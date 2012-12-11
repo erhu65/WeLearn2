@@ -19,7 +19,7 @@
 	if ((self = [super initWithCoder:aDecoder]))
 	{
 		NSLog(@"initWithCoder %@", self);
-
+        
 		// Fill up the array with Record objects, and sort by date.
 		_records =
 			[@[
@@ -41,7 +41,6 @@
 {
 	NSLog(@"dealloc %@", self);
 }
-
 - (Record *)makeFakeRecord
 {
 	// A Record contains a date and up to 24 NSNumber objects (one for each
@@ -56,14 +55,12 @@
 	{
 		[values addObject:@(arc4random_uniform(100))];
 	}
-
 	return [[Record alloc] initWithDate:date values:values];
 }
 
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
-
 	// These properties were set in prepareForSegue:, which is called before
 	// viewDidLoad. We can now tell the Days view controller about the Graph
 	// view controller.

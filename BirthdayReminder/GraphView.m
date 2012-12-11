@@ -16,7 +16,7 @@
 	UIRectFill(self.bounds);
 
 	// Compensate for UIKit coordinate system
-	CGContextTranslateCTM(context, 0.0f, self.bounds.origin.y + self.bounds.size.height);  
+	CGContextTranslateCTM(context, 0.0f, self.bounds.origin.y + self.bounds.size.height);     
 	CGContextScaleCTM(context, 1.0f, -1.0f);
 
 	// Add a small margin around the content
@@ -24,7 +24,6 @@
 	const CGFloat VertMargin = 10.0f;
 	CGRect contentRect = CGRectInset(self.bounds, HorzMargin, VertMargin);
 	CGContextTranslateCTM(context, HorzMargin, VertMargin);
-
 	// Configure the line style
 	CGContextSetLineCap(context, kCGLineCapRound);
 	CGContextSetLineJoin(context, kCGLineJoinRound);
