@@ -19,8 +19,7 @@
 @end
 
 @implementation BRImportViewController
-//@synthesize importButton;
-//@synthesize tableView;
+
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

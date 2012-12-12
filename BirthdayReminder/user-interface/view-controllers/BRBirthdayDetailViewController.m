@@ -21,19 +21,7 @@
 @end
 
 @implementation BRBirthdayDetailViewController
-//@synthesize photoView;
-//@synthesize scrollView;
-//@synthesize birthdayLabel;
-//@synthesize remainingDaysLabel;
-//@synthesize remainingDaysSubTextLabel;
-//@synthesize notesTitleLabel;
-//@synthesize notesTextLabel;
-//@synthesize remainingDaysImageView;
-//@synthesize facebookButton;
-//@synthesize callButton;
-//@synthesize smsButton;
-//@synthesize emailButton;
-//@synthesize deleteButton;
+
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

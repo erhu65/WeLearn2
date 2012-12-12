@@ -124,6 +124,15 @@
 		48DEA96415C2F3C400397172 /* navigation-bar-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95015C2F3C400397172 /* navigation-bar-background@2x.png */; };
 		48DEA96515C2F3C400397172 /* tool-bar-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95115C2F3C400397172 /* tool-bar-background.png */; };
 		48DEA96615C2F3C400397172 /* tool-bar-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */; };
+		B77A4CDE1678947A0021C984 /* UIView+position.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD51678947A0021C984 /* UIView+position.m */; };
+		B77A4CDF1678947A0021C984 /* Connectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD71678947A0021C984 /* Connectivity.m */; };
+		B77A4CE01678947A0021C984 /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD91678947A0021C984 /* Geometry.m */; };
+		B77A4CE11678947A0021C984 /* Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CDB1678947A0021C984 /* Orientation.m */; };
+		B77A4CE21678947A0021C984 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CDD1678947A0021C984 /* Utils.m */; };
+		B77A4CE81678963D0021C984 /* UIImage+CacheExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */; };
+		B77A4CE91678963D0021C984 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CE71678963D0021C984 /* UIColor-Expanded.m */; };
+		B77A4CF416789BAF0021C984 /* ErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CF316789BAF0021C984 /* ErrorHandler.m */; };
+		B77A4CF716789C6B0021C984 /* BRErrorHandlerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CF616789C6B0021C984 /* BRErrorHandlerViewController.m */; };
 		B78BE85C16764856006FE99C /* PRPDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BE85B16764856006FE99C /* PRPDebug.m */; };
 		B78C303616770A6000B80BE7 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303316770A6000B80BE7 /* MasterViewController.m */; };
 		B78C303716770A6000B80BE7 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303516770A6000B80BE7 /* DetailViewController.m */; };
@@ -304,6 +313,24 @@
 		48DEA95015C2F3C400397172 /* navigation-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation-bar-background@2x.png"; sourceTree = "<group>"; };
 		48DEA95115C2F3C400397172 /* tool-bar-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background.png"; sourceTree = "<group>"; };
 		48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background@2x.png"; sourceTree = "<group>"; };
+		B77A4CD41678947A0021C984 /* UIView+position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+position.h"; sourceTree = "<group>"; };
+		B77A4CD51678947A0021C984 /* UIView+position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+position.m"; sourceTree = "<group>"; };
+		B77A4CD61678947A0021C984 /* Connectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connectivity.h; sourceTree = "<group>"; };
+		B77A4CD71678947A0021C984 /* Connectivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connectivity.m; sourceTree = "<group>"; };
+		B77A4CD81678947A0021C984 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
+		B77A4CD91678947A0021C984 /* Geometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Geometry.m; sourceTree = "<group>"; };
+		B77A4CDA1678947A0021C984 /* Orientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Orientation.h; sourceTree = "<group>"; };
+		B77A4CDB1678947A0021C984 /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
+		B77A4CDC1678947A0021C984 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		B77A4CDD1678947A0021C984 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CacheExtensions.h"; sourceTree = "<group>"; };
+		B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CacheExtensions.m"; sourceTree = "<group>"; };
+		B77A4CE61678963D0021C984 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor-Expanded.h"; sourceTree = "<group>"; };
+		B77A4CE71678963D0021C984 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor-Expanded.m"; sourceTree = "<group>"; };
+		B77A4CF216789BAF0021C984 /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHandler.h; sourceTree = "<group>"; };
+		B77A4CF316789BAF0021C984 /* ErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHandler.m; sourceTree = "<group>"; };
+		B77A4CF516789C6B0021C984 /* BRErrorHandlerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRErrorHandlerViewController.h; path = ../../BRErrorHandlerViewController.h; sourceTree = "<group>"; };
+		B77A4CF616789C6B0021C984 /* BRErrorHandlerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRErrorHandlerViewController.m; path = ../../BRErrorHandlerViewController.m; sourceTree = "<group>"; };
 		B78BE85A16764856006FE99C /* PRPDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPDebug.h; sourceTree = "<group>"; };
 		B78BE85B16764856006FE99C /* PRPDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPDebug.m; sourceTree = "<group>"; };
 		B78C303216770A6000B80BE7 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
@@ -442,6 +469,8 @@
 		487BA46D1594B02C00EEB099 /* BirthdayReminder */ = {
 			isa = PBXGroup;
 			children = (
+				B77A4CE3167896220021C984 /* Category */,
+				B77A4CD21678946C0021C984 /* Utilities */,
 				B78C305B16775B0D00B80BE7 /* viewcontrollerContainer */,
 				B78C3049167733BE00B80BE7 /* autolayout */,
 				B78C303016770A4900B80BE7 /* subscripting */,
@@ -590,6 +619,8 @@
 				485172FC15D92ED70085F77C /* BRSettingsViewController.m */,
 				4851730115D9341A0085F77C /* BRDaysBeforeViewController.h */,
 				4851730215D9341A0085F77C /* BRDaysBeforeViewController.m */,
+				B77A4CF516789C6B0021C984 /* BRErrorHandlerViewController.h */,
+				B77A4CF616789C6B0021C984 /* BRErrorHandlerViewController.m */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -635,9 +666,39 @@
 			path = components;
 			sourceTree = "<group>";
 		};
+		B77A4CD21678946C0021C984 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B77A4CD61678947A0021C984 /* Connectivity.h */,
+				B77A4CD71678947A0021C984 /* Connectivity.m */,
+				B77A4CD81678947A0021C984 /* Geometry.h */,
+				B77A4CD91678947A0021C984 /* Geometry.m */,
+				B77A4CDA1678947A0021C984 /* Orientation.h */,
+				B77A4CDB1678947A0021C984 /* Orientation.m */,
+				B77A4CDC1678947A0021C984 /* Utils.h */,
+				B77A4CDD1678947A0021C984 /* Utils.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		B77A4CE3167896220021C984 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				B77A4CD41678947A0021C984 /* UIView+position.h */,
+				B77A4CD51678947A0021C984 /* UIView+position.m */,
+				B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */,
+				B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */,
+				B77A4CE61678963D0021C984 /* UIColor-Expanded.h */,
+				B77A4CE71678963D0021C984 /* UIColor-Expanded.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
 		B78BE85516764807006FE99C /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				B77A4CF216789BAF0021C984 /* ErrorHandler.h */,
+				B77A4CF316789BAF0021C984 /* ErrorHandler.m */,
 				B78BE85A16764856006FE99C /* PRPDebug.h */,
 				B78BE85B16764856006FE99C /* PRPDebug.m */,
 			);
@@ -909,6 +970,15 @@
 				B78C307716775B4600B80BE7 /* MyCustomSegue.m in Sources */,
 				B78C307816775B4600B80BE7 /* MyUnwindSegue.m in Sources */,
 				B78C307916775B4600B80BE7 /* MyNavigationController.m in Sources */,
+				B77A4CDE1678947A0021C984 /* UIView+position.m in Sources */,
+				B77A4CDF1678947A0021C984 /* Connectivity.m in Sources */,
+				B77A4CE01678947A0021C984 /* Geometry.m in Sources */,
+				B77A4CE11678947A0021C984 /* Orientation.m in Sources */,
+				B77A4CE21678947A0021C984 /* Utils.m in Sources */,
+				B77A4CE81678963D0021C984 /* UIImage+CacheExtensions.m in Sources */,
+				B77A4CE91678963D0021C984 /* UIColor-Expanded.m in Sources */,
+				B77A4CF416789BAF0021C984 /* ErrorHandler.m in Sources */,
+				B77A4CF716789C6B0021C984 /* BRErrorHandlerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

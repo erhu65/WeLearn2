@@ -22,11 +22,7 @@
 @end
 
 @implementation BRHomeViewController
-//@synthesize tableView;
-//@synthesize importLabel;
-//@synthesize addressBookButton;
-//@synthesize facebookButton;
-//@synthesize importView;
+
 
 -(void)didReceiveMemoryWarning
 {

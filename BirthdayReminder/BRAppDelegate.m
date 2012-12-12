@@ -10,11 +10,66 @@
 #import "BRStyleSheet.h"
 #import "BRDModel.h"
 #import "Appirater.h"
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+
+@interface BRAppDelegate ()
+<UIAlertViewDelegate,
+MFMailComposeViewControllerDelegate>
+{
+
+}
+@end
 
 @implementation BRAppDelegate
 
+void exceptionHandler(NSException *exception)
+{
+    NSLog(@"Uncaught exception: %@\nReason: %@\nUser Info: %@\nCall Stack: %@",
+          exception.name, exception.reason, exception.userInfo, exception.callStackSymbols);
+    
+    //Set flag
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    
+    [settings setBool:YES forKey:@"ExceptionOccurredOnLastRun"];
+    [settings synchronize];
+}
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    
+#if !TARGET_IPHONE_SIMULATOR
+    // Default exception handling code
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    
+    if ([settings boolForKey:@"ExceptionOccurredOnLastRun"])
+    {
+        // Reset exception occurred flag
+        [settings setBool:NO forKey:@"ExceptionOccurredOnLastRunKey"];
+        [settings synchronize];
+        
+        // Notify the user
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"We're sorry" message:@"An error occurred on the previous run." delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+        [alert addButtonWithTitle:@"Email a Report"];
+        [alert show];
+    }
+    else
+    {
+        NSSetUncaughtExceptionHandler(&exceptionHandler);
+        
+        // Redirect stderr output stream to file
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+        NSString *documentsPath = [paths objectAtIndex:0];
+        NSString *stderrPath = [documentsPath stringByAppendingPathComponent:@"stderr.log"];
+        
+        freopen([stderrPath cStringUsingEncoding:NSASCIIStringEncoding], "w", stderr);
+    }
+#endif
+    
     [BRStyleSheet initStyles];
     [Appirater appLaunched:YES];
     [application registerForRemoteNotificationTypes:
@@ -63,4 +118,48 @@
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));    
 }
+
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0];
+    NSString *stderrPath = [documentsPath stringByAppendingPathComponent:@"stderr.log"];
+    
+    if (buttonIndex == 1)
+    {
+        // Email a Report
+        MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
+        mailComposer.mailComposeDelegate = self;
+        [mailComposer setSubject:@"Error Report"];
+        [mailComposer setToRecipients:[NSArray arrayWithObject:@"erhu65@gmail.com"]];
+        // Attach log file
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                             NSUserDomainMask, YES);
+        NSString *documentsPath = [paths objectAtIndex:0];
+        NSString *stderrPath = [documentsPath stringByAppendingPathComponent:@"stderr.log"];
+        
+        NSData *data = [NSData dataWithContentsOfFile:stderrPath];
+        
+        [mailComposer addAttachmentData:data mimeType:@"Text/XML" fileName:@"stderr.log"];
+        UIDevice *device = [UIDevice currentDevice];
+        NSString *emailBody = [NSString stringWithFormat:@"My Model: %@\nMy OS: %@\nMy Version: %@", [device model], [device systemName], [device systemVersion]];
+        [mailComposer setMessageBody:emailBody isHTML:NO];
+        [self.window.rootViewController presentViewController:mailComposer animated:YES
+                                                   completion:nil];
+    }
+    
+    NSSetUncaughtExceptionHandler(&exceptionHandler);
+    
+    // Redirect stderr output stream to file
+    freopen([stderrPath cStringUsingEncoding:NSASCIIStringEncoding], "w", stderr);
+}
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 @end

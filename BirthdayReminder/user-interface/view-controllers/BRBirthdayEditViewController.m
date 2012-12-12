@@ -20,14 +20,7 @@
 @end
 
 @implementation BRBirthdayEditViewController
-//@synthesize saveButton;
-//@synthesize nameTextField;
-//@synthesize includeYearLabel;
-//@synthesize includeYearSwitch;
-//@synthesize datePicker;
-//@synthesize photoContainerView;
-//@synthesize picPhotoLabel;
-//@synthesize photoView;
+
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
