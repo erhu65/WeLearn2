@@ -116,5 +116,15 @@ xcuserdata
 #
 # ...none. Everything is now explained.
 
-BirthdayReminder.xcodeproj/xcuserdata/*
-BirthdayReminder.xcodeproj/project.xcworkspace/xcuserdata/*
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+.DS_Store
+*.tm_build_errors
+.DS_Store
+.gitignore
+BirthdayReminder.xcodeproj/project.xcworkspace/xcuserdata/erhu66.xcuserdatad/UserInterfaceState.xcuserstate
