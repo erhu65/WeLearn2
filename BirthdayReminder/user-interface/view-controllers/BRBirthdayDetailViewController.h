@@ -11,7 +11,7 @@
 @class BRDBirthday;
 
 @interface BRBirthdayDetailViewController : BRCoreViewController<UIActionSheetDelegate>
-
+  
 @property(nonatomic,strong) BRDBirthday *birthday;
 @property (weak, nonatomic) IBOutlet UIImageView *photoView;
    
