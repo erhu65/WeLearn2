@@ -14,7 +14,7 @@
 
 @property(nonatomic,strong) BRDBirthday *birthday;
 @property (weak, nonatomic) IBOutlet UIImageView *photoView;
-
+ 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UILabel *birthdayLabel;
 @property (weak, nonatomic) IBOutlet UILabel *remainingDaysLabel;
