@@ -72,13 +72,11 @@
     UIImageView *imageView;
     if ([self isSelectedAtIndexPath:indexPath]) {
         imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-selected.png"]];
-    }
-    else {
+    }else {
         imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-not-selected.png"]];
     }
     tableCell.accessoryView = imageView;
 }
-
 
 - (IBAction)didTapImportButton:(id)sender {
     NSArray *birthdaysToImport = [self.selectedIndexPathToBirthday allValues];
@@ -100,7 +98,6 @@
         //create the selection reference
         self.selectedIndexPathToBirthday[indexPath] = birthdayImport;
     }
-    
     [self.tableView reloadData];
     [self updateImportButton];
 }

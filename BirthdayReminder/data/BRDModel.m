@@ -139,10 +139,11 @@ static BRDModel *_sharedInstance = nil;
         [self authenticateWithFacebook];
         return;
     }
+    
     //We've got an authenticated Facebook Account if the code executes here
     NSURL *requestURL = [NSURL URLWithString:@"https://graph.facebook.com/me/friends"];
     
-    NSDictionary *params = @{ @"fields" : @"name,id,birthday"};
+    NSDictionary *params = @{@"fields" : @"name,id,birthday"};
     
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook requestMethod:SLRequestMethodGET URL:requestURL parameters:params];
     

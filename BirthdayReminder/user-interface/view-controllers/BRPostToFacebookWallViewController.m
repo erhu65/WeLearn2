@@ -35,16 +35,11 @@
     [super viewWillAppear:animated];
     
     NSString *facebookPicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=large",self.facebookID];
-    
     [self.photoView setImageWithRemoteFileURL:facebookPicURL placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
     self.textView.text = self.initialPostText;
-    
     [self.textView becomeFirstResponder];
-    
     [self updatePostButton];
 }
-
-
 
 - (IBAction)postToFacebook:(id)sender {
     [[BRDModel sharedInstance] postToFacebookWall:self.textView.text withFacebookID:self.facebookID];

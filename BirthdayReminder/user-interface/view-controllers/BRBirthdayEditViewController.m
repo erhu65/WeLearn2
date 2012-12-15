@@ -100,6 +100,7 @@
 - (IBAction)cancelAndDismiss:(id)sender {
     
     [[BRDModel sharedInstance] cancelChanges];
+        
     if(self.complectionBlock != nil){
         
         self.complectionBlock(NO, @"no");

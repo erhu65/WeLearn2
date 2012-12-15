@@ -313,8 +313,8 @@
 		48DEA95015C2F3C400397172 /* navigation-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation-bar-background@2x.png"; sourceTree = "<group>"; };
 		48DEA95115C2F3C400397172 /* tool-bar-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background.png"; sourceTree = "<group>"; };
 		48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background@2x.png"; sourceTree = "<group>"; };
-		B77A4CD41678947A0021C984 /* UIView+position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+position.h"; sourceTree = "<group>"; };
-		B77A4CD51678947A0021C984 /* UIView+position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+position.m"; sourceTree = "<group>"; };
+		B77A4CD41678947A0021C984 /* UIView+position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+position.h"; path = "../../UIView+position.h"; sourceTree = "<group>"; };
+		B77A4CD51678947A0021C984 /* UIView+position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+position.m"; path = "../../UIView+position.m"; sourceTree = "<group>"; };
 		B77A4CD61678947A0021C984 /* Connectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connectivity.h; sourceTree = "<group>"; };
 		B77A4CD71678947A0021C984 /* Connectivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connectivity.m; sourceTree = "<group>"; };
 		B77A4CD81678947A0021C984 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
@@ -323,10 +323,10 @@
 		B77A4CDB1678947A0021C984 /* Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Orientation.m; sourceTree = "<group>"; };
 		B77A4CDC1678947A0021C984 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		B77A4CDD1678947A0021C984 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CacheExtensions.h"; sourceTree = "<group>"; };
-		B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CacheExtensions.m"; sourceTree = "<group>"; };
-		B77A4CE61678963D0021C984 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor-Expanded.h"; sourceTree = "<group>"; };
-		B77A4CE71678963D0021C984 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor-Expanded.m"; sourceTree = "<group>"; };
+		B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+CacheExtensions.h"; path = "../../UIImage+CacheExtensions.h"; sourceTree = "<group>"; };
+		B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+CacheExtensions.m"; path = "../../UIImage+CacheExtensions.m"; sourceTree = "<group>"; };
+		B77A4CE61678963D0021C984 /* UIColor-Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor-Expanded.h"; path = "../../UIColor-Expanded.h"; sourceTree = "<group>"; };
+		B77A4CE71678963D0021C984 /* UIColor-Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor-Expanded.m"; path = "../../UIColor-Expanded.m"; sourceTree = "<group>"; };
 		B77A4CF216789BAF0021C984 /* ErrorHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ErrorHandler.h; sourceTree = "<group>"; };
 		B77A4CF316789BAF0021C984 /* ErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHandler.m; sourceTree = "<group>"; };
 		B77A4CF516789C6B0021C984 /* BRErrorHandlerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRErrorHandlerViewController.h; path = ../../BRErrorHandlerViewController.h; sourceTree = "<group>"; };
@@ -469,7 +469,7 @@
 		487BA46D1594B02C00EEB099 /* BirthdayReminder */ = {
 			isa = PBXGroup;
 			children = (
-				B77A4CE3167896220021C984 /* Category */,
+				48DEA8DC15C17F1D00397172 /* categories */,
 				B77A4CD21678946C0021C984 /* Utilities */,
 				B78C305B16775B0D00B80BE7 /* viewcontrollerContainer */,
 				B78C3049167733BE00B80BE7 /* autolayout */,
@@ -584,7 +584,6 @@
 			isa = PBXGroup;
 			children = (
 				48DEA92215C2DB8100397172 /* components */,
-				48DEA8DC15C17F1D00397172 /* categories */,
 				48BA416415A44E3B00F5885A /* view-controllers */,
 				48DEA92E15C2E80100397172 /* BRStyleSheet.h */,
 				48DEA92F15C2E80100397172 /* BRStyleSheet.m */,
@@ -645,12 +644,19 @@
 		48DEA8DC15C17F1D00397172 /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				B77A4CD41678947A0021C984 /* UIView+position.h */,
+				B77A4CD51678947A0021C984 /* UIView+position.m */,
+				B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */,
+				B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */,
+				B77A4CE61678963D0021C984 /* UIColor-Expanded.h */,
+				B77A4CE71678963D0021C984 /* UIColor-Expanded.m */,
 				48DEA8DE15C17F9E00397172 /* UIImage+Thumbnail.h */,
 				48DEA8DF15C17F9E00397172 /* UIImage+Thumbnail.m */,
 				485172AF15D8DA660085F77C /* UIImageView+RemoteFile.h */,
 				485172B015D8DA660085F77C /* UIImageView+RemoteFile.m */,
 			);
-			path = categories;
+			name = categories;
+			path = "user-interface/categories";
 			sourceTree = "<group>";
 		};
 		48DEA92215C2DB8100397172 /* components */ = {
@@ -679,19 +685,6 @@
 				B77A4CDD1678947A0021C984 /* Utils.m */,
 			);
 			name = Utilities;
-			sourceTree = "<group>";
-		};
-		B77A4CE3167896220021C984 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				B77A4CD41678947A0021C984 /* UIView+position.h */,
-				B77A4CD51678947A0021C984 /* UIView+position.m */,
-				B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */,
-				B77A4CE51678963D0021C984 /* UIImage+CacheExtensions.m */,
-				B77A4CE61678963D0021C984 /* UIColor-Expanded.h */,
-				B77A4CE71678963D0021C984 /* UIColor-Expanded.m */,
-			);
-			name = Category;
 			sourceTree = "<group>";
 		};
 		B78BE85516764807006FE99C /* lib */ = {
@@ -1094,8 +1087,8 @@
 				GCC_PREFIX_HEADER = "BirthdayReminder/BirthdayReminder-Prefix.pch";
 				INFOPLIST_FILE = "BirthdayReminder/BirthdayReminder-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5E71E94F-EB6A-4A19-91DF-6C38A09DC07A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5E71E94F-EB6A-4A19-91DF-6C38A09DC07A";
+				PROVISIONING_PROFILE = "0F114B3C-75F7-4429-865D-31E4FEBA8AC2";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0F114B3C-75F7-4429-865D-31E4FEBA8AC2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

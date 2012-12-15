@@ -34,5 +34,5 @@
 - (IBAction)emailButtonTapped:(id)sender;
 - (IBAction)deleteButtonTapped:(id)sender;
 
-
+-(IBAction)unwindBackToDetailViewController:(UIStoryboardSegue *)segue;
 @end

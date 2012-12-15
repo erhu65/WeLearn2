@@ -37,14 +37,30 @@
 }
 
 - (IBAction)cancelAndDismiss:(id)sender {
+    
     [[BRDModel sharedInstance] cancelChanges];
-    [super cancelAndDismiss:sender];
+    
+    if(self.complectionBlock != nil){
+        
+        self.complectionBlock(YES, @"no");
+    } else {
+        
+        [super cancelAndDismiss:sender];
+    }    
+    
 }
 
 - (IBAction)saveAndDismiss:(id)sender
 {
     [[BRDModel sharedInstance] saveChanges];
-    [super saveAndDismiss:sender];
+    
+    if(self.complectionBlock != nil){
+        
+        self.complectionBlock(YES, @"yes");
+    } else {
+        
+         [super saveAndDismiss:sender];
+    }
 }
 
 #pragma mark UITextViewDelegate

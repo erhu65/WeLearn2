@@ -59,8 +59,15 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"viewWillAppear");
-    self.title = self.birthday.name;
 
+}
+
+-(void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"viewDidAppear");
+    self.title = self.birthday.name;
+    
     if (self.birthday.imageData == nil)
     {
         if ([self.birthday.picURL length] > 0) {
@@ -107,7 +114,7 @@
     
     cY += buttonGap * 2;
     
-    NSMutableArray *buttonsToShow = [NSMutableArray arrayWithObjects:self.facebookButton,self.callButton, self.smsButton, self.emailButton, self.deleteButton, nil];
+    NSMutableArray *buttonsToShow = [NSMutableArray arrayWithObjects:self.facebookButton,self.callButton, self.smsButton, self.emailButton, nil];
     
     NSMutableArray *buttonsToHide = [NSMutableArray array];
     
@@ -147,15 +154,9 @@
         button.frame = frame;
         cY += button.frame.size.height + buttonGap;
     }
-    
+    //if(cY < 400) cY = 400;
     self.scrollView.contentSize = CGSizeMake(320, cY);
 
-}
-
--(void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    NSLog(@"viewDidAppear");
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -180,8 +181,19 @@
         //Edit this birthday
         UINavigationController *navigationController = segue.destinationViewController;
         
-        BRBirthdayEditViewController *birthdayEditViewController = (BRBirthdayEditViewController *) navigationController.topViewController;
+        BRBirthdayEditViewController *birthdayEditViewController = (BRBirthdayEditViewController *) navigationController.topViewController; 
         birthdayEditViewController.birthday = self.birthday;
+        birthdayEditViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        birthdayEditViewController.complectionBlock = ^(BOOL issuccess, NSString* str){ 
+            PRPLog(@"%d , %@-[%@ , %@]",
+                   issuccess,
+                   str,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        };        
     }
     else if ([identifier isEqualToString:@"EditNotes"]) {
         //Edit this birthday
@@ -189,6 +201,17 @@
         
         BRNotesEditViewController *birthdayNotesEditViewController = (BRNotesEditViewController *) navigationController.topViewController;
         birthdayNotesEditViewController.birthday = self.birthday;
+        birthdayNotesEditViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        birthdayNotesEditViewController.complectionBlock = ^(BOOL issuccess, NSString* str){
+            PRPLog(@"%d , %@-[%@ , %@]",
+                   issuccess,
+                   str,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        };        
     }
 }
 
@@ -225,7 +248,7 @@
 - (IBAction)deleteButtonTapped:(id)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:[NSString stringWithFormat:@"Delete %@",self.birthday.name] otherButtonTitles:nil];
-    [actionSheet showInView:self.view];
+    [actionSheet showInView:self.tabBarController.view];
 }
 
 #pragma mark Address Book contact helper methods
@@ -321,5 +344,17 @@
     //pop this view controller off the stack and slide back to the home screen
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(IBAction)unwindBackToDetailViewController:(UIStoryboardSegue *)segue
+{
+//    BRBirthdayEditViewController* sourceVC = (BRBirthdayEditViewController*) segue.sourceViewController;
+    //[[BRDModel sharedInstance] cancelChanges];
+    PRPLog(@"%unwindBackToHomeViewController-[%@ , %@]",
+           NSStringFromClass([self class]),
+           NSStringFromSelector(_cmd));
+
+}
+
+
 
 @end
