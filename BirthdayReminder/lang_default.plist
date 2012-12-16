@@ -4,12 +4,20 @@
 <dict>
 	<key>sum</key>
 	<string>Sum</string>
+	<key>titleMainCategories</key>
+	<string>Main Categories</string>
+	<key>sort</key>
+	<string>Sort:</string>
+	<key>noSort</key>
+	<string>NO Sort</string>
+	<key>byDate</key>
+	<string>By Date</string>
+	<key>byName</key>
+	<string>By Name</string>
 	<key>error</key>
 	<string>Error</string>
 	<key>error_network_connection</key>
 	<string>Netowrk Connection Fail</string>
-	<key>error_server_error</key>
-	<string>Server Error</string>
 	<key>error_parse_fail</key>
 	<string>Parse Error</string>
 </dict>

@@ -31,6 +31,10 @@ typedef enum : int
 @end
 
 @implementation BRDModel
+{
+    
+    
+}
 
 static BRDModel *_sharedInstance = nil;
 + (BRDModel*)sharedInstance
@@ -364,6 +368,56 @@ static BRDModel *_sharedInstance = nil;
     });
 }
 
+-(void)mainCategoriesSort{
+
+     self.mainCategories = [[self.mainCategories sortedArrayUsingComparator: ^(id a, id b) {
+        BRRecordMainCategory *A = ( BRRecordMainCategory* ) a;
+        BRRecordMainCategory *B = ( BRRecordMainCategory* ) b;
+        
+        if(self.mainCategoriesSortType == mainCategoriesSortTypeSortByName){
+            
+            static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch |
+            NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+            NSLocale *currentLocale = [NSLocale currentLocale];
+            
+            NSString* firstStr;
+            NSString* secondStr;
+            if(!self.mainCategoriesSortIsDesc){
+                
+                firstStr = A.name;
+                secondStr = B.name;
+                
+            } else {
+                
+                firstStr = B.name;
+                secondStr = A.name;
+            }            
+            NSRange string1Range = NSMakeRange(0, [firstStr length]);
+            
+            return [secondStr compare:secondStr options:comparisonOptions range:string1Range locale:currentLocale];
+            
+        } else {
+            NSDate* firstDate;
+            NSDate* secondDate;
+            
+            if(self.mainCategoriesSortIsDesc){
+                
+                firstDate = A.created_at;
+                secondDate = B.created_at;
+                
+            } else {
+                firstDate = B.created_at;
+                secondDate = A.created_at;
+            }            
+            
+            return [firstDate compare:secondDate];
+         
+        } 
+  
+    }] mutableCopy];
+}
+
+     
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID
 {
     NSLog(@"postToFacebookWall");

@@ -12,6 +12,8 @@
 @property(nonatomic, strong)NSString* uid;
 @property(nonatomic, strong)NSString* name;
 @property(nonatomic, strong)NSString* desc;
+@property(nonatomic, strong)NSDate* created_at;
+@property(nonatomic, strong)NSDate* modified_at;
 
 -(id)initWithJsonDic:(NSDictionary *)dic;
 @end

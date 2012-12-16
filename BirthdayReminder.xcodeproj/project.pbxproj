@@ -132,6 +132,9 @@
 		B7101D12167DB6B50093DBC8 /* lang_chinese.plist in Resources */ = {isa = PBXBuildFile; fileRef = B7101D10167DB6B50093DBC8 /* lang_chinese.plist */; };
 		B7101D51167DED370093DBC8 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101D50167DED370093DBC8 /* MBProgressHUD.m */; };
 		B7101D5B167E02110093DBC8 /* HiddenHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7101D5A167E02100093DBC8 /* HiddenHeaderView.xib */; };
+		B7101D64167E39770093DBC8 /* ArrowAsc.png in Resources */ = {isa = PBXBuildFile; fileRef = B7101D62167E39770093DBC8 /* ArrowAsc.png */; };
+		B7101D65167E39770093DBC8 /* ArrowAsc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */; };
+		B7101D68167E40E90093DBC8 /* NSMutableArray+Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101D67167E40E90093DBC8 /* NSMutableArray+Shuffling.m */; };
 		B77A4CDE1678947A0021C984 /* UIView+position.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD51678947A0021C984 /* UIView+position.m */; };
 		B77A4CDF1678947A0021C984 /* Connectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD71678947A0021C984 /* Connectivity.m */; };
 		B77A4CE01678947A0021C984 /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD91678947A0021C984 /* Geometry.m */; };
@@ -335,6 +338,10 @@
 		B7101D4F167DED370093DBC8 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		B7101D50167DED370093DBC8 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		B7101D5A167E02100093DBC8 /* HiddenHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HiddenHeaderView.xib; sourceTree = "<group>"; };
+		B7101D62167E39770093DBC8 /* ArrowAsc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ArrowAsc.png; sourceTree = "<group>"; };
+		B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ArrowAsc@2x.png"; sourceTree = "<group>"; };
+		B7101D66167E40E90093DBC8 /* NSMutableArray+Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Shuffling.h"; sourceTree = "<group>"; };
+		B7101D67167E40E90093DBC8 /* NSMutableArray+Shuffling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffling.m"; sourceTree = "<group>"; };
 		B77A4CD41678947A0021C984 /* UIView+position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+position.h"; path = "../../UIView+position.h"; sourceTree = "<group>"; };
 		B77A4CD51678947A0021C984 /* UIView+position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+position.m"; path = "../../UIView+position.m"; sourceTree = "<group>"; };
 		B77A4CD61678947A0021C984 /* Connectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connectivity.h; sourceTree = "<group>"; };
@@ -541,6 +548,8 @@
 				48DD475115DE7FD000CE9A51 /* Icon.png */,
 				B78C304F167733F800B80BE7 /* Arrow.png */,
 				B78C3050167733F800B80BE7 /* Arrow@2x.png */,
+				B7101D62167E39770093DBC8 /* ArrowAsc.png */,
+				B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */,
 				4851735315DBDDD00085F77C /* sms-icon.png */,
 				4851735415DBDDD00085F77C /* sms-icon@2x.png */,
 				4851735115DBA8040085F77C /* icon300x300.png */,
@@ -684,6 +693,8 @@
 				48DEA8DF15C17F9E00397172 /* UIImage+Thumbnail.m */,
 				485172AF15D8DA660085F77C /* UIImageView+RemoteFile.h */,
 				485172B015D8DA660085F77C /* UIImageView+RemoteFile.m */,
+				B7101D66167E40E90093DBC8 /* NSMutableArray+Shuffling.h */,
+				B7101D67167E40E90093DBC8 /* NSMutableArray+Shuffling.m */,
 			);
 			name = categories;
 			path = "user-interface/categories";
@@ -958,6 +969,8 @@
 				B7101D11167DB6B50093DBC8 /* lang_default.plist in Resources */,
 				B7101D12167DB6B50093DBC8 /* lang_chinese.plist in Resources */,
 				B7101D5B167E02110093DBC8 /* HiddenHeaderView.xib in Resources */,
+				B7101D64167E39770093DBC8 /* ArrowAsc.png in Resources */,
+				B7101D65167E39770093DBC8 /* ArrowAsc@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1026,6 +1039,7 @@
 				B7101CFD167DADCD0093DBC8 /* BRRecordMainCategory.m in Sources */,
 				B7101D0D167DB60C0093DBC8 /* LangManager.m in Sources */,
 				B7101D51167DED370093DBC8 /* MBProgressHUD.m in Sources */,
+				B7101D68167E40E90093DBC8 /* NSMutableArray+Shuffling.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

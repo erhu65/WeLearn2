@@ -12,13 +12,25 @@
 
 #define BRNotificationMainCategoriesDidUpdate            @"BRNotificationMainCategoriesDidUpdate"
 
+
+typedef enum mainCategoriesSortType {
+    mainCategoriesSortTypeNoSort = 0,
+    mainCategoriesSortTypeSortByName = 1,
+    mainCategoriesSortTypeSortByDate = 2
+    
+} mainCategoriesSortType;
+
+
+
+
 @interface BRDModel : NSObject
 
 + (BRDModel*)sharedInstance;
 
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
 
-@property(nonatomic, strong)NSMutableArray* mainCategories;
+
+
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -31,7 +43,13 @@
 
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
+
+@property BOOL  mainCategoriesSortIsDesc;
+@property mainCategoriesSortType mainCategoriesSortType;
+@property(nonatomic, strong)NSMutableArray* mainCategories;
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page;
+-(void)mainCategoriesSort;
+
 -(void) importBirthdays:(NSArray *)birthdaysToImport;
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;
 

@@ -75,8 +75,8 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
-					<int key="NSColorSpace">2</int>
-					<bytes key="NSRGB">MC4xNjA3ODQzMiAwLjEwMTk2MDc5IDAuNTYwNzg0MzQgMC41AA</bytes>
+					<int key="NSColorSpace">1</int>
+					<bytes key="NSRGB">MC4yMDQwMzc4NzM2IDAuMTUzMDYzMjQ1MSAwLjExODM1NTMxMDUgMC43MgA</bytes>
 				</object>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
 				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">

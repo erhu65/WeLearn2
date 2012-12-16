@@ -8,14 +8,9 @@
 
 #import "BRCoreViewController.h"
 
+
 @interface BRMainCategoryViewController : BRCoreViewController
 <UITableViewDelegate, UITableViewDataSource,UIScrollViewDelegate>
-
-
-@property(nonatomic, strong)NSNumber* page;
-@property(nonatomic, strong)NSNumber* lastPage;
-
-@property(nonatomic, weak)IBOutlet UITableView* tb;
 
 
 @end

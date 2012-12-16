@@ -18,6 +18,8 @@
         self.name = [dic objectForKey:@"name"];
         self.uid = [dic objectForKey:@"_id"];
         self.desc = [dic objectForKey:@"desc"];
+        self.created_at = [dic objectForKey:@"created_at"];
+        self.modified_at = [dic objectForKey:@"created_at"];
     }
     return self;
 }
