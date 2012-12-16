@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Nick Kuh. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+
 #import <AddressBook/AddressBook.h>
 
 @interface BRDBirthdayImport : NSObject

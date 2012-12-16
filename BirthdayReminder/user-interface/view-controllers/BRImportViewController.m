@@ -117,20 +117,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
+     BRBirthdayTableViewCell *brTableCell =  (BRBirthdayTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"Cell"];
     
     BRDBirthdayImport *birthdayImport = self.birthdays[indexPath.row];
     
-    BRBirthdayTableViewCell *brTableCell = (BRBirthdayTableViewCell *)cell;
-    
+    //BRBirthdayTableViewCell *brTableCell = (BRBirthdayTableViewCell *)cell;
+    brTableCell.indexPath = indexPath;
+    brTableCell.isSelected = [self isSelectedAtIndexPath:indexPath];
     brTableCell.birthdayImport = birthdayImport;
     
-    UIImage *backgroundImage = (indexPath.row == 0) ? [UIImage imageNamed:@"table-row-background.png"] : [UIImage imageNamed:@"table-row-icing-background.png"];
-    brTableCell.backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
-    
-    [self updateAccessoryForTableCell:cell atIndexPath:indexPath];
-    
-    return cell;
+    return brTableCell;
 }
 
 #pragma mark UITableViewDelegate

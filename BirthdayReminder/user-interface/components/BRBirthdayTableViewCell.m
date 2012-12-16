@@ -14,8 +14,32 @@
 
 @implementation BRBirthdayTableViewCell
 
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        // Initialization code
+        //not get called
+        
+    }
+    return self;
+    
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self){
+
+        
+        
+    }
+    return self;
+}
+
+
 -(void) setBirthdayImport:(BRDBirthdayImport *)birthdayImport
 {
+
     _birthdayImport = birthdayImport;
     self.nameLabel.text = _birthdayImport.name;
     
@@ -45,6 +69,17 @@
         self.iconView.image = [UIImage imageWithData:birthdayImport.imageData];
     }
     
+    
+    UIImage *backgroundImage = (self.indexPath.row == 0) ? [UIImage imageNamed:@"table-row-background.png"] : [UIImage imageNamed:@"table-row-icing-background.png"];
+    self.backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
+
+     UIImageView *imageView;
+    if(self.isSelected){
+        imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-selected.png"]];
+    } else {
+            imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-not-selected.png"]];
+    }
+    self.accessoryView = imageView;
 }
 
 -(void) setBirthday:(BRDBirthday *)birthday

@@ -31,7 +31,7 @@ void PRPDebug(const char *fileName, int lineNumber, NSString *fmt, ...) {
     
     NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
     NSString *appName = [info objectForKey:(NSString *)kCFBundleNameKey];
-    fprintf(stdout, "%s %s[%s:%d] %s\n",
+    fprintf(stdout, "\n %s %s \n[%s:%d] %s\n",
             [timestamp UTF8String],
             [appName UTF8String],
             [[filePath lastPathComponent] UTF8String],

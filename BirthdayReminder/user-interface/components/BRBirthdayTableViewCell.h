@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Nick Kuh. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 
 @class BRDBirthday;
 @class BRDBirthdayImport;
@@ -15,6 +14,8 @@
 
 @property(nonatomic,strong) BRDBirthday *birthday;
 @property(nonatomic,strong) BRDBirthdayImport *birthdayImport;
+@property(nonatomic, strong) NSIndexPath* indexPath;
+@property BOOL isSelected;
 @property (nonatomic, weak) IBOutlet UIImageView* iconView;
 @property (nonatomic, weak) IBOutlet UIImageView* remainingDaysImageView;
 @property (nonatomic, weak) IBOutlet UILabel* nameLabel;

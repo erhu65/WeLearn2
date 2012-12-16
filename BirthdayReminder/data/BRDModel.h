@@ -10,13 +10,15 @@
 #define BRNotificationFacebookBirthdaysDidUpdate            @"BRNotificationFacebookBirthdaysDidUpdate"
 #define BRNotificationCachedBirthdaysDidUpdate          @"BRNotificationCachedBirthdaysDidUpdate"
 
-#import <Foundation/Foundation.h>
+#define BRNotificationMainCategoriesDidUpdate            @"BRNotificationMainCategoriesDidUpdate"
 
 @interface BRDModel : NSObject
 
 + (BRDModel*)sharedInstance;
 
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
+
+@property(nonatomic, strong)NSMutableArray* mainCategories;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -29,6 +31,7 @@
 
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
+- (void)fetchMainCategoriesWithPage:(NSNumber*)page;
 -(void) importBirthdays:(NSArray *)birthdaysToImport;
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>sum</key>
+	<string>Sum</string>
+	<key>error</key>
+	<string>Error</string>
+	<key>error_network_connection</key>
+	<string>Netowrk Connection Fail</string>
+	<key>error_server_error</key>
+	<string>Server Error</string>
+	<key>error_parse_fail</key>
+	<string>Parse Error</string>
+</dict>
+</plist>

@@ -9,6 +9,7 @@
 #import "BRDModel.h"
 #import "BRDBirthday.h"
 #import "BRDBirthdayImport.h"
+#import "BRRecordMainCategory.h"
 #import "BRDSettings.h"
 #import <AddressBook/AddressBook.h>
 #import <Social/Social.h>
@@ -43,6 +44,14 @@ static BRDModel *_sharedInstance = nil;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+-(NSMutableArray*)mainCategories{
+    
+    if(!_mainCategories){
+        _mainCategories = [NSMutableArray array];
+    }
+    return _mainCategories;
+}
 
 -(void) extractBirthdaysFromAddressBook:(ABAddressBookRef)addressBook
 {
@@ -193,6 +202,168 @@ static BRDModel *_sharedInstance = nil;
     }];
 }
 
+- (void)fetchMainCategoriesWithPage:(NSNumber*)page{
+    
+    //[self.mainCategories removeAllObjects];
+    
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+                
+//        dispatch_sync(concurrentQueue, ^{
+//            
+//            
+//        });
+//        __block NSMutableArray *randomNumbers = nil;
+//        /* Read the numbers from disk and sort them in an
+//         ascending fashion */
+//        dispatch_sync(concurrentQueue, ^{
+//            
+// 
+//        });
+        NSString* urlMainCategores = [NSString stringWithFormat:@"%@/MainCategories", BASE_URL];
+        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d", [page intValue]];
+        NSURL *url = [NSURL URLWithString:urlMainCategores];
+        
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg = @"";
+        NSNumber* page = @0;
+        NSNumber* lastPage = @0;
+        
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        PRPLog(@"http request url: %@\n  -[%@ , %@]",
+               urlMainCategores,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+//            PRPLog(@"response %@ -[%@ , %@]",
+//                   [response description],
+//                   NSStringFromClass([self class]),
+//                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+        
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    page = [deserializedDictionary objectForKey:@"page"];
+                    lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
+                    
+                    PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                           page,
+                           lastPage,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    NSArray* MainCategories = [deserializedDictionary objectForKey:@"MainCategories"]; 
+                    
+                    [MainCategories enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                        //create an instance of BRDBirthdayImport
+                        NSDictionary* dicRecord = (NSDictionary*)obj;
+                        BRRecordMainCategory* record = [[BRRecordMainCategory alloc] initWithJsonDic:dicRecord];
+                
+                        //[self.mainCategories addObject: record];
+                        [self.mainCategories insertObject:record atIndex:0];
+
+                    }];
+                    
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            NSDictionary *userInfo = @{@"errMsg":errMsg,
+                                        @"page":page,
+                                        @"lastPage": lastPage};
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationMainCategoriesDidUpdate object:self userInfo:userInfo];
+        
+        });
+        
+    });
+}
+
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID
 {
     NSLog(@"postToFacebookWall");
@@ -244,7 +415,7 @@ static BRDModel *_sharedInstance = nil;
     // At first, we only ask for the basic read
     NSArray* permissions = @[@"email", @"read_stream",@"read_friendlists", @"friends_birthday"];
     
-    NSDictionary* options =@{ACFacebookAppIdKey:@"500954283270682",ACFacebookPermissionsKey: permissions,ACFacebookAudienceKey:ACFacebookAudienceOnlyMe};    
+    NSDictionary* options =@{ACFacebookAppIdKey:KFacebookKey,ACFacebookPermissionsKey: permissions,ACFacebookAudienceKey:ACFacebookAudienceOnlyMe};    
     
     //Replace with your Facebook.com app ID
 //    NSDictionary *options = @{ACFacebookAppIdKey: @"500954283270682",

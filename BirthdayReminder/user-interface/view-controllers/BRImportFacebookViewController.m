@@ -35,7 +35,6 @@
 -(void)handleFacebookBirthdaysDidUpdate:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
-    
     self.birthdays = userInfo[@"birthdays"];
     [self.tableView reloadData];
 }
