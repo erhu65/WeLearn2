@@ -75,8 +75,29 @@
 
 -(void)handleErrMsg:(NSString*) errMsg{
 
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.lang[@"error"] message:errMsg delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.lang[@"error"] message:errMsg delegate:nil cancelButtonTitle:self.lang[@"actionDimiss"]  otherButtonTitles:nil];
     [alert show];
+}
+-(void)showMsg:(NSString*)msg type:(msgLevel)level{
+
+    NSString* levelStr;
+    switch (level) {
+        case msgLevelInfo:
+            levelStr = self.lang[@"info"];
+            break;
+        case msgLevelWarn:
+            levelStr = self.lang[@"warn"];
+            break;
+        case msgLevelError:
+            levelStr = self.lang[@"error"];
+            break;
+        default:
+            levelStr = self.lang[@"info"];
+            break;
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:levelStr message:msg delegate:nil cancelButtonTitle:self.lang[@"actionDimiss"]  otherButtonTitles:nil];
+    [alert show];
+
 }
 
 -(void)showHud:(BOOL) isAnimation{
@@ -94,5 +115,10 @@
     if(HUD!= nil){
         HUD = nil;
     }   
+}
+
+-(void)navigationBack:(id)sender  {
+    [self.navigationController popViewControllerAnimated:YES];
+
 }
 @end

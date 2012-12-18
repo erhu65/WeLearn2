@@ -12,6 +12,9 @@
 
 #define BRNotificationMainCategoriesDidUpdate            @"BRNotificationMainCategoriesDidUpdate"
 
+#define BRNotificationSubCategoriesDidUpdate            @"BRNotificationSubCategoriesDidUpdate"
+
+#define BRNotificationVideosDidUpdate            @"BRNotificationVideosDidUpdate"
 
 typedef enum mainCategoriesSortType {
     mainCategoriesSortTypeNoSort = 0,
@@ -20,7 +23,12 @@ typedef enum mainCategoriesSortType {
     
 } mainCategoriesSortType;
 
-
+typedef enum subCategoriesSortType {
+    subCategoriesSortTypeNoSort = 0,
+    subCategoriesSortTypeSortByName = 1,
+    subCategoriesSortTypeSortByDate = 2
+    
+} subCategoriesSortType;
 
 
 @interface BRDModel : NSObject
@@ -47,8 +55,24 @@ typedef enum mainCategoriesSortType {
 @property BOOL  mainCategoriesSortIsDesc;
 @property mainCategoriesSortType mainCategoriesSortType;
 @property(nonatomic, strong)NSMutableArray* mainCategories;
+@property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page;
 -(void)mainCategoriesSort;
+
+@property BOOL  subCategoriesSortIsDesc;
+@property subCategoriesSortType subCategoriesSortType;
+@property(nonatomic, strong)NSMutableArray* subCategories;
+@property(nonatomic, strong)NSString* subCategoriesSelectedUid;
+- (void)fetchSubCategoriesWithPage:(NSNumber*)page;
+-(void)subCategoriesSort;
+
+
+
+@property(nonatomic, strong)NSMutableArray* videos;
+@property(nonatomic, strong)NSMutableArray* videosTemp;
+
+- (void)fetchVideosWithPage:(NSNumber*)page;
+
 
 -(void) importBirthdays:(NSArray *)birthdaysToImport;
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;

@@ -1,17 +1,16 @@
 //
-//  BRCellMainCategory.h
+//  BRCellSubCategory.h
 //  BirthdayReminder
 //
-//  Created by Peter2 on 12/16/12.
+//  Created by Peter2 on 12/17/12.
 //  Copyright (c) 2012 Nick Kuh. All rights reserved.
 //
 
-@class BRRecordMainCategory;
+@class BRRecordSubCategory;
 
-@interface BRCellMainCategory : UITableViewCell
+@interface BRCellSubCategory : UITableViewCell
 
-
-@property(nonatomic, strong)BRRecordMainCategory* record;
+@property(nonatomic, strong)BRRecordSubCategory* record;
 @property(nonatomic, strong)NSIndexPath* indexPath;
 @property(nonatomic, weak)IBOutlet UILabel* nameLb;
 @property(nonatomic, weak)IBOutlet UILabel* descLb;

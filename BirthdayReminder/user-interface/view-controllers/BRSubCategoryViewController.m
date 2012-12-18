@@ -1,29 +1,25 @@
 //
-//  BRMainCategoryViewController.m
+//  BRSubCategoryViewController.m
 //  BirthdayReminder
 //
-//  Created by Peter2 on 12/16/12.
+//  Created by Peter2 on 12/17/12.
 //  Copyright (c) 2012 Nick Kuh. All rights reserved.
-//
 
-#import "BRMainCategoryViewController.h"
 #import "BRSubCategoryViewController.h"
-#import "BRCellMainCategory.h"
-#import "BRRecordMainCategory.h"
+#import "BRCellSubCategory.h"
+#import "BRRecordSubCategory.h"
 #import "BRDModel.h"
 #import "NSMutableArray+Shuffling.h"
-
 
 @interface UIWindow (AutoLayoutDebug) 
 + (UIWindow *)keyWindow;
 - (NSString *)_autolayoutTrace;
 @end
 
-@interface BRMainCategoryViewController ()
+@interface BRSubCategoryViewController ()
 <UITableViewDelegate, 
 UITableViewDataSource,
 UIScrollViewDelegate>
-
 @property(nonatomic, strong)NSNumber* page;
 @property(nonatomic, strong)NSNumber* lastPage;
 @property (weak, nonatomic) IBOutlet UIButton *sortBtn;
@@ -38,7 +34,7 @@ UIScrollViewDelegate>
 
 @end
 
-@implementation BRMainCategoryViewController
+@implementation BRSubCategoryViewController
 {
     BOOL addItemsTrigger;
     
@@ -47,7 +43,6 @@ UIScrollViewDelegate>
 	UITableView *filterTableView;
     NSArray *verticalConstraintsBeforeAnimation; 
     NSArray *verticalConstraintsAfterAnimation;
-    
 }
 -(NSNumber*)page{
     if(_page == nil){
@@ -75,54 +70,69 @@ UIScrollViewDelegate>
     self = [super initWithCoder:aDecoder];
     if(self){
 
-        self.title = self.lang[@"titleMainCategories"];
-        
         filterNames = @[self.lang[@"noSort"], self.lang[@"byName"], self.lang[@"byDate"]];
         activeFilterIndex = mainCategoriesSortTypeNoSort;
         [BRDModel sharedInstance].mainCategoriesSortType = activeFilterIndex;
         [BRDModel sharedInstance].mainCategoriesSortIsDesc = FALSE;
-        self.filterNameLabel.text = filterNames[activeFilterIndex];
 
+        
     }
     return self;
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+	// Do any additional setup after loading the view.
     // Add self as scroll view delegate to catch scroll events
     self.tb.autoresizesSubviews = YES;
     // Add the "Pull to Load" above the table
 	UIView *pullView = [[[NSBundle mainBundle] loadNibNamed:@"HiddenHeaderView" owner:self options:nil] lastObject]; 
 	pullView.frame = CGRectOffset(pullView.frame, 0.0f, -pullView.frame.size.height);
 	[self.tb addSubview:pullView];
+    
+    self.filterNameLabel.text = filterNames[activeFilterIndex];
+    
+    self.title = self.lang[@"titleSubCategories"];
+    self.sortLb.text = self.lang[@"sort"];
+    self.filterNameLabel.text = @"";
+    UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
+                                initWithTitle:self.lang[@"actionBack"] 
+                                style:UIBarButtonItemStyleBordered
+                                target:self
+                                action:@selector(navigationBack:)];
+    self.navigationItem.leftBarButtonItem = btnBack;
 	// Do any additional setup after loading the view.
 }
 
+-(void)navigationBack:(id)sender  {
+    
+    [[BRDModel sharedInstance].subCategories removeAllObjects];
+    [BRDModel sharedInstance].mainCategoriesSelectedUid = nil;
+     
+    [super navigationBack:sender];
+}
 
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMainCategoriesDidUpdate:) name:BRNotificationMainCategoriesDidUpdate object:[BRDModel sharedInstance]];
-   
-    [self _populateLang];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSubCategoriesDidUpdate:) name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
     
-    if( [[BRDModel sharedInstance].mainCategories count] ==0){
+    if( [[BRDModel sharedInstance].subCategories count] ==0){
         [self _handleRefresh];
     }
 }
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
+}
+
+
 
 -(void)_handleRefresh{
     
     [self showHud:YES];    
-    [[BRDModel sharedInstance] fetchMainCategoriesWithPage:self.page];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationMainCategoriesDidUpdate object:[BRDModel sharedInstance]];
+    [[BRDModel sharedInstance] fetchSubCategoriesWithPage:self.page];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -131,19 +141,20 @@ UIScrollViewDelegate>
            [[UIWindow keyWindow] _autolayoutTrace],
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
-
+    
 }
 - (void)didRotateFromInterfaceOrientation: (UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:
      fromInterfaceOrientation];
+    
     PRPLog(@"%@-[%@ , %@]",
-          [[UIWindow keyWindow] _autolayoutTrace],
+           [[UIWindow keyWindow] _autolayoutTrace],
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
 }
 
--(void)handleMainCategoriesDidUpdate:(NSNotification *)notification
+-(void)handleSubCategoriesDidUpdate:(NSNotification *)notification
 {
     [self hideHud:YES];
     NSDictionary *userInfo = [notification userInfo];
@@ -152,28 +163,29 @@ UIScrollViewDelegate>
     self.lastPage = userInfo[@"lastPage"];
     
     if(errMsg!= nil && [errMsg length] > 0){
-        [self handleErrMsg:errMsg];
+ 
+        [self showMsg:errMsg type:msgLevelError];
     } else {
-        PRPLog(@"[BRDModel sharedInstance].mainCategories: %d-[%@ , %@]",
-                [BRDModel sharedInstance].mainCategories.count,
+        PRPLog(@"[BRDModel sharedInstance].subCategories.count: %d-[%@ , %@]",
+               [BRDModel sharedInstance].subCategories.count,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-        [self.tb reloadData];
+        if([BRDModel sharedInstance].subCategories.count > 0){
+            [self.tb reloadData];
+            self.sortBtn.enabled = YES;
+        } else {
+            [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+            self.sortBtn.enabled = NO;
+        }
+       
     }
     
 }
-
-
--(void)_populateLang
-{
-    self.sortLb.text = self.lang[@"sort"];
-}
-
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.tb)
-		return [[BRDModel sharedInstance].mainCategories count];
+		return [[BRDModel sharedInstance].subCategories count];
     else 
         return [filterNames count];
 }
@@ -185,22 +197,22 @@ UIScrollViewDelegate>
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-
+    
     if(tableView == self.tb){
         cell = nil;
-        static NSString *CellIdentifier = @"BRCellMainCategory";
-        BRCellMainCategory *cell =  (BRCellMainCategory *)[self.tb dequeueReusableCellWithIdentifier:CellIdentifier];
+        static NSString *CellIdentifier = @"BRSublCategory";
+        BRCellSubCategory *cell =  (BRCellSubCategory *)[self.tb dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[indexPath.row];
+        BRRecordSubCategory *record = [BRDModel sharedInstance].subCategories[indexPath.row];
         cell.indexPath = indexPath;
-        cell.record = record;
+        cell.record = record; 
         return cell;
     } else {
 		cell.textLabel.text = filterNames[indexPath.row];
-//		cell.accessoryType = (activeFilterIndex == indexPath.row) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-        if([BRDModel sharedInstance].mainCategoriesSortType == indexPath.row){
+        //		cell.accessoryType = (activeFilterIndex == indexPath.row) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        if([BRDModel sharedInstance].subCategoriesSortType == indexPath.row){
             UIImage* img_;
-            if([BRDModel sharedInstance].mainCategoriesSortIsDesc){
+            if([BRDModel sharedInstance].subCategoriesSortIsDesc){
                 img_ = [UIImage imageNamed:@"Arrow.png"]; 
             } else{
                 img_ = [UIImage imageNamed:@"ArrowAsc.png"]; 
@@ -216,7 +228,7 @@ UIScrollViewDelegate>
         cell.textLabel.font = [UIFont systemFontOfSize:14.0f]; 
         cell.textLabel.textColor = [UIColor whiteColor];
     }
-
+    
     return cell;
 }
 
@@ -227,50 +239,50 @@ UIScrollViewDelegate>
     
     if (tableView == filterTableView) {
         if(activeFilterIndex == indexPath.row){
-            [BRDModel sharedInstance].mainCategoriesSortIsDesc =  ![BRDModel sharedInstance].mainCategoriesSortIsDesc;
+            [BRDModel sharedInstance].subCategoriesSortIsDesc =  ![BRDModel sharedInstance].subCategoriesSortIsDesc;
         } else {
-            [BRDModel sharedInstance].mainCategoriesSortIsDesc = FALSE;
+            [BRDModel sharedInstance].subCategoriesSortIsDesc = FALSE;
         }
         
         activeFilterIndex = indexPath.row; 
-        [BRDModel sharedInstance].mainCategoriesSortType = activeFilterIndex;
+        [BRDModel sharedInstance].subCategoriesSortType = activeFilterIndex;
         self.filterNameLabel.text =filterNames[activeFilterIndex];
         [self hideFilterTable];
         
     } else {
-        
-//        BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[indexPath.row];
+//        
+//        BRRecordSubCategory *record = [BRDModel sharedInstance].subCategories[indexPath.row];
     }
 }
 
 
-#pragma mark UIScrollViewDelegate
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-	// Detect if the trigger has been set, if so add new items
-	if (addItemsTrigger)
-	{
-
-        BOOL isLastPage = [self.lastPage boolValue];
-        if(!isLastPage){
-            int page_ = [self.page intValue];
-            page_++;
-            self.page = [[NSNumber alloc] initWithInt:page_];
-            [self _handleRefresh];
-        }
-
-	}
-	// Reset the trigger
-	addItemsTrigger = NO;
-}
-
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-{
-	// Trigger the offset if the user has pulled back more than 50 pixels
-	if (scrollView.contentOffset.y < -80.0f)
-		addItemsTrigger = YES;
-}
-
+#pragma mark UIScrollViewDelegate 
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//	// Detect if the trigger has been set, if so add new items
+//	if (addItemsTrigger)
+//	{
+//        
+//        BOOL isLastPage = [self.lastPage boolValue];
+//        if(!isLastPage){
+//            int page_ = [self.page intValue];
+//            page_++;
+//            self.page = [[NSNumber alloc] initWithInt:page_];
+//            [self _handleRefresh];
+//        }
+//        
+//	}
+//	// Reset the trigger
+//	addItemsTrigger = NO;
+//}
+//
+//- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//	// Trigger the offset if the user has pulled back more than 50 pixels
+//	if (scrollView.contentOffset.y < -80.0f)
+//		addItemsTrigger = YES;
+//}
+//
 #pragma mark show or hide order table view
 - (IBAction)filterButtonPressed:(id)sender {
     
@@ -281,12 +293,12 @@ UIScrollViewDelegate>
 - (void)hideFilterTable {
     
     PRPLog(@"\n sort type: %d  \n ascOrDesc %d \n-[%@ , %@]",
-            [BRDModel sharedInstance].mainCategoriesSortType,
-            [BRDModel sharedInstance].mainCategoriesSortIsDesc,
+           [BRDModel sharedInstance].subCategoriesSortType,
+           [BRDModel sharedInstance].subCategoriesSortIsDesc,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
     UIImage* img_;
-    if([BRDModel sharedInstance].mainCategoriesSortIsDesc){
+    if([BRDModel sharedInstance].subCategoriesSortIsDesc){
         img_ = [UIImage imageNamed:@"Arrow.png"]; 
     } else{
         img_ = [UIImage imageNamed:@"ArrowAsc.png"]; 
@@ -299,18 +311,22 @@ UIScrollViewDelegate>
     [UIView animateWithDuration:0.3f animations:^ {
         [self.view layoutIfNeeded]; }
                      completion:^(BOOL finished) {
+                         
                          [filterTableView removeFromSuperview]; 
                          filterTableView = nil;
                          [self.view addConstraint: self.spaceBetweenFilterBarAndMainTable];
-                         if([BRDModel sharedInstance].mainCategoriesSortType == mainCategoriesSortTypeNoSort){
-                             [[BRDModel sharedInstance].mainCategories shuffle];
+                         if([BRDModel sharedInstance].subCategoriesSortType == subCategoriesSortTypeNoSort){
+                             
+                             [[BRDModel sharedInstance].subCategories shuffle];
                          } else {
-                             [[BRDModel sharedInstance] mainCategoriesSort];
+                             [[BRDModel sharedInstance] subCategoriesSort];
                          }
-                           [self.tb reloadData];
+                         [self.tb reloadData];
                          
                      }];
+    
 }
+
 - (void)showFilterTable
 {
     filterTableView = [[UITableView alloc]
@@ -331,7 +347,7 @@ UIScrollViewDelegate>
                                                                      views:viewsDictionary];
     [self.view addConstraints:constraints];
     [self.view removeConstraint: self.spaceBetweenFilterBarAndMainTable];
-
+    
     viewsDictionary = @{
     @"filterTableView": filterTableView, @"filterBar": self.filterBar, @"mainTableView": self.tb };
     
@@ -344,8 +360,7 @@ UIScrollViewDelegate>
     [self.view addConstraints:constraints]; 
     [self.view layoutIfNeeded];
     [self.view removeConstraints:constraints]; /// until here
-    
-    
+
     constraints = [NSLayoutConstraint constraintsWithVisualFormat:
                    @"V:[filterBar][filterTableView(72)][mainTableView]"
                                                           options:0
@@ -363,21 +378,21 @@ UIScrollViewDelegate>
 {
     NSString *identifier = segue.identifier;
     
-    if ([identifier isEqualToString:@"segueSubCategories"]) {
+    if ([identifier isEqualToString:@"segueVideos"]) {
         
-        BRCellMainCategory *cell =  (BRCellMainCategory *)sender;
+        BRCellSubCategory *cell =  (BRCellSubCategory *)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
-        BRRecordMainCategory* record =  [[BRDModel sharedInstance].mainCategories objectAtIndex:[indexPath row]];
-        [BRDModel sharedInstance].mainCategoriesSelectedUid = record.uid;
-        PRPLog(@"\n [BRDModel sharedInstance].mainCategoriesSelectedUid %@ \n-[%@ , %@]",
-               [BRDModel sharedInstance].mainCategoriesSelectedUid,
+        BRRecordSubCategory* record =  [[BRDModel sharedInstance].subCategories objectAtIndex:[indexPath row]];
+        [BRDModel sharedInstance].subCategoriesSelectedUid = record.uid;
+        PRPLog(@"\n [BRDModel sharedInstance].subCategoriesSelectedUid %@ \n-[%@ , %@]",
+               [BRDModel sharedInstance].subCategoriesSelectedUid,
                NSStringFromClass([self class]),
-               NSStringFromSelector(_cmd));
-//        UINavigationController *navigationController = segue.destinationViewController;
+               NSStringFromSelector(_cmd));   
+        //        UINavigationController *navigationController = segue.destinationViewController;
         
-//        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
-//        BRSubCategoryViewController_.m = self.birthday;
-
+        //        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
+        //        BRSubCategoryViewController_.m = self.birthday;
+        
     }
 }
 

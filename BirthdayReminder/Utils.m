@@ -213,7 +213,7 @@ static NSFileManager * _fileManager = nil;
     CFUUIDRef uuidObject = CFUUIDCreate(kCFAllocatorDefault);
     
     // Get the string representation of CFUUID object.
-    NSString *uuidStr = (__bridge NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidObject);
+    NSString *uuidStr = (__bridge_transfer NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuidObject);
     
     // If needed, here is how to get a representation in bytes, returned as a structure
     // typedef struct {

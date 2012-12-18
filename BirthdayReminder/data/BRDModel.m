@@ -10,6 +10,8 @@
 #import "BRDBirthday.h"
 #import "BRDBirthdayImport.h"
 #import "BRRecordMainCategory.h"
+#import "BRRecordSubCategory.h"
+#import "BRRecordVideo.h"
 #import "BRDSettings.h"
 #import <AddressBook/AddressBook.h>
 #import <Social/Social.h>
@@ -56,6 +58,15 @@ static BRDModel *_sharedInstance = nil;
     }
     return _mainCategories;
 }
+
+-(NSMutableArray*)subCategories{
+    
+    if(!_subCategories){
+        _subCategories = [NSMutableArray array];
+    }
+    return _subCategories;
+}
+
 
 -(void) extractBirthdaysFromAddressBook:(ABAddressBookRef)addressBook
 {
@@ -144,6 +155,8 @@ static BRDModel *_sharedInstance = nil;
     CFRelease(addressBook);
 }
 
+
+
 - (void)fetchFacebookBirthdays
 {
     NSLog(@"fetchFacebookBirthdays");
@@ -206,6 +219,7 @@ static BRDModel *_sharedInstance = nil;
     }];
 }
 
+#pragma mark mainCategories
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page{
     
     //[self.mainCategories removeAllObjects];
@@ -233,7 +247,10 @@ static BRDModel *_sharedInstance = nil;
         urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d", [page intValue]];
         NSURL *url = [NSURL URLWithString:urlMainCategores];
         
-        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
         
         NSURLResponse *response;
         NSError *error;
@@ -417,6 +434,406 @@ static BRDModel *_sharedInstance = nil;
     }] mutableCopy];
 }
 
+
+#pragma mark subCategories
+- (void)fetchSubCategoriesWithPage:(NSNumber*)page{
+    
+    //[self.mainCategories removeAllObjects];
+    
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        //            
+        //        });
+        //        __block NSMutableArray *randomNumbers = nil;
+        //        /* Read the numbers from disk and sort them in an
+        //         ascending fashion */
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        // 
+        //        });
+        NSString* urlMainCategores = [NSString stringWithFormat:@"%@/SubCategories", BASE_URL];
+        //urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d", [page intValue]];
+        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?main=%@", self.mainCategoriesSelectedUid];
+        NSURL *url = [NSURL URLWithString:urlMainCategores];
+        
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg = @"";
+        NSNumber* page = @0;
+        NSNumber* lastPage = @0;
+        
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        PRPLog(@"http request url: %@\n  -[%@ , %@]",
+               urlMainCategores,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            //            PRPLog(@"response %@ -[%@ , %@]",
+            //                   [response description],
+            //                   NSStringFromClass([self class]),
+            //                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    page = [deserializedDictionary objectForKey:@"page"];
+                    lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
+                    
+                    PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                           page,
+                           lastPage,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    NSArray* SubCategories = [deserializedDictionary objectForKey:@"SubCategories"]; 
+                    
+                    [SubCategories enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                        //create an instance of BRDBirthdayImport
+                        NSDictionary* dicRecord = (NSDictionary*)obj;
+                        BRRecordSubCategory* record = [[BRRecordSubCategory alloc] initWithJsonDic:dicRecord];
+                        
+                        //[self.subCategories addObject: record];
+                        [self.subCategories insertObject:record atIndex:0];
+                        
+                    }];
+                
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+            
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSDictionary *userInfo = @{@"errMsg":errMsg,
+            @"page":page,
+            @"lastPage": lastPage};
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationSubCategoriesDidUpdate object:self userInfo:userInfo];
+            
+        });
+        
+    });
+}
+
+-(void)subCategoriesSort{
+    
+    self.subCategories = [[self.subCategories sortedArrayUsingComparator: ^(id a, id b) {
+        BRRecordSubCategory *A = ( BRRecordSubCategory* ) a;
+        BRRecordSubCategory *B = ( BRRecordSubCategory* ) b;
+        
+        if(self.subCategoriesSortType == subCategoriesSortTypeSortByName){
+            
+            static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSNumericSearch |
+            NSWidthInsensitiveSearch | NSForcedOrderingSearch;
+            NSLocale *currentLocale = [NSLocale currentLocale];
+            
+            NSString* firstStr;
+            NSString* secondStr;
+            if(!self.subCategoriesSortIsDesc){
+                
+                firstStr = A.name;
+                secondStr = B.name;
+                
+            } else {
+                
+                firstStr = B.name;
+                secondStr = A.name;
+            }            
+            NSRange string1Range = NSMakeRange(0, [firstStr length]);
+            
+            return [secondStr compare:secondStr options:comparisonOptions range:string1Range locale:currentLocale];
+            
+        } else {
+            NSDate* firstDate;
+            NSDate* secondDate;
+            
+            if(self.subCategoriesSortIsDesc){
+                
+                firstDate = A.created_at;
+                secondDate = B.created_at;
+                
+            } else {
+                firstDate = B.created_at;
+                secondDate = A.created_at;
+            }            
+            
+            return [firstDate compare:secondDate];
+            
+        } 
+        
+    }] mutableCopy];
+}
+
+
+#pragma mark Videos
+-(NSMutableArray*)videos{
+    
+    if(!_videos){
+        _videos = [NSMutableArray array];
+    }
+    return _videos;
+}
+
+- (void)fetchVideosWithPage:(NSNumber*)page{
+    
+    //[self.mainCategories removeAllObjects];
+    
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        //            
+        //        });
+        //        __block NSMutableArray *randomNumbers = nil;
+        //        /* Read the numbers from disk and sort them in an
+        //         ascending fashion */
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        // 
+        //        });
+        NSString* urlVideos= [NSString stringWithFormat:@"%@/Videos", BASE_URL];
+        urlVideos = [urlVideos stringByAppendingFormat:@"?page=%d", [page intValue]];
+        urlVideos = [urlVideos stringByAppendingFormat:@"&sub=%@", self.subCategoriesSelectedUid];
+        PRPLog(@"http request url: %@\n  -[%@ , %@]",
+               urlVideos,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        NSURL *url = [NSURL URLWithString:urlVideos];
+        
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg = @"";
+        NSNumber* page = @0;
+        NSNumber* lastPage = @0;
+        
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            //            PRPLog(@"response %@ -[%@ , %@]",
+            //                   [response description],
+            //                   NSStringFromClass([self class]),
+            //                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    page = [deserializedDictionary objectForKey:@"page"];
+                    lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
+                    
+                    PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                           page,
+                           lastPage,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    page = [deserializedDictionary objectForKey:@"page"];
+                    lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
+                    
+                    PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                           page,
+                           lastPage,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    NSArray* videos = [deserializedDictionary objectForKey:@"videos"]; 
+                    
+                    [videos enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                        //create an instance of BRDBirthdayImport
+                        NSDictionary* dicRecord = (NSDictionary*)obj;
+                        BRRecordVideo* record = [[BRRecordVideo alloc] initWithJsonDic:dicRecord];
+                        
+                        //[self.subCategories addObject: record];
+                        [self.videos insertObject:record atIndex:0];
+                        
+                    }];
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+            
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSDictionary *userInfo = @{@"errMsg":errMsg,
+            @"page":page,
+            @"lastPage": lastPage};
+            self.videosTemp = [self.videos mutableCopy];
+            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideosDidUpdate object:self userInfo:userInfo];
+            
+        });
+        
+    });
+}
+
+
      
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID
 {
@@ -514,10 +931,8 @@ static BRDModel *_sharedInstance = nil;
     }];
 }
 
-
 -(void) updateCachedBirthdays
-{
-    
+{    
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -677,8 +1092,7 @@ static BRDModel *_sharedInstance = nil;
         birthday = existingBirthdays[uid];
         if (birthday) {
             //a birthday with this udid already exists in Core Data, don't create a duplicate
-        }
-        else {
+        } else {
             birthday = [NSEntityDescription insertNewObjectForEntityForName:@"BRDBirthday" inManagedObjectContext:context];
             birthday.uid = uid;
             existingBirthdays[uid] = birthday;
@@ -729,7 +1143,6 @@ static BRDModel *_sharedInstance = nil;
     if (_managedObjectContext != nil) {
         return _managedObjectContext;
     }
-    
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         _managedObjectContext = [[NSManagedObjectContext alloc] init];

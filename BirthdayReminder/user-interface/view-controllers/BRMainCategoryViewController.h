@@ -10,7 +10,7 @@
 
 
 @interface BRMainCategoryViewController : BRCoreViewController
-<UITableViewDelegate, UITableViewDataSource,UIScrollViewDelegate>
+
 
 
 @end

@@ -6,6 +6,10 @@
 	<string>Sum</string>
 	<key>titleMainCategories</key>
 	<string>Main Categories</string>
+	<key>titleSubCategories</key>
+	<string>Sub Categories</string>
+	<key>titleVideos</key>
+	<string>Videos</string>
 	<key>sort</key>
 	<string>Sort:</string>
 	<key>noSort</key>
@@ -16,9 +20,21 @@
 	<string>By Name</string>
 	<key>error</key>
 	<string>Error</string>
+	<key>info</key>
+	<string>Info</string>
+	<key>warn</key>
+	<string>Warn</string>
 	<key>error_network_connection</key>
 	<string>Netowrk Connection Fail</string>
 	<key>error_parse_fail</key>
 	<string>Parse Error</string>
+	<key>infoNoData</key>
+	<string>No Data</string>
+	<key>actionDimiss</key>
+	<string>Dimiss</string>
+	<key>actionBack</key>
+	<string>Back</string>
+	<key>actionSearch</key>
+	<string>Search</string>
 </dict>
 </plist>
