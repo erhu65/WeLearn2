@@ -1006,10 +1006,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YCb-1u-W9W" userLabel="imvThumb">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="YCb-1u-W9W" userLabel="imvThumb">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="80" id="Fys-zZ-j4C"/>
-                                                        <constraint firstAttribute="height" constant="57" id="imJ-l8-xQe"/>
+                                                        <constraint firstAttribute="width" constant="80" id="Quw-Z9-BNb"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" type="user" id="V0l-me-5Le"/>
+                                                        <constraint firstAttribute="height" constant="73" id="uKV-og-wJd"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qlC-dd-33W" userLabel="lbName">
@@ -1029,11 +1030,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="YCb-1u-W9W" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="14" type="user" id="91Q-CG-DJx"/>
+                                            <constraint firstItem="YCb-1u-W9W" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" constant="8" type="user" id="5fJ-w5-Ncp"/>
+                                            <constraint firstItem="YCb-1u-W9W" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="8" type="user" id="91Q-CG-DJx"/>
                                             <constraint firstAttribute="trailing" secondItem="vi6-3h-dv0" secondAttribute="trailing" constant="8" type="user" id="DY5-r0-3Qb"/>
-                                            <constraint firstAttribute="centerY" secondItem="YCb-1u-W9W" secondAttribute="centerY" type="user" id="Edb-Gc-iIo"/>
                                             <constraint firstItem="qlC-dd-33W" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="108" type="user" id="GQf-Yp-4vc"/>
-                                            <constraint firstItem="qlC-dd-33W" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" constant="5" id="Lh3-RZ-8zM"/>
+                                            <constraint firstItem="qlC-dd-33W" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" type="default" id="WvZ-qM-KCh"/>
                                             <constraint firstItem="qlC-dd-33W" firstAttribute="leading" secondItem="vi6-3h-dv0" secondAttribute="leading" type="user" id="dGP-RG-N85"/>
                                             <constraint firstItem="vi6-3h-dv0" firstAttribute="top" secondItem="qlC-dd-33W" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="oBT-hs-ITj"/>
                                         </constraints>
@@ -2595,7 +2596,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="AutoLayoutViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AutoLayoutViewController.h"/>
             <relationships>
-                <relationship kind="action" name="filterButtonPressed:"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="spaceBetweenFilterBarAndMainTable" candidateClass="NSLayoutConstraint"/>
@@ -2629,12 +2629,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRBirthdayEditViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBirthdayEditViewController.h"/>
             <relationships>
-                <relationship kind="action" name="cancelAndDismiss:"/>
                 <relationship kind="action" name="didChangeDatePicker:"/>
                 <relationship kind="action" name="didChangeNameText:"/>
                 <relationship kind="action" name="didTapPhoto:"/>
                 <relationship kind="action" name="didToggleSwitch:"/>
-                <relationship kind="action" name="saveAndDismiss:"/>
                 <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
                 <relationship kind="outlet" name="includeYearLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="includeYearSwitch" candidateClass="UISwitch"/>
@@ -2694,11 +2692,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         </class>
         <class className="BRErrorHandlerViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRErrorHandlerViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="fakeFatalError:"/>
-                <relationship kind="action" name="fakeNonFatalError:"/>
-                <relationship kind="action" name="throwFakeException:"/>
-            </relationships>
         </class>
         <class className="BRHomeViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRHomeViewController.h"/>
@@ -2732,7 +2725,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRMainCategoryViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRMainCategoryViewController.h"/>
             <relationships>
-                <relationship kind="action" name="filterButtonPressed:"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
@@ -2744,8 +2736,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRNotesEditViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRNotesEditViewController.h"/>
             <relationships>
-                <relationship kind="action" name="cancelAndDismiss:"/>
-                <relationship kind="action" name="saveAndDismiss:"/>
                 <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
             </relationships>
@@ -2803,9 +2793,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         </class>
         <class className="CombinedViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CombinedViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:" candidateClass="UIStoryboardSegue"/>
-            </relationships>
         </class>
         <class className="DaysViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DaysViewController.h"/>
@@ -2813,8 +2800,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="DetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailViewController.h"/>
             <relationships>
-                <relationship kind="action" name="cancel:"/>
-                <relationship kind="action" name="done:"/>
                 <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
             </relationships>
@@ -2822,7 +2807,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="EditViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EditViewController.h"/>
             <relationships>
-                <relationship kind="action" name="delete:"/>
                 <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
             </relationships>
@@ -2833,7 +2817,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="GraphViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphViewController.h"/>
             <relationships>
-                <relationship kind="action" name="toggleGraph:"/>
                 <relationship kind="outlet" name="graphView" candidateClass="GraphView"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="toggleButton" candidateClass="UIButton"/>
@@ -2842,17 +2825,12 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="MasterViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MasterViewController.h"/>
             <relationships>
-                <relationship kind="action" name="sortChanged:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="segmentedControl" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>
         </class>
         <class className="MeasurementsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MeasurementsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="deleteValue:" candidateClass="UIStoryboardSegue"/>
-                <relationship kind="action" name="done:" candidateClass="UIStoryboardSegue"/>
-            </relationships>
         </class>
         <class className="MyNavigationController" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MyNavigationController.h"/>

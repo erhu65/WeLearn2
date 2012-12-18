@@ -70,8 +70,8 @@ typedef enum subCategoriesSortType {
 
 @property(nonatomic, strong)NSMutableArray* videos;
 @property(nonatomic, strong)NSMutableArray* videosTemp;
-
 - (void)fetchVideosWithPage:(NSNumber*)page;
+- (void)filterVideoByNameOrDesc:(NSString*)strSearch;
 
 
 -(void) importBirthdays:(NSArray *)birthdaysToImport;

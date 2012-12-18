@@ -832,7 +832,29 @@ static BRDModel *_sharedInstance = nil;
         
     });
 }
-
+- (void)filterVideoByNameOrDesc:(NSString*)searchFor
+{
+    __block NSMutableArray* arrayTemp = [[NSMutableArray alloc] init];
+    
+    self.videos = nil;
+    [self.videosTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
+        BRRecordVideo* record = (BRRecordVideo*)obj;
+        if ([record.name rangeOfString:searchFor].location != NSNotFound
+            ||[record.desc rangeOfString:searchFor].location != NSNotFound
+            ) {
+            
+            [arrayTemp insertObject:record atIndex:0];
+        }
+        
+    }];
+    
+    if([searchFor length]>0){
+        self.videos = arrayTemp;
+    } else {
+        self.videos = [BRDModel sharedInstance].videosTemp;
+    }
+    
+}
 
      
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID

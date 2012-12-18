@@ -110,7 +110,7 @@ UISearchBarDelegate>
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideosDidUpdate:) name:BRNotificationVideosDidUpdate object:[BRDModel sharedInstance]];
     
-    if([[BRDModel sharedInstance].videos count] ==0){
+    if([[BRDModel sharedInstance].videosTemp count] ==0){
         [self _handleRefresh];
     }
 }
@@ -332,25 +332,7 @@ UISearchBarDelegate>
 //	[BRDModel sharedInstance].videos = [[BRDModel sharedInstance].videosTemp mutableCopy];
 //	
     self.strSearch  = searchFor;
-    __block NSMutableArray* arrayTemp = [[NSMutableArray alloc] init];
-    
-    [BRDModel sharedInstance].videos = nil;
-    [[BRDModel sharedInstance].videosTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
-        BRRecordVideo* record = (BRRecordVideo*)obj;
-        if ([record.name rangeOfString:searchFor].location != NSNotFound
-            ||[record.desc rangeOfString:searchFor].location != NSNotFound
-            ) {
-            
-            [arrayTemp insertObject:record atIndex:0];
-        }
-        
-    }];
-
-    if([searchFor length]>0){
-        [BRDModel sharedInstance].videos = arrayTemp;
-    } else {
-        [BRDModel sharedInstance].videos = [BRDModel sharedInstance].videosTemp;
-    }
+    [[BRDModel sharedInstance] filterVideoByNameOrDesc:self.strSearch];
     [self.tb reloadData];	
     
 }
