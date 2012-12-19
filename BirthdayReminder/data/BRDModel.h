@@ -15,6 +15,8 @@
 #define BRNotificationSubCategoriesDidUpdate            @"BRNotificationSubCategoriesDidUpdate"
 
 #define BRNotificationVideosDidUpdate            @"BRNotificationVideosDidUpdate"
+#define BRNotificationVideoDidUpdate            @"BRNotificationVideoDidUpdate"
+
 
 typedef enum mainCategoriesSortType {
     mainCategoriesSortTypeNoSort = 0,
@@ -30,6 +32,9 @@ typedef enum subCategoriesSortType {
     
 } subCategoriesSortType;
 
+@class BRRecordMainCategory;
+@class BRRecordSubCategory;
+@class BRRecordVideo;
 
 @interface BRDModel : NSObject
 
@@ -56,6 +61,7 @@ typedef enum subCategoriesSortType {
 @property mainCategoriesSortType mainCategoriesSortType;
 @property(nonatomic, strong)NSMutableArray* mainCategories;
 @property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
+@property(nonatomic, strong)BRRecordMainCategory* currentSelectMainCategory;
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page;
 -(void)mainCategoriesSort;
 
@@ -63,6 +69,7 @@ typedef enum subCategoriesSortType {
 @property subCategoriesSortType subCategoriesSortType;
 @property(nonatomic, strong)NSMutableArray* subCategories;
 @property(nonatomic, strong)NSString* subCategoriesSelectedUid;
+@property(nonatomic, strong)BRRecordSubCategory* currentSelectSubCategory;
 - (void)fetchSubCategoriesWithPage:(NSNumber*)page;
 -(void)subCategoriesSort;
 
@@ -70,7 +77,10 @@ typedef enum subCategoriesSortType {
 
 @property(nonatomic, strong)NSMutableArray* videos;
 @property(nonatomic, strong)NSMutableArray* videosTemp;
+@property(nonatomic, strong)NSString* videoSelectedUid;
+@property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
 - (void)fetchVideosWithPage:(NSNumber*)page;
+- (void)fetchVideoByUid:(NSString*)uid;
 - (void)filterVideoByNameOrDesc:(NSString*)strSearch;
 
 

@@ -9,6 +9,10 @@
 #import "BRVideoViewController.h"
 #import "BRCellVideo.h"
 #import "BRRecordVideo.h"
+
+#import "BRRecordMainCategory.h"
+#import "BRRecordSubCategory.h"
+
 #import "BRDModel.h"
 #import "NSMutableArray+Shuffling.h"
 
@@ -86,7 +90,8 @@ UISearchBarDelegate>
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.tb.autoresizesSubviews = YES;
-    self.title = self.lang[@"titleVideos"];
+    self.title = [NSString stringWithFormat:@"%@~%@",  [BRDModel sharedInstance].currentSelectMainCategory.name,  [BRDModel sharedInstance].currentSelectSubCategory.name];
+   
     self.sortLb.text = self.lang[@"actionSearch"];
  
     UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
@@ -100,11 +105,12 @@ UISearchBarDelegate>
 -(void)navigationBack:(id)sender  {
     
     [[BRDModel sharedInstance].videos removeAllObjects];
+    [[BRDModel sharedInstance].videosTemp removeAllObjects];
     [BRDModel sharedInstance].subCategoriesSelectedUid = nil;
-    
+    [BRDModel sharedInstance].currentSelectedVideo = nil;
     [super navigationBack:sender];
 }
-
+ 
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -196,7 +202,7 @@ UISearchBarDelegate>
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    BRRecordVideo *record = [BRDModel sharedInstance].videos[indexPath.row];
+    //BRRecordVideo *record = [BRDModel sharedInstance].videos[indexPath.row];
 }
 
 #pragma mark UIScrollViewDelegate 
@@ -369,5 +375,32 @@ UISearchBarDelegate>
            NSStringFromSelector(_cmd));
     [self hideFilterTable];
 }
+
+#pragma mark Segues
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString *identifier = segue.identifier;
+    
+    if ([identifier isEqualToString:@"segueVideo"]) {
+        
+        BRCellVideo *cell =  (BRCellVideo*)sender;
+        NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
+        BRRecordVideo* record =  [[BRDModel sharedInstance].videos objectAtIndex:[indexPath row]];
+        //[BRDModel sharedInstance].currentSelectedVideo = record;
+        
+        [BRDModel sharedInstance].videoSelectedUid = record.uid;
+        PRPLog(@"\n [BRDModel sharedInstance].videoSelectedUid %@ \n-[%@ , %@]",
+               [BRDModel sharedInstance].subCategoriesSelectedUid,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));   
+        //        UINavigationController *navigationController = segue.destinationViewController;
+        
+        //        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
+        //        BRSubCategoryViewController_.m = self.birthday;
+        
+    }
+}
+
+
 
 @end

@@ -368,15 +368,17 @@ UIScrollViewDelegate>
         BRCellMainCategory *cell =  (BRCellMainCategory *)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
         BRRecordMainCategory* record =  [[BRDModel sharedInstance].mainCategories objectAtIndex:[indexPath row]];
+        [BRDModel sharedInstance].currentSelectMainCategory = record;
         [BRDModel sharedInstance].mainCategoriesSelectedUid = record.uid;
         PRPLog(@"\n [BRDModel sharedInstance].mainCategoriesSelectedUid %@ \n-[%@ , %@]",
                [BRDModel sharedInstance].mainCategoriesSelectedUid,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-//        UINavigationController *navigationController = segue.destinationViewController;
         
+//        UINavigationController *navigationController = segue.destinationViewController;
+//        
 //        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
-//        BRSubCategoryViewController_.m = self.birthday;
+//        BRSubCategoryViewController_.byMainCategory = record.uid;
 
     }
 }

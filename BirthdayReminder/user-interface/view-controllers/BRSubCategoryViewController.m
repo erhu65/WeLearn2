@@ -7,6 +7,7 @@
 
 #import "BRSubCategoryViewController.h"
 #import "BRCellSubCategory.h"
+#import "BRRecordMainCategory.h"
 #import "BRRecordSubCategory.h"
 #import "BRDModel.h"
 #import "NSMutableArray+Shuffling.h"
@@ -20,6 +21,7 @@
 <UITableViewDelegate, 
 UITableViewDataSource,
 UIScrollViewDelegate>
+
 @property(nonatomic, strong)NSNumber* page;
 @property(nonatomic, strong)NSNumber* lastPage;
 @property (weak, nonatomic) IBOutlet UIButton *sortBtn;
@@ -92,7 +94,8 @@ UIScrollViewDelegate>
     
     self.filterNameLabel.text = filterNames[activeFilterIndex];
     
-    self.title = self.lang[@"titleSubCategories"];
+    self.title = [BRDModel sharedInstance].currentSelectMainCategory.name;
+    
     self.sortLb.text = self.lang[@"sort"];
     self.filterNameLabel.text = @"";
     UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
@@ -108,7 +111,7 @@ UIScrollViewDelegate>
     
     [[BRDModel sharedInstance].subCategories removeAllObjects];
     [BRDModel sharedInstance].mainCategoriesSelectedUid = nil;
-     
+    [BRDModel sharedInstance].currentSelectSubCategory = nil;
     [super navigationBack:sender];
 }
 
@@ -383,6 +386,7 @@ UIScrollViewDelegate>
         BRCellSubCategory *cell =  (BRCellSubCategory *)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
         BRRecordSubCategory* record =  [[BRDModel sharedInstance].subCategories objectAtIndex:[indexPath row]];
+        [BRDModel sharedInstance].currentSelectSubCategory = record;
         [BRDModel sharedInstance].subCategoriesSelectedUid = record.uid;
         PRPLog(@"\n [BRDModel sharedInstance].subCategoriesSelectedUid %@ \n-[%@ , %@]",
                [BRDModel sharedInstance].subCategoriesSelectedUid,

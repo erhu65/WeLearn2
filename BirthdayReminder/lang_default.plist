@@ -10,6 +10,8 @@
 	<string>Sub Categories</string>
 	<key>titleVideos</key>
 	<string>Videos</string>
+	<key>titleVideo</key>
+	<string>Video</string>
 	<key>sort</key>
 	<string>Sort:</string>
 	<key>noSort</key>

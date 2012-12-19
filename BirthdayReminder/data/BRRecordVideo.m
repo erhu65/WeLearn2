@@ -22,13 +22,17 @@
         self.subCategoryName = [dic objectForKey:@"subCategoryName"];
         self.youtubeKey = [dic objectForKey:@"youtubeKey"];
         self.imgName = [dic objectForKey:@"imgName"];
+
         
         self.strImgUrl = [NSString stringWithFormat:@"%@/uploads/%@", BASE_URL, self.imgName];
-        
         self.created_at = [dic objectForKey:@"created_at"];
         self.modified_at = [dic objectForKey:@"modified_at"];
     }
     return self;
 }
-
+-(NSString*)description
+{
+    [super description];
+    return [NSString stringWithFormat:@"self.name: %@ \n self.name: %@ \n self.name: %@",  self.name, self.youtubeKey, self.imgName];
+}
 @end
