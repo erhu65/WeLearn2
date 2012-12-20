@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "377711956.057821"
+         timestampString = "377715622.642401"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "296"
-         endingLineNumber = "296"
+         startingLineNumber = "322"
+         endingLineNumber = "322"
          landmarkName = "-enteredFullscreen:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "377711956.057821"
+         timestampString = "377715622.642401"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "300"
-         endingLineNumber = "300"
+         startingLineNumber = "326"
+         endingLineNumber = "326"
          landmarkName = "-willExitFullscreen:"
          landmarkType = "5">
       </FileBreakpoint>

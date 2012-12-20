@@ -386,7 +386,7 @@ UISearchBarDelegate>
         BRCellVideo *cell =  (BRCellVideo*)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
         BRRecordVideo* record =  [[BRDModel sharedInstance].videos objectAtIndex:[indexPath row]];
-        //[BRDModel sharedInstance].currentSelectedVideo = record;
+        [BRDModel sharedInstance].currentSelectedVideo = record;
         
         [BRDModel sharedInstance].videoSelectedUid = record.uid;
         PRPLog(@"\n [BRDModel sharedInstance].videoSelectedUid %@ \n-[%@ , %@]",

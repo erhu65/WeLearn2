@@ -118,6 +118,9 @@
     
     if(![BRDModel sharedInstance].currentSelectedVideo){
         [[BRDModel sharedInstance] fetchVideoByUid:[BRDModel sharedInstance].videoSelectedUid];
+    } else {
+        if(!self.youtubePlayer)[self _handleVideoDidUpdate:nil];
+
     }
 } 
 - (void) viewWillDisappear:(BOOL)animated
@@ -161,7 +164,11 @@
         
         [self _showMovie:[BRDModel sharedInstance].currentSelectedVideo.youtubeKey];
         //    youtubePlayer = [[LBYouTubePlayerController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=i9OjcxfcUkE&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
-
+        if(self.lbMarquee){
+            [self.lbMarquee removeFromSuperview];
+            self.lbMarquee = nil;
+        }
+        
         self.lbMarquee = [[MarqueeLabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 20)  rate:50.0f andFadeLength:10.0f];
         self.lbMarquee.translatesAutoresizingMaskIntoConstraints = NO;
         self.lbMarquee.marqueeType = MLContinuous;
@@ -179,7 +186,7 @@
                                [BRDModel sharedInstance].currentSelectedVideo.subCategoryName,
                                [BRDModel sharedInstance].currentSelectedVideo.name,
                                [BRDModel sharedInstance].currentSelectedVideo.desc];
-        
+        self.title = [BRDModel sharedInstance].currentSelectedVideo.name;
         UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(marqueeTap:)];
         [self.lbMarquee addGestureRecognizer:tapRecognizer];
         self.lbMarquee.tag = 101;
@@ -248,8 +255,27 @@
            error,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
+    [self _showNextMovie];
 }
 
+
+-(void)_showNextMovie
+{
+    NSUInteger indexOfPerivousVideo = [[BRDModel sharedInstance].videos indexOfObject:[BRDModel sharedInstance].currentSelectedVideo];
+    
+    NSUInteger count = [[BRDModel sharedInstance].videos count];
+    NSUInteger indexOfNextVideo = ++indexOfPerivousVideo;
+    if(indexOfNextVideo == count)indexOfNextVideo = 0;
+    [BRDModel sharedInstance].currentSelectedVideo = [[BRDModel sharedInstance].videos objectAtIndex:indexOfNextVideo];
+
+    if(self.youtubePlayer){
+        
+        [self.youtubePlayer.view removeFromSuperview];
+        self.youtubePlayer = nil; 
+    }
+    [self _handleVideoDidUpdate:nil];
+    //[self _showMovie:strYoutubeKeyNextVideo];
+}
 - (void)_showMovie:(NSString*)youtubeKey {
     
     self.youtubePlayer =  [[LBYouTubePlayerController alloc] initWithYouTubeID:youtubeKey quality:LBYouTubeVideoQualitySmall];
@@ -322,17 +348,34 @@
     NSNumber* reason = [[notification userInfo] objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
     switch ([reason intValue]) {
         case MPMovieFinishReasonPlaybackEnded:
-            NSLog(@"playbackFinished. Reason: Playback Ended");         
+
+            PRPLog(@"playbackFinished. Reason: Playback Ended[%@ , %@]",
+                   [self.youtubePlayer currentPlaybackRate],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
             break;
         case MPMovieFinishReasonPlaybackError:
-            NSLog(@"playbackFinished. Reason: Playback Error");
+            PRPLog(@"playbackFinished. Reason: Playback Error[%@ , %@]",
+                   [self.youtubePlayer currentPlaybackRate],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
             break;
         case MPMovieFinishReasonUserExited:
-            NSLog(@"playbackFinished. Reason: User Exited");
+            PRPLog(@"playbackFinished. Reason: User Exited[%@ , %@]",
+                   [self.youtubePlayer currentPlaybackRate],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+
             break;
         default:
             break;
     }
+    if([reason intValue] == MPMovieFinishReasonPlaybackEnded){
+        
+        [self _showNextMovie];
+    }
+    
+
     //[self.youtubePlayer setFullscreen:NO animated:YES];
     //[self.youtubePlayer stop];
     //將影片重畫面上移除
