@@ -7,7 +7,10 @@
 //
 
 #import "BRCoreViewController.h"
-
+#import "LBYouTube.h" 
 @interface BRVideoDetailViewController : BRCoreViewController
+<LBYouTubePlayerControllerDelegate, 
+MPMediaPlayback>
+
 
 @end

@@ -150,6 +150,10 @@
 		B78A01871681E3480072810D /* UIImageViewResizable.m in Sources */ = {isa = PBXBuildFile; fileRef = B78A01861681E3480072810D /* UIImageViewResizable.m */; };
 		B78A018B1681E3CE0072810D /* BRVideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78A018A1681E3CE0072810D /* BRVideoDetailViewController.m */; };
 		B78A018D1681E81D0072810D /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = B78A018C1681E81D0072810D /* test.png */; };
+		B78B21D11682D80F001A99B0 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B78B21D01682D80F001A99B0 /* MediaPlayer.framework */; };
+		B78B21D71682D875001A99B0 /* LBYouTubeExtractor.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B21D41682D875001A99B0 /* LBYouTubeExtractor.m */; };
+		B78B21D81682D875001A99B0 /* LBYouTubePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B21D61682D875001A99B0 /* LBYouTubePlayerController.m */; };
+		B78B220816835CB2001A99B0 /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B220716835CB2001A99B0 /* MarqueeLabel.m */; };
 		B78BE85C16764856006FE99C /* PRPDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BE85B16764856006FE99C /* PRPDebug.m */; };
 		B78C303616770A6000B80BE7 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303316770A6000B80BE7 /* MasterViewController.m */; };
 		B78C303716770A6000B80BE7 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303516770A6000B80BE7 /* DetailViewController.m */; };
@@ -381,6 +385,14 @@
 		B78A01891681E3CE0072810D /* BRVideoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRVideoDetailViewController.h; sourceTree = "<group>"; };
 		B78A018A1681E3CE0072810D /* BRVideoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRVideoDetailViewController.m; sourceTree = "<group>"; };
 		B78A018C1681E81D0072810D /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test.png; sourceTree = "<group>"; };
+		B78B21D01682D80F001A99B0 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		B78B21D21682D875001A99B0 /* LBYouTube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBYouTube.h; sourceTree = "<group>"; };
+		B78B21D31682D875001A99B0 /* LBYouTubeExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBYouTubeExtractor.h; sourceTree = "<group>"; };
+		B78B21D41682D875001A99B0 /* LBYouTubeExtractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBYouTubeExtractor.m; sourceTree = "<group>"; };
+		B78B21D51682D875001A99B0 /* LBYouTubePlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBYouTubePlayerController.h; sourceTree = "<group>"; };
+		B78B21D61682D875001A99B0 /* LBYouTubePlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBYouTubePlayerController.m; sourceTree = "<group>"; };
+		B78B220616835CB2001A99B0 /* MarqueeLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MarqueeLabel.h; path = ../components/MarqueeLabel.h; sourceTree = "<group>"; };
+		B78B220716835CB2001A99B0 /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MarqueeLabel.m; path = ../components/MarqueeLabel.m; sourceTree = "<group>"; };
 		B78BE85A16764856006FE99C /* PRPDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPDebug.h; sourceTree = "<group>"; };
 		B78BE85B16764856006FE99C /* PRPDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPDebug.m; sourceTree = "<group>"; };
 		B78C303216770A6000B80BE7 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
@@ -435,6 +447,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B78B21D11682D80F001A99B0 /* MediaPlayer.framework in Frameworks */,
 				4851735815DBF1BC0085F77C /* MessageUI.framework in Frameworks */,
 				4851733115DA9EB00085F77C /* SystemConfiguration.framework in Frameworks */,
 				4851732F15DA9EAA0085F77C /* CFNetwork.framework in Frameworks */,
@@ -516,6 +529,7 @@
 		487BA4661594B02C00EEB099 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B78B21D01682D80F001A99B0 /* MediaPlayer.framework */,
 				4851735715DBF1BC0085F77C /* MessageUI.framework */,
 				4851733015DA9EB00085F77C /* SystemConfiguration.framework */,
 				4851732E15DA9EAA0085F77C /* CFNetwork.framework */,
@@ -725,6 +739,8 @@
 		48DEA8DC15C17F1D00397172 /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				B78B220616835CB2001A99B0 /* MarqueeLabel.h */,
+				B78B220716835CB2001A99B0 /* MarqueeLabel.m */,
 				B77A4CD41678947A0021C984 /* UIView+position.h */,
 				B77A4CD51678947A0021C984 /* UIView+position.m */,
 				B77A4CE41678963D0021C984 /* UIImage+CacheExtensions.h */,
@@ -792,9 +808,22 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
+		B78B21CA1682D7C6001A99B0 /* LBYouTubeView */ = {
+			isa = PBXGroup;
+			children = (
+				B78B21D21682D875001A99B0 /* LBYouTube.h */,
+				B78B21D31682D875001A99B0 /* LBYouTubeExtractor.h */,
+				B78B21D41682D875001A99B0 /* LBYouTubeExtractor.m */,
+				B78B21D51682D875001A99B0 /* LBYouTubePlayerController.h */,
+				B78B21D61682D875001A99B0 /* LBYouTubePlayerController.m */,
+			);
+			name = LBYouTubeView;
+			sourceTree = "<group>";
+		};
 		B78BE85516764807006FE99C /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				B78B21CA1682D7C6001A99B0 /* LBYouTubeView */,
 				B77A4CF216789BAF0021C984 /* ErrorHandler.h */,
 				B77A4CF316789BAF0021C984 /* ErrorHandler.m */,
 				B78BE85A16764856006FE99C /* PRPDebug.h */,
@@ -1098,6 +1127,9 @@
 				B79DF3611680C64F00510CA9 /* BRRecordBase.m in Sources */,
 				B78A01871681E3480072810D /* UIImageViewResizable.m in Sources */,
 				B78A018B1681E3CE0072810D /* BRVideoDetailViewController.m in Sources */,
+				B78B21D71682D875001A99B0 /* LBYouTubeExtractor.m in Sources */,
+				B78B21D81682D875001A99B0 /* LBYouTubePlayerController.m in Sources */,
+				B78B220816835CB2001A99B0 /* MarqueeLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

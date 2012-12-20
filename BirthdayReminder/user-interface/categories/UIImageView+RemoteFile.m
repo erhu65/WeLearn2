@@ -7,6 +7,7 @@
 //
 
 #import "UIImageView+RemoteFile.h"
+#import "Utils.h"
 #import <objc/runtime.h>
 
 //A singleton cache class that will store a mutable dictionary of url keys and UIImage values for images that have previously been downloaded
@@ -127,6 +128,7 @@
 
 @property (nonatomic,strong,setter = setUrl:) NSString *url;
 @property (nonatomic,strong,setter = setDownloadHelper:) DownloadHelper *downloadHelper;
+@property (nonatomic,strong,setter = setCacheFileName:) NSString *cacheFileName;
 
 @end
 
@@ -134,10 +136,11 @@
 
 @dynamic url;
 @dynamic downloadHelper;
+@dynamic cacheFileName;
 
 static char kImageUrlObjectKey;
 static char kImageDownloadHelperObjectKey;
-
+static char kImagecCacheFileNameObjectKey;
 
 + (ImageCache *)imageCache {
     static ImageCache *_imageCache;
@@ -172,8 +175,17 @@ static char kImageDownloadHelperObjectKey;
 }
 
 - (void)setDownloadHelper:(DownloadHelper *)downloadHelper {
+    
     objc_setAssociatedObject(self, &kImageDownloadHelperObjectKey, downloadHelper, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
+- (NSString *)cacheFileName {
+    return (NSString *)objc_getAssociatedObject(self, &kImagecCacheFileNameObjectKey);
+}
+-(void)setCacheFileName:(NSString *)cacheFileName
+{
+     objc_setAssociatedObject(self, &kImagecCacheFileNameObjectKey, cacheFileName, OBJC_ASSOCIATION_RETAIN_NONATOMIC);   
+}
+
 
 -(void) dealloc
 {
@@ -181,26 +193,22 @@ static char kImageDownloadHelperObjectKey;
 }
 
 #pragma mark DownloadHelperDelegate
-
 -(void)didCompleteDownloadForURL:(NSString *)url withData:(NSMutableData *)data
 {
     //handles the downloaded image data, turns it into an image instance and saves then it into the ImageCache singleton.
-    
     UIImage *image = [UIImage imageWithData:data];
-    
     if (image == nil) {//something didn't work out - data may be corrupted or a bad url
         return;
     }
-    
     //cache the image
     ImageCache *imageCache = [UIImageView imageCache];
     [imageCache storeCachedImage:image forURL:url];
-    
     //update the placeholder image display of this UIImageView
-    self.image = image;
+    NSString* cacheNamePath = [Utils filePathInCaches:self.cacheFileName withSuffix:nil];
+    [data writeToFile:cacheNamePath atomically:YES];
     
+    self.image = image;
 }
-
 @end
 
 
@@ -208,19 +216,23 @@ static char kImageDownloadHelperObjectKey;
 
 - (void)setImageWithRemoteFileURL:(NSString *)urlString placeHolderImage:(UIImage *)placeholderImage
 {
-    
     if (self.url != nil && [self.url isEqualToString:urlString]) {
         //if the url matches the existing url then ignore it
         return;
     }
+    NSArray* urlQueryArr = [urlString componentsSeparatedByString:@"/"];
+    self.cacheFileName = [urlQueryArr lastObject];
+    NSString* cacheNamePath = [Utils filePathInCaches:self.cacheFileName withSuffix:nil];
+    BOOL isFileExist =  [[NSFileManager defaultManager] fileExistsAtPath:cacheNamePath];
+    if (isFileExist) {
+        self.image =  [Utils readCacheImage:cacheNamePath];
+        return;
+    } 
     
     [self.downloadHelper cancelConnection];
-    
     self.url = urlString;
-    
     //get a reference to the image cache singleton
     ImageCache *imageCache = [UIImageView imageCache];
-    
     UIImage *image = [imageCache cachedImageForURL:urlString];
     //check it we've already got a cached version of the image
     if (image) {
@@ -230,7 +242,6 @@ static char kImageDownloadHelperObjectKey;
     
     //no cached version so start downloading the remote file
     self.image = placeholderImage;
-    
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -241,8 +252,5 @@ static char kImageDownloadHelperObjectKey;
         //create an empty mutable data container to add the data bytes to
         self.downloadHelper.data = [NSMutableData data];
     }
-    
-    
 }
-
 @end

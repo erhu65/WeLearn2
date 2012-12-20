@@ -91,11 +91,9 @@ static NSFileManager * _fileManager = nil;
     CGSize newSize = CGSizeMake(actualWidth, actualHeight);
     return newSize;
 }
-
 + (UIImage*)imageWithImage:(UIImage*)image 
               scaledToSize:(CGSize)newSize;
 {
-    
     UIGraphicsBeginImageContext( newSize );
     [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -126,7 +124,7 @@ static NSFileManager * _fileManager = nil;
         fileUrl: (NSString *) url
         isSaveThumb: (BOOL) isSaveThumb{
     
-    NSString *filePath = [Utils filePathInDocument:fileName withSuffix:nil];
+    NSString *filePath = [Utils filePathInCaches:fileName withSuffix:nil];
     
     if(![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         
@@ -140,7 +138,6 @@ static NSFileManager * _fileManager = nil;
         if(isSaveThumb) {
             [Utils saveImageAsThumb:fileName image:image scaledToSize:CGSizeMake(120.0f, 120.0f)];
         }
-
     }
 }
 
@@ -151,8 +148,6 @@ static NSFileManager * _fileManager = nil;
     UIImage *image = [UIImage imageWithData:pngData];
     return image;    
 }
-
-
 +(BOOL)writeStr:(NSString *) str 
         ToFilePath: (NSString *) path{
 

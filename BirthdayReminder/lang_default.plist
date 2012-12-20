@@ -38,5 +38,9 @@
 	<string>Back</string>
 	<key>actionSearch</key>
 	<string>Search</string>
+	<key>actionZoomOut</key>
+	<string>Zoom Out</string>
+	<key>actionZoomIn</key>
+	<string>Zoom In</string>
 </dict>
 </plist>
