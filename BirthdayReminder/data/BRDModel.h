@@ -17,6 +17,8 @@
 #define BRNotificationVideosDidUpdate            @"BRNotificationVideosDidUpdate"
 #define BRNotificationVideoDidUpdate            @"BRNotificationVideoDidUpdate"
 
+#define BRNotificationSocketURLDidUpdate            @"BRNotificationSocketURLDidUpdate"
+
 
 typedef enum mainCategoriesSortType {
     mainCategoriesSortTypeNoSort = 0,
@@ -79,14 +81,21 @@ typedef enum subCategoriesSortType {
 @property(nonatomic, strong)NSMutableArray* videosTemp;
 @property(nonatomic, strong)NSString* videoSelectedUid;
 @property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
+
+@property(nonatomic, strong)NSString* socketUrl;
+
 - (void)fetchVideosWithPage:(NSNumber*)page;
 - (void)fetchVideoByUid:(NSString*)uid;
 - (void)filterVideoByNameOrDesc:(NSString*)strSearch;
+
+- (void)getSocketUrl;
 
 
 -(void) importBirthdays:(NSArray *)birthdaysToImport;
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;
 
 -(void) updateCachedBirthdays;
+
+
 
 @end

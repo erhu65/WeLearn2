@@ -74,7 +74,10 @@ void exceptionHandler(NSException *exception)
     [Appirater appLaunched:YES];
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];     
-    return YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleSocketURLDidUpdate:) name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]]; 
+    [[BRDModel sharedInstance] getSocketUrl];
+    
     return YES;
 }
 				
@@ -162,4 +165,25 @@ void exceptionHandler(NSException *exception)
 }
 
 
+-(void)_handleSocketURLDidUpdate:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSString* errMsg = userInfo[@"errMsg"];
+    
+    if(errMsg!= nil && [errMsg length] > 0){        
+        // Notify the user
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                        message:errMsg 
+                                                       delegate:self
+                                              cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        PRPLog(@"[BRDModel sharedInstance].socketUrl: %@-[%@ , %@]",
+               [BRDModel sharedInstance].socketUrl,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+
+    }
+
+}
 @end

@@ -11,9 +11,9 @@
 #import "BRRecordVideo.h"
 #import "BRDModel.h"
 #import "MarqueeLabel.h"
+#import "WebViewJavascriptBridge.h"
+
 //#import "UIImageView+RemoteFile.h"
-
-
 
 @interface UIWindow (AutoLayoutDebug) 
 + (UIWindow *)keyWindow;
@@ -21,7 +21,8 @@
 @end
 
 @interface BRVideoDetailViewController ()
-<UIScrollViewDelegate>
+<UIScrollViewDelegate,
+UIAlertViewDelegate>
 
 //@property(nonatomic, strong) UIImageViewResizable* imvThumb;
 //@property(weak, nonatomic) IBOutlet UIScrollView *scrvThumb;
@@ -36,11 +37,22 @@
 
 @property (strong, nonatomic) MarqueeLabel*lbMarquee;
 
+@property (weak, nonatomic) IBOutlet UIWebView *webview;
+@property (weak, nonatomic) IBOutlet UITextView* tvOutPut;
+@property (weak, nonatomic) IBOutlet UIButton* joinRoomButton;
+@property (weak, nonatomic) IBOutlet UIButton* chatButton;
+
+
+@property (strong, nonatomic) WebViewJavascriptBridge *javascriptBridge;
+
+
+- (void)renderButtons:(UIWebView*)webView;
+- (void)loadExamplePage:(UIWebView*)webView;
 
 
 @end
 @implementation BRVideoDetailViewController
-
+@synthesize javascriptBridge = _bridge;
 
 - (void)didReceiveMemoryWarning
 {
@@ -89,6 +101,42 @@
                                    action:@selector(toggleVideoZoom:)];
     self.navigationItem.rightBarButtonItem = zoomBarbtn;
 
+    
+    //node.js socket.io webview bridge start...
+    [self.view  insertSubview:self.webview atIndex:0];
+    [WebViewJavascriptBridge enableLogging];
+
+    _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webview handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSLog(@"ObjC received message from JS: %@", data);
+        responseCallback(@"Response for message from ObjC");
+    }];
+    
+    [_bridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSLog(@"testObjcCallback called: %@", data);
+        responseCallback(@"Response from testObjcCallback");
+    }];
+    
+    [_bridge registerHandler:@"iosGetMsgCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSDictionary* resDic = (NSDictionary*)data;
+        NSLog(@"iosGetMsgCallback called: %@", resDic);
+        NSString* strOutput = [NSString stringWithFormat:@"%@ %@ at %@", resDic[@"sender"], resDic[@"message"], [NSDate date]];
+        NSString* strOutputOriginal = self.tvOutPut.text;
+        NSString* strOutputNew = [NSString stringWithFormat:@"%@ \n %@", strOutput, strOutputOriginal];
+        self.tvOutPut.text = strOutputNew;
+        responseCallback(@"Response from iosGetMsgCallback: ios got chatroom msg");
+    }];
+    
+    [_bridge send:@"A string sent from ObjC before Webview has loaded." responseCallback:^(id responseData) {
+        NSLog(@"objc got response! %@", responseData);
+    }];
+    
+    [_bridge callHandler:@"testJavascriptHandler" data:[NSDictionary dictionaryWithObject:@"before ready" forKey:@"foo"]];
+    
+    [self renderButtons:self.webview];
+    [self loadExamplePage:self.webview];
+    
+    [_bridge send:@"A string sent from ObjC after Webview has loaded."];
+    //node.js socket.io webview bridge end...
 
 }
 
@@ -126,7 +174,13 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    //stop youtube before leaving
+    self.youtubePlayer = nil;
+    //Clear A UIWebView to trigger window.onunload
+    [self.webview loadHTMLString:@"" baseURL:[NSURL URLWithString:@"http://google.com"]];
     [[NSNotificationCenter defaultCenter] removeObserver:self]; 
+    
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -155,11 +209,7 @@
 //        if ([[BRDModel sharedInstance].currentSelectedVideo.strImgUrl length] > 0) {
 //            
 //            [self.imvThumb setImageWithRemoteFileURL:[BRDModel sharedInstance].currentSelectedVideo.strImgUrl placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-//        }         
-        
-
-
-
+//        }
         // Set the height of the container box to be 250
         
         [self _showMovie:[BRDModel sharedInstance].currentSelectedVideo.youtubeKey];
@@ -225,7 +275,6 @@
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
 }
-
 
 #pragma mark UIScrollViewDelegate
 //- (void)scrollViewDidZoom:(UIScrollView *)aScrollView {
@@ -295,8 +344,8 @@
 //    self.youtubePlayer.movieSourceType = MPMovieSourceTypeStreaming;
 //    [self.youtubePlayer setInitialPlaybackTime:-1.f];
     //[self.youtubePlayer setFullscreen:YES animated:YES];
-//    [self.youtubePlayer prepareToPlay];
-//    [self.youtubePlayer play];
+    [self.youtubePlayer prepareToPlay];
+    [self.youtubePlayer play];
     
 //     UIPinchGestureRecognizer* pinchOutGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchOutGesture:)];
 //    [self.youtubePlayer.view addGestureRecognizer:pinchOutGesture];
@@ -426,8 +475,82 @@
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
-    
 
+}
+
+#pragma mark node.js socekt helper methods
+- (void)renderButtons:(UIWebView*)webView {
+
+    [self.joinRoomButton addTarget:self action:@selector(_jsointRoom) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.chatButton addTarget:self action:@selector(_sendMsgToRoom) forControlEvents:UIControlEventTouchUpInside];
+
+}
+
+- (void)sendMessage:(id)sender {
+    [_bridge send:@"A string sent from ObjC to JS" responseCallback:^(id response) {
+        NSLog(@"sendMessage got response: %@", response);
+    }];
+}
+
+- (void)callHandler:(id)sender {
+    NSDictionary* data = [NSDictionary dictionaryWithObject:@"Hi there, JS!" forKey:@"greetingFromObjC"];
+    [_bridge callHandler:@"testJavascriptHandler" data:data responseCallback:^(id response) {
+        NSLog(@"testJavascriptHandler responded: %@", response);
+    }];
+}
+
+- (void)callJsSendMsgHandler:(NSString*)newMsg  {
+    
+    NSDictionary* data = @{@"msg": newMsg};
+    
+    [_bridge callHandler:@"JsSendMsgHandler" data:data responseCallback:^(id response) {
+        NSLog(@"JsSendMsgHandler responded: %@", response);
+    }];
+}
+
+- (void)callJsJoinRoomHandler:(NSString*)newName {
+    
+    NSDictionary* data = @{@"newName": newName, @"newRoom": @"room1"};
+    
+    [_bridge callHandler:@"JsJoinRoomHandler" data:data responseCallback:^(id response) {
+        NSLog(@"JsSendMsgHandler responded: %@", response);
+    }];
+}
+
+-(void)_jsointRoom
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Join room" message:@"type your name" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alert.tag = 101;
+    [alert show];
+}
+
+-(void)_sendMsgToRoom
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Chat" message:@"type your Msg" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alert.tag = 102;
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if(alertView.tag == 101){
+        [self callJsJoinRoomHandler: [alertView textFieldAtIndex:0].text];
+    } else if(alertView.tag == 102) {
+        [self callJsSendMsgHandler: [alertView textFieldAtIndex:0].text];
+    }    
+}
+
+- (void)loadExamplePage:(UIWebView*)webView {
+    
+    //NSString* htmlPath = [[NSBundle mainBundle] pathForResource:@"ExampleApp" ofType:@"html"];
+    //NSString* appHtml = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    NSURL* url = [[NSURL alloc] initWithString:[BRDModel sharedInstance].socketUrl];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    [webView loadRequest:request];
+    //[webView loadHTMLString:appHtml baseURL:nil];
 }
 
 @end
