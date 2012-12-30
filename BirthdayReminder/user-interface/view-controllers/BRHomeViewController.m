@@ -29,7 +29,6 @@
     [super didReceiveMemoryWarning];
 }
 
-
 -(void) viewDidLoad
 {
     [super viewDidLoad];
@@ -80,8 +79,8 @@
         
         BRBirthdayDetailViewController *birthdayDetailViewController = segue.destinationViewController;
         birthdayDetailViewController.birthday = birthday;
-    }
-    else if ([identifier isEqualToString:@"AddBirthday"]) {
+        
+    } else if ([identifier isEqualToString:@"AddBirthday"]) {
         //Add a new birthday dictionary to the array of birthdays
         
         NSManagedObjectContext *context = [BRDModel sharedInstance].managedObjectContext;
@@ -92,6 +91,7 @@
         BRBirthdayEditViewController *birthdayEditViewController = (BRBirthdayEditViewController *) navigationController.topViewController;
         birthdayEditViewController.birthday = birthday;
         birthdayEditViewController.complectionBlock = ^(BOOL issuccess, NSString* str){
+            
             PRPLog(@"%d , %@-[%@ , %@]",
                    issuccess,
                    str,
@@ -111,7 +111,6 @@
 }
 
 #pragma mark UITableViewDataSource
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Cell"];

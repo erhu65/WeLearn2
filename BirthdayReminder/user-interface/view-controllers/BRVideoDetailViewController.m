@@ -13,6 +13,7 @@
 #import "MarqueeLabel.h"
 #import "WebViewJavascriptBridge.h"
 
+#import "FbChatRoomViewController.h"
 //#import "UIImageView+RemoteFile.h"
 
 @interface UIWindow (AutoLayoutDebug) 
@@ -21,51 +22,42 @@
 @end
 
 @interface BRVideoDetailViewController ()
-<UIScrollViewDelegate,
-UIAlertViewDelegate>
+<LBYouTubePlayerControllerDelegate, 
+MPMediaPlayback,
+UIScrollViewDelegate,
+UIAlertViewDelegate,
+FbChatRoomViewControllerDelegate>
 
 //@property(nonatomic, strong) UIImageViewResizable* imvThumb;
 //@property(weak, nonatomic) IBOutlet UIScrollView *scrvThumb;
 
-
-
 @property (nonatomic, strong) LBYouTubePlayerController* youtubePlayer;
 @property (nonatomic, assign, getter = isZoomed) BOOL zoomed;
-
-@property (nonatomic, strong) NSArray *hConstraint;
-@property (nonatomic, strong) NSArray *vConstraint;
-
+@property (nonatomic, strong) NSArray *hConstraintYoutubePlayer;
+@property (nonatomic, strong) NSArray *vConstraintYoutubePlayer;
 @property (strong, nonatomic) MarqueeLabel*lbMarquee;
 
-@property (weak, nonatomic) IBOutlet UIWebView *webview;
-@property (weak, nonatomic) IBOutlet UITextView* tvOutPut;
-@property (weak, nonatomic) IBOutlet UIButton* joinRoomButton;
-@property (weak, nonatomic) IBOutlet UIButton* chatButton;
-
-
-@property (strong, nonatomic) WebViewJavascriptBridge *javascriptBridge;
-
-
-- (void)renderButtons:(UIWebView*)webView;
-- (void)loadExamplePage:(UIWebView*)webView;
+@property(nonatomic, strong) FbChatRoomViewController* fbChatRoomViewController;
 
 
 @end
 @implementation BRVideoDetailViewController
-@synthesize javascriptBridge = _bridge;
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     if([self isViewLoaded] && self.view.window == nil){
         //self.imvThumb = nil;
+        self.view = nil;
+		[self.fbChatRoomViewController willMoveToParentViewController:nil];
+		[self.fbChatRoomViewController removeFromParentViewController];
+
     }
 }
 -(id)initWithCoder:(NSCoder *)aDecoder{
     
     self = [super initWithCoder:aDecoder];
     if(self){
-
         
     }
     return self;
@@ -100,51 +92,18 @@ UIAlertViewDelegate>
                                    target:self
                                    action:@selector(toggleVideoZoom:)];
     self.navigationItem.rightBarButtonItem = zoomBarbtn;
-
-    
-    //node.js socket.io webview bridge start...
-    [self.view  insertSubview:self.webview atIndex:0];
-    [WebViewJavascriptBridge enableLogging];
-
-    _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webview handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"ObjC received message from JS: %@", data);
-        responseCallback(@"Response for message from ObjC");
-    }];
-    
-    [_bridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSLog(@"testObjcCallback called: %@", data);
-        responseCallback(@"Response from testObjcCallback");
-    }];
-    
-    [_bridge registerHandler:@"iosGetMsgCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
-        NSDictionary* resDic = (NSDictionary*)data;
-        NSLog(@"iosGetMsgCallback called: %@", resDic);
-        NSString* strOutput = [NSString stringWithFormat:@"%@ %@ at %@", resDic[@"sender"], resDic[@"message"], [NSDate date]];
-        NSString* strOutputOriginal = self.tvOutPut.text;
-        NSString* strOutputNew = [NSString stringWithFormat:@"%@ \n %@", strOutput, strOutputOriginal];
-        self.tvOutPut.text = strOutputNew;
-        responseCallback(@"Response from iosGetMsgCallback: ios got chatroom msg");
-    }];
-    
-    [_bridge send:@"A string sent from ObjC before Webview has loaded." responseCallback:^(id responseData) {
-        NSLog(@"objc got response! %@", responseData);
-    }];
-    
-    [_bridge callHandler:@"testJavascriptHandler" data:[NSDictionary dictionaryWithObject:@"before ready" forKey:@"foo"]];
-    
-    [self renderButtons:self.webview];
-    [self loadExamplePage:self.webview];
-    
-    [_bridge send:@"A string sent from ObjC after Webview has loaded."];
-    //node.js socket.io webview bridge end...
-
 }
 
 -(void)navigationBack:(id)sender  {
     
     [BRDModel sharedInstance].videoSelectedUid = nil;
     [BRDModel sharedInstance].currentSelectedVideo = nil;
+    self.fbChatRoomViewController.isLeaving = YES;
+    //stop youtube before leaving
+    self.youtubePlayer = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
     [super navigationBack:sender];
+    
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -155,31 +114,24 @@ UIAlertViewDelegate>
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willExitFullscreen:) name:MPMoviePlayerWillExitFullscreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredFullscreen:) name:MPMoviePlayerDidEnterFullscreenNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exitedFullscreen:) name:MPMoviePlayerDidExitFullscreenNotification object:nil];
-
-    //使用Observer製作完成播放時要執行的動作
+    
+    //使用Observer製作完成播放時要執行的動作 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackDidFinish:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification 
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideoDidUpdate:) name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]];
     
     if(![BRDModel sharedInstance].currentSelectedVideo){
         [[BRDModel sharedInstance] fetchVideoByUid:[BRDModel sharedInstance].videoSelectedUid];
     } else {
         if(!self.youtubePlayer)[self _handleVideoDidUpdate:nil];
-
-    }
+    } 
 } 
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    //stop youtube before leaving
-    self.youtubePlayer = nil;
-    //Clear A UIWebView to trigger window.onunload
-    [self.webview loadHTMLString:@"" baseURL:[NSURL URLWithString:@"http://google.com"]];
-    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]];
     
 }
 - (void)viewDidAppear:(BOOL)animated {
@@ -205,15 +157,9 @@ UIAlertViewDelegate>
                [BRDModel sharedInstance].currentSelectedVideo,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-        
-//        if ([[BRDModel sharedInstance].currentSelectedVideo.strImgUrl length] > 0) {
-//            
-//            [self.imvThumb setImageWithRemoteFileURL:[BRDModel sharedInstance].currentSelectedVideo.strImgUrl placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-//        }
         // Set the height of the container box to be 250
-        
         [self _showMovie:[BRDModel sharedInstance].currentSelectedVideo.youtubeKey];
-        //    youtubePlayer = [[LBYouTubePlayerController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=i9OjcxfcUkE&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
+
         if(self.lbMarquee){
             [self.lbMarquee removeFromSuperview];
             self.lbMarquee = nil;
@@ -242,17 +188,14 @@ UIAlertViewDelegate>
         self.lbMarquee.tag = 101;
         [self.view addSubview:self.lbMarquee];
         
-        
         NSDictionary *viewsDictionary = 
         @{@"lbMarquee": self.lbMarquee};
         NSArray* constrainsMarqueeH = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[lbMarquee(<=490)]|" options:0 metrics:nil views:viewsDictionary];
         
         [self.view addConstraints:constrainsMarqueeH];
         NSArray* constrainsMarqueeV = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[lbMarquee(==20)]|" options:0 metrics:nil views:viewsDictionary];
-        
-        [self.view addConstraints:constrainsMarqueeV];        
+        [self.view addConstraints:constrainsMarqueeV];   
     }
-    
 }
 - (void)marqueeTap:(UITapGestureRecognizer *)recognizer {
     MarqueeLabel *lbMarquee = (MarqueeLabel *)recognizer.view;
@@ -275,20 +218,6 @@ UIAlertViewDelegate>
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
 }
-
-#pragma mark UIScrollViewDelegate
-//- (void)scrollViewDidZoom:(UIScrollView *)aScrollView {
-//    CGFloat offsetX = (self.scrvThumb.bounds.size.width > self.scrvThumb.contentSize.width)? 
-//    (self.scrvThumb.bounds.size.width - self.scrvThumb.contentSize.width) * 0.5 : 0.0;
-//    CGFloat offsetY = (self.scrvThumb.bounds.size.height > self.scrvThumb.contentSize.height)? 
-//    (self.scrvThumb.bounds.size.height - self.scrvThumb.contentSize.height) * 0.5 : 0.0;
-//    self.imvThumb.center = CGPointMake(self.scrvThumb.contentSize.width * 0.5 + offsetX, 
-//                                   self.scrvThumb.contentSize.height * 0.5 + offsetY);
-//}
-//-(UIView *) viewForZoomingInScrollView:(UIScrollView *)scrollView {
-//    return self.imvThumb;
-//}
-
 #pragma mark LBYouTubePlayerViewControllerDelegate
 -(void)youTubePlayerViewController:(LBYouTubePlayerController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     
@@ -322,9 +251,11 @@ UIAlertViewDelegate>
         [self.youtubePlayer.view removeFromSuperview];
         self.youtubePlayer = nil; 
     }
+    
     [self _handleVideoDidUpdate:nil];
     //[self _showMovie:strYoutubeKeyNextVideo];
 }
+
 - (void)_showMovie:(NSString*)youtubeKey {
     
     self.youtubePlayer =  [[LBYouTubePlayerController alloc] initWithYouTubeID:youtubeKey quality:LBYouTubeVideoQualitySmall];
@@ -339,7 +270,10 @@ UIAlertViewDelegate>
     self.youtubePlayer.scalingMode = MPMovieScalingModeAspectFill;
     self.youtubePlayer.repeatMode = MPMovieRepeatModeNone;
     self.youtubePlayer.controlStyle = MPMovieControlStyleDefault;
-    [self.view addSubview:self.youtubePlayer.view];
+    //self.youtubePlayer.initialPlaybackTime = 40.f;
+
+    [self.view insertSubview:self.youtubePlayer.view belowSubview:self.fbChatRoomViewController.view ];
+
     //self.youtubePlayer.view.userInteractionEnabled = NO;    
 //    self.youtubePlayer.movieSourceType = MPMovieSourceTypeStreaming;
 //    [self.youtubePlayer setInitialPlaybackTime:-1.f];
@@ -355,39 +289,51 @@ UIAlertViewDelegate>
     @{@"youtubePlayer": self.youtubePlayer.view};
     
     // Set the width of the container box to be 250
-    self.hConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:viewsDictionary];
+    self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:viewsDictionary];
     // Set the height of the container box to be 250
-    self.vConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==200)]|" options:0 metrics:nil views:viewsDictionary];
-    [self.view addConstraints:self.hConstraint];
-    [self.view addConstraints: self.vConstraint];
+    self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==190)]|" options:0 metrics:nil views:viewsDictionary];
+    [self.view addConstraints:self.hConstraintYoutubePlayer];
+    [self.view addConstraints: self.vConstraintYoutubePlayer];
+}
+
+#pragma mark FbChatRoomViewControllerDelegate method
+-(void)getOutterInfo
+{
+    self.fbChatRoomViewController.currentYoutubeKey = [BRDModel sharedInstance].currentSelectedVideo.youtubeKey;
+    self.fbChatRoomViewController.currentPlaybackTime = [NSString stringWithFormat:@"%f", [self.youtubePlayer currentPlaybackTime]];
+    [[BRDModel sharedInstance] findVideoByYoutubeKey:self.fbChatRoomViewController.currentYoutubeKey];
     
 }
-#pragma mark MPMediaPlayback
-- (void)willEnterFullscreen:(NSNotification*)notification {
+#pragma mark MPMediaPlayback delegate
+- (void)willEnterFullscreen:(NSNotification*)notification 
+{
     NSLog(@"willEnterFullscreen");
 }
 
-- (void)enteredFullscreen:(NSNotification*)notification {
+- (void)enteredFullscreen:(NSNotification*)notification 
+{
     NSLog(@"enteredFullscreen");
 }
 
-- (void)willExitFullscreen:(NSNotification*)notification {
+- (void)willExitFullscreen:(NSNotification*)notification 
+{
     NSLog(@"willExitFullscreen");
 }
+
 //only get called in full screen mode
-- (void)exitedFullscreen:(NSNotification*)notification {
-    
+- (void)exitedFullscreen:(NSNotification*)notification 
+{
     NSLog(@"exitedFullscreen");
-    
     NSNumber *reason = [notification.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
     if(self.youtubePlayer){
         
-        PRPLog(@"reason: %d, currentPlaybackTime: %d-[%@ , %@]",
+        PRPLog(@"reason: %d, currentPlaybackTime: %f \n currentPlaybackRate: %f \n -[%@ , %@]",
                reason,
+               [self.youtubePlayer currentPlaybackTime],
                [self.youtubePlayer currentPlaybackRate],
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-        [self.youtubePlayer play];
+        [self.youtubePlayer play];        
     }
 }
 //自行定義影片播放完成的函式 //only get called in non-full screen mode
@@ -397,7 +343,6 @@ UIAlertViewDelegate>
     NSNumber* reason = [[notification userInfo] objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
     switch ([reason intValue]) {
         case MPMovieFinishReasonPlaybackEnded:
-
             PRPLog(@"playbackFinished. Reason: Playback Ended[%@ , %@]",
                    [self.youtubePlayer currentPlaybackRate],
                    NSStringFromClass([self class]),
@@ -414,17 +359,14 @@ UIAlertViewDelegate>
                    [self.youtubePlayer currentPlaybackRate],
                    NSStringFromClass([self class]),
                    NSStringFromSelector(_cmd));
-
             break;
         default:
             break;
     }
     if([reason intValue] == MPMovieFinishReasonPlaybackEnded){
-        
         [self _showNextMovie];
     }
     
-
     //[self.youtubePlayer setFullscreen:NO animated:YES];
     //[self.youtubePlayer stop];
     //將影片重畫面上移除
@@ -435,8 +377,8 @@ UIAlertViewDelegate>
     @"self" : self.view, 
     @"youtubePlayer": self.youtubePlayer.view};
     
-    [self.view removeConstraints:self.hConstraint];
-    [self.view  removeConstraints:self.vConstraint];
+    [self.view removeConstraints:self.hConstraintYoutubePlayer];
+    [self.view  removeConstraints:self.vConstraintYoutubePlayer];
     
     if (self.isZoomed)
     {
@@ -449,10 +391,10 @@ UIAlertViewDelegate>
 
         self.navigationItem.rightBarButtonItem.title = self.lang[@"actionZoomIn"];
         // Set the width of the container box to be 250
-        self.hConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
+        self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
         
         // Set the height of the container box to be 250
-        self.vConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==200)]" options:0 metrics:nil views:views];
+        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==190)]" options:0 metrics:nil views:views];
     }
     else
     {
@@ -463,94 +405,34 @@ UIAlertViewDelegate>
                                        action:@selector(toggleVideoZoom:)];
         self.navigationItem.rightBarButtonItem = zoomBarbtn;
         
-        self.hConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
+        self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
         
-        self.vConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[youtubePlayer]|" options:0 metrics:nil views:views];
+        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[youtubePlayer]|" options:0 metrics:nil views:views];
     }
     
-    [self.view addConstraints:self.hConstraint];
-    [self.view addConstraints:self.vConstraint];
+    [self.view addConstraints:self.hConstraintYoutubePlayer];
+    [self.view addConstraints:self.vConstraintYoutubePlayer];
     self.zoomed = !self.isZoomed;
     
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
-
 }
 
-#pragma mark node.js socekt helper methods
-- (void)renderButtons:(UIWebView*)webView {
-
-    [self.joinRoomButton addTarget:self action:@selector(_jsointRoom) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.chatButton addTarget:self action:@selector(_sendMsgToRoom) forControlEvents:UIControlEventTouchUpInside];
-
-}
-
-- (void)sendMessage:(id)sender {
-    [_bridge send:@"A string sent from ObjC to JS" responseCallback:^(id response) {
-        NSLog(@"sendMessage got response: %@", response);
-    }];
-}
-
-- (void)callHandler:(id)sender {
-    NSDictionary* data = [NSDictionary dictionaryWithObject:@"Hi there, JS!" forKey:@"greetingFromObjC"];
-    [_bridge callHandler:@"testJavascriptHandler" data:data responseCallback:^(id response) {
-        NSLog(@"testJavascriptHandler responded: %@", response);
-    }];
-}
-
-- (void)callJsSendMsgHandler:(NSString*)newMsg  {
-    
-    NSDictionary* data = @{@"msg": newMsg};
-    
-    [_bridge callHandler:@"JsSendMsgHandler" data:data responseCallback:^(id response) {
-        NSLog(@"JsSendMsgHandler responded: %@", response);
-    }];
-}
-
-- (void)callJsJoinRoomHandler:(NSString*)newName {
-    
-    NSDictionary* data = @{@"newName": newName, @"newRoom": @"room1"};
-    
-    [_bridge callHandler:@"JsJoinRoomHandler" data:data responseCallback:^(id response) {
-        NSLog(@"JsSendMsgHandler responded: %@", response);
-    }];
-}
-
--(void)_jsointRoom
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Join room" message:@"type your name" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alert.tag = 101;
-    [alert show];
+	if ([segue.identifier isEqualToString:@"segueFbChatRoom"])
+	{
+		self.fbChatRoomViewController = segue.destinationViewController;
+        self.fbChatRoomViewController.delegate = self;
+		//self.daysViewController.records = _records;
+	}
+    //	else if ([segue.identifier isEqualToString:@"EmbedGraph"])
+    //	{
+    //		self.graphViewController = segue.destinationViewController;
+    //	}
 }
 
--(void)_sendMsgToRoom
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Chat" message:@"type your Msg" delegate:self cancelButtonTitle:@"Done" otherButtonTitles:nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alert.tag = 102;
-    [alert show];
-}
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if(alertView.tag == 101){
-        [self callJsJoinRoomHandler: [alertView textFieldAtIndex:0].text];
-    } else if(alertView.tag == 102) {
-        [self callJsSendMsgHandler: [alertView textFieldAtIndex:0].text];
-    }    
-}
-
-- (void)loadExamplePage:(UIWebView*)webView {
-    
-    //NSString* htmlPath = [[NSBundle mainBundle] pathForResource:@"ExampleApp" ofType:@"html"];
-    //NSString* appHtml = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    NSURL* url = [[NSURL alloc] initWithString:[BRDModel sharedInstance].socketUrl];
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-    [webView loadRequest:request];
-    //[webView loadHTMLString:appHtml baseURL:nil];
-}
 
 @end

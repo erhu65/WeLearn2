@@ -167,6 +167,11 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="XiW-cR-Uti"/>
+                        <barButtonItem image="icon-settings.png" id="xvL-wD-5D0">
+                            <connections>
+                                <segue destination="Zzq-pf-aAH" kind="modal" modalTransitionStyle="flipHorizontal" id="s5U-xI-xgo"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem title="Address Book" id="TLB-hb-1ID">
                             <connections>
                                 <action selector="importFromAddressBookTapped:" destination="2" id="kEC-2w-OR6"/>
@@ -181,11 +186,6 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="fMe-Nm-jdY"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Birthdays" id="NOY-Ow-kr6">
-                        <barButtonItem key="leftBarButtonItem" image="icon-settings.png" id="xvL-wD-5D0">
-                            <connections>
-                                <segue destination="Zzq-pf-aAH" kind="modal" modalTransitionStyle="flipHorizontal" id="s5U-xI-xgo"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="icon-add-new.png" id="1hS-JD-a4Q">
                             <connections>
                                 <segue destination="RiP-qw-rdd" kind="modal" identifier="AddBirthday" id="mom-eS-TxU"/>
@@ -203,7 +203,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1751" y="2816"/>
+            <point key="canvasLocation" x="1142" y="2812"/>
         </scene>
         <!--Post To Facebook Wall View Controller - Facebook-->
         <scene sceneID="Awq-Xw-A1E">
@@ -408,7 +408,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3734" y="2386"/>
+            <point key="canvasLocation" x="2794" y="2400"/>
         </scene>
         <!--Birthday Detail View Controller - Birthday Detail-->
         <scene sceneID="8b9-eE-hKi">
@@ -639,7 +639,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rky-bi-M3Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2235" y="2816"/>
+            <point key="canvasLocation" x="1626" y="2812"/>
         </scene>
         <!--Notes Edit View Controller - Edit Notes-->
         <scene sceneID="bpO-US-aYL">
@@ -687,7 +687,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wea-WC-Jgn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3081" y="3120"/>
+            <point key="canvasLocation" x="2739" y="3116"/>
         </scene>
         <!--Navigation Controller - Item-->
         <scene sceneID="BWS-pE-iqt">
@@ -1121,52 +1121,20 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gh3-71-dc0">
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </webView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M7H-t3-rzy">
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="136" id="2mv-2F-7qE"/>
-                                </constraints>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q87-Uy-Zz1">
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="chat">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gPa-YA-ISD">
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="join">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                            <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YYa-Zf-MvM" userLabel="Container View_FB_users">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue destination="gMo-ma-Ify" kind="embed" identifier="segueFbChatRoom" id="DzJ-Mt-8TT"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Q87-Uy-Zz1" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="default" id="4q2-sG-SCV"/>
-                            <constraint firstItem="M7H-t3-rzy" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="default" id="79I-jt-8Kd"/>
-                            <constraint firstItem="gPa-YA-ISD" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="default" id="7Bf-5W-mDM"/>
-                            <constraint firstItem="Q87-Uy-Zz1" firstAttribute="leading" secondItem="gPa-YA-ISD" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="BSg-7y-E9S"/>
-                            <constraint firstItem="M7H-t3-rzy" firstAttribute="leading" secondItem="Uhn-T1-QsF" secondAttribute="leading" type="default" id="FXQ-bW-K1E"/>
-                            <constraint firstItem="gPa-YA-ISD" firstAttribute="leading" secondItem="Uhn-T1-QsF" secondAttribute="leading" type="default" id="TPd-Rp-usv"/>
-                            <constraint firstItem="gh3-71-dc0" firstAttribute="top" secondItem="Uhn-T1-QsF" secondAttribute="top" type="default" id="VI5-n2-TRm"/>
-                            <constraint firstItem="M7H-t3-rzy" firstAttribute="trailing" secondItem="Uhn-T1-QsF" secondAttribute="trailing" type="default" id="XIu-0N-TlM"/>
-                            <constraint firstItem="gh3-71-dc0" firstAttribute="leading" secondItem="Uhn-T1-QsF" secondAttribute="leading" type="default" id="g6B-Tk-fS3"/>
-                            <constraint firstItem="gh3-71-dc0" firstAttribute="trailing" secondItem="Uhn-T1-QsF" secondAttribute="trailing" type="default" id="m9P-Nx-E92"/>
-                            <constraint firstItem="gh3-71-dc0" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="default" id="n4d-wu-DIO"/>
+                            <constraint firstItem="YYa-Zf-MvM" firstAttribute="leading" secondItem="Uhn-T1-QsF" secondAttribute="leading" type="default" id="0N9-uf-mRe"/>
+                            <constraint firstItem="YYa-Zf-MvM" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="user" id="0V6-HK-C7D"/>
+                            <constraint firstItem="YYa-Zf-MvM" firstAttribute="bottom" secondItem="Uhn-T1-QsF" secondAttribute="bottom" type="user" id="7jC-8h-dv6"/>
+                            <constraint firstItem="YYa-Zf-MvM" firstAttribute="trailing" secondItem="Uhn-T1-QsF" secondAttribute="trailing" type="default" id="rGK-HU-577"/>
+                            <constraint firstItem="YYa-Zf-MvM" firstAttribute="top" secondItem="Uhn-T1-QsF" secondAttribute="top" constant="224" id="rzL-rz-rSM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="t3H-69-vo0">
@@ -1176,12 +1144,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="chatButton" destination="Q87-Uy-Zz1" id="Ksh-Fl-tgf"/>
-                        <outlet property="joinRoomButton" destination="gPa-YA-ISD" id="0fa-MZ-Miv"/>
-                        <outlet property="tvOutPut" destination="M7H-t3-rzy" id="8Ot-9A-kfF"/>
-                        <outlet property="webview" destination="gh3-71-dc0" id="dLM-NO-hpq"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bW7-hU-vAZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1306,7 +1268,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4dP-dq-I2u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1239" y="4231"/>
+            <point key="canvasLocation" x="1157" y="4249"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="leY-5t-Ov9">
@@ -1324,7 +1286,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XLH-T6-4tj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3252" y="2386"/>
+            <point key="canvasLocation" x="2312" y="2400"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="yd7-Sc-ODe">
@@ -1342,7 +1304,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pPW-Wv-rCr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2649" y="3120"/>
+            <point key="canvasLocation" x="2307" y="3116"/>
         </scene>
         <!--Import Address Book View Controller - Address Book-->
         <scene sceneID="KH1-1k-89a">
@@ -1478,7 +1440,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pDq-m3-JBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4669" y="3753"/>
+            <point key="canvasLocation" x="4337" y="3781"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="yax-3D-dNV">
@@ -1500,7 +1462,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xnv-j1-HSs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4216" y="3753"/>
+            <point key="canvasLocation" x="3884" y="3781"/>
         </scene>
         <!--Import Facebook View Controller - Facebook-->
         <scene sceneID="Lh3-UF-tIx">
@@ -1636,7 +1598,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="enL-9o-gqF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4669" y="3166"/>
+            <point key="canvasLocation" x="4337" y="3194"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Dlw-cd-oNi">
@@ -1658,7 +1620,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MPv-qR-Zxx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4216" y="3166"/>
+            <point key="canvasLocation" x="3884" y="3194"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8SD-o2-bWg">
@@ -1903,7 +1865,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OhU-6B-1bf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3111" y="3831"/>
+            <point key="canvasLocation" x="2787" y="3841"/>
         </scene>
         <!--Notification Time View Controller - Alert Time-->
         <scene sceneID="eTz-9v-xIG">
@@ -1972,7 +1934,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sAc-0d-pcU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3663" y="3989"/>
+            <point key="canvasLocation" x="3371" y="4115"/>
         </scene>
         <!--Days Before View Controller - Days Before-->
         <scene sceneID="Chz-vv-qh3">
@@ -2011,7 +1973,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2I-J0-Ljf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3663" y="3412"/>
+            <point key="canvasLocation" x="3371" y="3430"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1OD-dB-Fyh">
@@ -2029,7 +1991,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="64h-PL-s09" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2649" y="3830"/>
+            <point key="canvasLocation" x="2325" y="3840"/>
         </scene>
         <!--Master View Controller - Numberpedia-->
         <scene sceneID="cF0-y4-m9Q">
@@ -2113,7 +2075,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6C-ds-Kno" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1239" y="3575"/>
+            <point key="canvasLocation" x="1151" y="3571"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="kRD-AS-Gce">
@@ -2168,7 +2130,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pUe-oE-4Z6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1721" y="3575"/>
+            <point key="canvasLocation" x="1676" y="3571"/>
         </scene>
         <!--Navigation Controller - subscripting-->
         <scene sceneID="1Ew-v9-EhM">
@@ -2218,12 +2180,18 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <subviews>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Owr-7U-bo7">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" type="user" id="CJ5-u8-Mpp"/>
+                                </constraints>
                                 <connections>
                                     <segue destination="qAT-mw-0FZ" kind="embed" identifier="EmbedDays" id="fKZ-oJ-LWI"/>
                                 </connections>
                             </containerView>
                             <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F00-5g-xaq">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="158" type="user" id="Qna-VS-vgA"/>
+                                </constraints>
                                 <connections>
                                     <segue destination="UYE-FM-Lbt" kind="embed" identifier="EmbedGraph" id="fAJ-Fp-hHE"/>
                                 </connections>
@@ -2232,27 +2200,27 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Owr-7U-bo7" firstAttribute="leading" secondItem="gwA-Nc-2yC" secondAttribute="leading" type="default" id="9GA-56-M4M"/>
-                            <constraint firstAttribute="bottom" secondItem="Owr-7U-bo7" secondAttribute="bottom" constant="152" id="9NA-JY-cQh"/>
                             <constraint firstItem="F00-5g-xaq" firstAttribute="trailing" secondItem="gwA-Nc-2yC" secondAttribute="trailing" type="default" id="Iko-ZH-3cD"/>
-                            <constraint firstItem="F00-5g-xaq" firstAttribute="top" secondItem="gwA-Nc-2yC" secondAttribute="top" constant="303" id="TtM-6n-Gd8"/>
-                            <constraint firstItem="F00-5g-xaq" firstAttribute="bottom" secondItem="gwA-Nc-2yC" secondAttribute="bottom" type="default" id="qdv-mH-k0I"/>
+                            <constraint firstItem="F00-5g-xaq" firstAttribute="bottom" secondItem="gwA-Nc-2yC" secondAttribute="bottom" type="user" id="Sih-aV-avu"/>
+                            <constraint firstItem="F00-5g-xaq" firstAttribute="top" secondItem="Owr-7U-bo7" secondAttribute="bottom" type="user" id="So7-qD-ctp"/>
+                            <constraint firstItem="F00-5g-xaq" firstAttribute="bottom" secondItem="gwA-Nc-2yC" secondAttribute="bottom" type="user" id="YFB-F7-MRH"/>
                             <constraint firstItem="F00-5g-xaq" firstAttribute="leading" secondItem="gwA-Nc-2yC" secondAttribute="leading" type="default" id="sTo-lg-vi6"/>
                             <constraint firstItem="Owr-7U-bo7" firstAttribute="trailing" secondItem="gwA-Nc-2yC" secondAttribute="trailing" type="default" id="uTd-il-eoa"/>
-                            <constraint firstItem="Owr-7U-bo7" firstAttribute="top" secondItem="gwA-Nc-2yC" secondAttribute="top" type="default" id="y8b-If-LWD"/>
+                            <constraint firstItem="Owr-7U-bo7" firstAttribute="top" secondItem="gwA-Nc-2yC" secondAttribute="top" type="user" id="w6J-6K-llU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Days" id="WB9-wl-YmR"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nay-Pu-lEl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1031" y="4958"/>
+            <point key="canvasLocation" x="1151" y="4958"/>
         </scene>
         <!--Days View Controller - Days-->
         <scene sceneID="nLy-5X-EoG">
             <objects>
                 <tableViewController storyboardIdentifier="" id="qAT-mw-0FZ" customClass="DaysViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="emk-mk-B8k">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="303"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="297"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -2295,14 +2263,14 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WTC-xU-QAj" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1632" y="4937"/>
+            <point key="canvasLocation" x="1752" y="4937"/>
         </scene>
         <!--Graph View Controller-->
         <scene sceneID="azW-d7-oGW">
             <objects>
                 <viewController storyboardIdentifier="" id="UYE-FM-Lbt" customClass="GraphViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8Tq-dH-pHk">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="158"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="adP-LP-0CL">
@@ -2339,14 +2307,14 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uLy-Hv-Hd0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1626" y="5419"/>
+            <point key="canvasLocation" x="1736" y="5407"/>
         </scene>
         <!--Measurements View Controller - Measurements-->
         <scene sceneID="Iad-Mh-CS2">
             <objects>
                 <tableViewController id="o3q-08-m6c" customClass="MeasurementsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="ROa-m3-YR5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="303"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="297"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -2483,12 +2451,12 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="526" y="4958"/>
         </scene>
-        <!--Error Handler View Controller - Item-->
+        <!--Error Handler View Controller-->
         <scene sceneID="hsE-cA-MAQ">
             <objects>
                 <viewController id="8ah-54-aKo" customClass="BRErrorHandlerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="d8h-yx-0gL">
-                        <rect key="frame" x="0.0" y="20" width="320" height="499"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I77-QT-JoW">
@@ -2542,11 +2510,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <constraint firstItem="4sE-sl-AMM" firstAttribute="top" secondItem="d8h-yx-0gL" secondAttribute="top" constant="181" id="wcH-12-WSb"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="CPo-Go-olw"/>
+                    <navigationItem key="navigationItem" id="NrO-es-6fx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xF0-RB-nnZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="531" y="5626"/>
+            <point key="canvasLocation" x="1163" y="5626"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="mlt-2E-rY9">
@@ -2639,12 +2607,125 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <segue destination="w3m-u7-WiE" kind="relationship" relationship="viewControllers" id="4yN-3C-aKj"/>
                         <segue destination="u6p-Io-qWL" kind="relationship" relationship="viewControllers" id="Ngt-oa-v2j"/>
                         <segue destination="hXu-Gk-0Jc" kind="relationship" relationship="viewControllers" id="jH1-gp-8yQ"/>
-                        <segue destination="8ah-54-aKo" kind="relationship" relationship="viewControllers" id="SyY-VW-Gft"/>
+                        <segue destination="hhR-TB-U6x" kind="relationship" relationship="viewControllers" id="SyY-VW-Gft"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9v4-h8-iG1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-30" y="2650"/>
+        </scene>
+        <!--Fb Chat Room View Controller-->
+        <scene sceneID="d9Y-fW-fZ4">
+            <objects>
+                <viewController id="gMo-ma-Ify" customClass="FbChatRoomViewController" sceneMemberID="viewController">
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Ste-WX-2gG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="231"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vMa-GM-QLz" userLabel="tfChat">
+                                <constraints>
+                                    <constraint firstAttribute="width" id="zdI-4S-HL0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <webView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y2v-oj-Sgp"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4IB-Uw-gCc" userLabel="tvOutPut">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="190" id="exT-fN-Xrt"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JSk-dB-go8" userLabel="toolBarRoom">
+                                <items>
+                                    <barButtonItem title="Join" id="NQT-jm-AiR" userLabel="barBtnJoin">
+                                        <connections>
+                                            <action selector="joinRoomWithFBAccount:" destination="gMo-ma-Ify" id="2tv-KT-J3h"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="agd-x7-qs8"/>
+                                    <barButtonItem style="plain" id="wYj-9l-SZH">
+                                        <view key="customView" contentMode="scaleToFill" id="Wzo-h0-odd">
+                                            <rect key="frame" x="112" y="6" width="95" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="chat room" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uyn-vH-GQ0">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="uyn-vH-GQ0" firstAttribute="centerX" secondItem="Wzo-h0-odd" secondAttribute="centerX" type="default" id="1DK-EF-9Wz"/>
+                                                <constraint firstItem="uyn-vH-GQ0" firstAttribute="centerY" secondItem="Wzo-h0-odd" secondAttribute="centerY" type="default" id="3F8-0j-md5"/>
+                                            </constraints>
+                                        </view>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="drJ-Gx-Ylo"/>
+                                    <barButtonItem title="Talk" id="iUP-vW-D4T">
+                                        <connections>
+                                            <action selector="_prepareTextForSendMsgToRoom:" destination="gMo-ma-Ify" id="05Q-Oz-Q6A"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0t0-08-u4W" userLabel="activityChatRoom"/>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="4IB-Uw-gCc" firstAttribute="top" secondItem="JSk-dB-go8" secondAttribute="bottom" type="default" id="9CL-AV-5TQ"/>
+                            <constraint firstItem="JSk-dB-go8" firstAttribute="top" secondItem="Ste-WX-2gG" secondAttribute="top" type="default" id="9If-ZD-Lo0"/>
+                            <constraint firstItem="JSk-dB-go8" firstAttribute="trailing" secondItem="Ste-WX-2gG" secondAttribute="trailing" type="default" id="GKl-tA-6bb"/>
+                            <constraint firstItem="Y2v-oj-Sgp" firstAttribute="trailing" secondItem="Ste-WX-2gG" secondAttribute="trailing" type="default" id="IcA-Zt-nqH"/>
+                            <constraint firstItem="4IB-Uw-gCc" firstAttribute="bottom" secondItem="Y2v-oj-Sgp" secondAttribute="bottom" type="default" id="K5q-bP-Cyx"/>
+                            <constraint firstItem="0t0-08-u4W" firstAttribute="centerX" secondItem="JSk-dB-go8" secondAttribute="centerX" type="default" id="MyZ-DE-bOi"/>
+                            <constraint firstItem="JSk-dB-go8" firstAttribute="leading" secondItem="Ste-WX-2gG" secondAttribute="leading" type="default" id="TeN-YL-jcx"/>
+                            <constraint firstAttribute="trailing" secondItem="vMa-GM-QLz" secondAttribute="trailing" constant="65" id="aNA-od-3dR"/>
+                            <constraint firstItem="0t0-08-u4W" firstAttribute="centerY" secondItem="4IB-Uw-gCc" secondAttribute="centerY" type="default" id="e6h-qO-Vk6"/>
+                            <constraint firstItem="vMa-GM-QLz" firstAttribute="top" secondItem="Ste-WX-2gG" secondAttribute="top" constant="20" symbolic="YES" type="default" id="eAt-xl-cAV"/>
+                            <constraint firstItem="Y2v-oj-Sgp" firstAttribute="top" secondItem="Ste-WX-2gG" secondAttribute="top" type="default" id="hy5-fp-K7K"/>
+                            <constraint firstItem="4IB-Uw-gCc" firstAttribute="leading" secondItem="Ste-WX-2gG" secondAttribute="leading" type="default" id="jqq-zS-p6V"/>
+                            <constraint firstItem="4IB-Uw-gCc" firstAttribute="trailing" secondItem="Ste-WX-2gG" secondAttribute="trailing" type="default" id="kvA-V0-Chj"/>
+                            <constraint firstItem="Y2v-oj-Sgp" firstAttribute="leading" secondItem="Ste-WX-2gG" secondAttribute="leading" type="default" id="vBF-88-GeI"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <connections>
+                        <outlet property="activityChatRoom" destination="0t0-08-u4W" id="ANP-Zl-utn"/>
+                        <outlet property="barBtnJoin" destination="NQT-jm-AiR" id="ja4-Tf-nHs"/>
+                        <outlet property="barBtnTalk" destination="iUP-vW-D4T" id="hQb-P1-Kqx"/>
+                        <outlet property="lbChatRoomTitle" destination="uyn-vH-GQ0" id="opJ-KX-BfQ"/>
+                        <outlet property="tfChat" destination="vMa-GM-QLz" id="tvp-e6-JGW"/>
+                        <outlet property="toolBarRoom" destination="JSk-dB-go8" id="0Ep-97-SUC"/>
+                        <outlet property="tvOutPut" destination="4IB-Uw-gCc" id="Cp6-Q0-CCG"/>
+                        <outlet property="webview" destination="Y2v-oj-Sgp" id="MIl-BW-s6b"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GY9-nV-1OB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2980" y="-5"/>
+        </scene>
+        <!--Navigation Controller - Item-->
+        <scene sceneID="xHP-aP-JOo">
+            <objects>
+                <navigationController id="hhR-TB-U6x" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="CPo-Go-olw"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3UJ-2O-qfN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8ah-54-aKo" kind="relationship" relationship="rootViewController" id="Eet-cm-r8A"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gwW-rl-pra" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="531" y="5626"/>
         </scene>
     </scenes>
     <resources>
@@ -2669,12 +2750,279 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="sms-icon.png" width="24" height="24"/>
         <image name="thumbnail-background.png" width="71" height="71"/>
     </resources>
+    <classes>
+        <class className="AutoLayoutViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AutoLayoutViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spaceBetweenFilterBarAndMainTable" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="BRBirthdayDetailViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBirthdayDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="callButtonTapped:"/>
+                <relationship kind="action" name="deleteButtonTapped:"/>
+                <relationship kind="action" name="emailButtonTapped:"/>
+                <relationship kind="action" name="facebookButtonTapped:"/>
+                <relationship kind="action" name="smsButtonTapped:"/>
+                <relationship kind="action" name="unwindBackToDetailViewController:" candidateClass="UIStoryboardSegue"/>
+                <relationship kind="outlet" name="birthdayLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="callButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="emailButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="facebookButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="notesTextLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="notesTitleLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="photoView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="remainingDaysImageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="remainingDaysLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="remainingDaysSubTextLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="smsButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="BRBirthdayEditViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBirthdayEditViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didChangeDatePicker:"/>
+                <relationship kind="action" name="didChangeNameText:"/>
+                <relationship kind="action" name="didTapPhoto:"/>
+                <relationship kind="action" name="didToggleSwitch:"/>
+                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
+                <relationship kind="outlet" name="includeYearLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="includeYearSwitch" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="nameTextField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="photoContainerView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="photoView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="picPhotoLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="BRBirthdayTableViewCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBirthdayTableViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="birthdayLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="iconView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="remainingDaysImageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="remainingDaysLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="remainingDaysSubTextLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="BRBlueButton" superclassName="UIButton">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBlueButton.h"/>
+        </class>
+        <class className="BRCellMainCategory" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellMainCategory.h"/>
+            <relationships>
+                <relationship kind="outlet" name="descLb" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLb" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="BRCellSubCategory" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellSubCategory.h"/>
+            <relationships>
+                <relationship kind="outlet" name="descLb" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="nameLb" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="BRCellVideo" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellVideo.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imvThumb" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="lbDesc" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="lbName" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="BRCoreViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCoreViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelAndDismiss:"/>
+                <relationship kind="action" name="navigationBack:"/>
+                <relationship kind="action" name="saveAndDismiss:"/>
+            </relationships>
+        </class>
+        <class className="BRDaysBeforeViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRDaysBeforeViewController.h"/>
+        </class>
+        <class className="BRErrorHandlerViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRErrorHandlerViewController.h"/>
+        </class>
+        <class className="BRHomeViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRHomeViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="importFromAddressBookTapped:"/>
+                <relationship kind="action" name="importFromFacebookTapped:"/>
+                <relationship kind="action" name="unwindBackToHomeViewController:" candidateClass="UIStoryboardSegue"/>
+                <relationship kind="outlet" name="addressBookButton" candidateClass="BRBlueButton"/>
+                <relationship kind="outlet" name="facebookButton" candidateClass="BRBlueButton"/>
+                <relationship kind="outlet" name="importLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="importView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="BRImportAddressBookViewController" superclassName="BRImportViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRImportAddressBookViewController.h"/>
+        </class>
+        <class className="BRImportFacebookViewController" superclassName="BRImportViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRImportFacebookViewController.h"/>
+        </class>
+        <class className="BRImportViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRImportViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didTapImportButton:"/>
+                <relationship kind="action" name="didTapSelectAllButton:"/>
+                <relationship kind="action" name="didTapSelectNoneButton:"/>
+                <relationship kind="outlet" name="importButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="BRMainCategoryViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRMainCategoryViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sortLb" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spaceBetweenFilterBarAndMainTable" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tb" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="BRNotesEditViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRNotesEditViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="saveButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="BRNotificationTimeViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRNotificationTimeViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didChangeTime:"/>
+                <relationship kind="outlet" name="timePicker" candidateClass="UIDatePicker"/>
+                <relationship kind="outlet" name="whatTimeLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="BRPostToFacebookWallViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRPostToFacebookWallViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="postToFacebook:"/>
+                <relationship kind="outlet" name="photoView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="postButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
+        </class>
+        <class className="BRRedButton" superclassName="UIButton">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRRedButton.h"/>
+        </class>
+        <class className="BRSettingsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRSettingsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didClickDoneButton:"/>
+                <relationship kind="outlet" name="tableCellDaysBefore" candidateClass="UITableViewCell"/>
+                <relationship kind="outlet" name="tableCellNotificationTime" candidateClass="UITableViewCell"/>
+            </relationships>
+        </class>
+        <class className="BRSubCategoryViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRSubCategoryViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sortLb" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spaceBetweenFilterBarAndMainTable" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tb" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="BRVideoDetailViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRVideoDetailViewController.h"/>
+        </class>
+        <class className="BRVideoViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRVideoViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
+                <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="sortLb" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spaceBetweenFilterBarAndMainTable" candidateClass="NSLayoutConstraint"/>
+                <relationship kind="outlet" name="tb" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="CombinedViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CombinedViewController.h"/>
+        </class>
+        <class className="DaysViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DaysViewController.h"/>
+        </class>
+        <class className="DetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="EditViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/EditViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="deleteButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="textField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="FbChatRoomViewController" superclassName="BRCoreViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FbChatRoomViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="activityChatRoom" candidateClass="UIActivityIndicatorView"/>
+                <relationship kind="outlet" name="barBtnJoin" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="barBtnTalk" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="chatButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="joinRoomButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="lbChatRoomTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="tb" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="tfChat" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="toolBarRoom" candidateClass="UIToolbar"/>
+                <relationship kind="outlet" name="tvOutPut" candidateClass="UITextView"/>
+                <relationship kind="outlet" name="webview" candidateClass="UIWebView"/>
+            </relationships>
+        </class>
+        <class className="GraphView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphView.h"/>
+        </class>
+        <class className="GraphViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/GraphViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="graphView" candidateClass="GraphView"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="toggleButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="MasterViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MasterViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="segmentedControl" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+        <class className="MeasurementsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MeasurementsViewController.h"/>
+        </class>
+        <class className="MyNavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyNavigationController.h"/>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UIStoryboardSegue" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="IoN-HE-JA9"/>
+        <segue reference="mom-eS-TxU"/>
     </inferredMetricsTieBreakers>
 </document>

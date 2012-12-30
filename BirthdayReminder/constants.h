@@ -7,7 +7,7 @@
 //
 
 #define BASE_URL          @"http://nameless-dawn-4099.herokuapp.com"
-//#define BASE_URL          @"http://localhost:3000"
+//s#define BASE_URL          @"http://localhost:3000"
 
 //431690400206637
 #define KFacebookKey @"500954283270682"//
@@ -24,16 +24,15 @@
 #define kCustomRowHeight    60.0
 #define kCustomRowCount     7
 
-
 #define app_logo @"http://erhu65.phpfogapp.com/public/images/icon_tagsale_57.png"
-
-
 
 #define kAppDelegate ((AppDelegate *) [[UIApplication sharedApplication] delegate])
 #define isiPhone ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
 
 #define BARBUTTON(TITLE, SELECTOR) [[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 #define IS_IPHONE			(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define SYSBARBUTTON(ITEM, SELECTOR) [[UIBarButtonItem alloc] initWithBarButtonSystemItem:ITEM target:self action:SELECTOR] 
+#define IS_IPAD	(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 #define BR_STYLE_COLOR [UIColor colorWithRed:87.0f/255.0f green:47.0f/255.0f blue:13.0f/255.0f alpha:0.5f]
 #define BARBUTTON(TITLE, SELECTOR) [[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]

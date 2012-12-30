@@ -20,12 +20,13 @@
 typedef enum : int
 {
     FacebookActionGetFriendsBirthdays = 1,
-    FacebookActionPostToWall
+    FacebookActionPostToWall,
+    FacebookActionGetMe
 }FacebookAction;
 
 @interface BRDModel()
 
-@property (strong) ACAccount *facebookAccount;
+@property (nonatomic, strong) ACAccount* facebookAccount;
 @property FacebookAction currentFacebookAction;
 @property (nonatomic,strong) NSString *postToFacebookMessage;
 @property (nonatomic,strong) NSString *postToFacebookID;
@@ -50,6 +51,13 @@ static BRDModel *_sharedInstance = nil;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
+
+-(ACAccount*)facebookAccount{
+    if(nil == _facebookAccount){
+        [self authenticateWithFacebook];
+    }
+    return _facebookAccount;
+}
 
 -(NSMutableArray*)mainCategories{
     
@@ -160,6 +168,7 @@ static BRDModel *_sharedInstance = nil;
 - (void)fetchFacebookBirthdays
 {
     NSLog(@"fetchFacebookBirthdays");
+    
     if (self.facebookAccount == nil) {
         self.currentFacebookAction = FacebookActionGetFriendsBirthdays;
         [self authenticateWithFacebook];
@@ -168,7 +177,6 @@ static BRDModel *_sharedInstance = nil;
     
     //We've got an authenticated Facebook Account if the code executes here
     NSURL *requestURL = [NSURL URLWithString:@"https://graph.facebook.com/me/friends"];
-    
     NSDictionary *params = @{@"fields" : @"name,id,birthday"};
     
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook requestMethod:SLRequestMethodGET URL:requestURL parameters:params];
@@ -218,6 +226,56 @@ static BRDModel *_sharedInstance = nil;
         }
     }];
 }
+
+
+- (void)fetchFacebookMe
+{    
+    
+    if(nil != self.fbMe){
+        [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
+        return;
+    }
+    
+    if (self.facebookAccount == nil) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
+    
+    //We've got an authenticated Facebook Account if the code executes here
+    NSURL *requestURL = [NSURL URLWithString:@"https://graph.facebook.com/me"];
+    NSDictionary *params = @{@"fields" : @"name,id,birthday"};
+    
+    SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook requestMethod:SLRequestMethodGET URL:requestURL parameters:params];
+    
+    request.account = self.facebookAccount;
+    __block NSDictionary *resultD;
+    __weak __block BRDModel *weakSelf = self;
+    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+        if (error != nil) {
+            NSLog(@"Error getting my Facebook friend birthdays: %@",error);
+        }
+        else
+        {
+            // Facebook's me/friends Graph API returns a root dictionary
+            resultD = (NSDictionary *) [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+            weakSelf.fbMe = resultD;
+            weakSelf.fbName = [resultD objectForKey:@"name"];
+            weakSelf.fbId = [resultD objectForKey:@"id"];
+            PRPLog(@"Facebook returned friends: %@ -[%@ , %@]",
+                   resultD,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+//                //update the view on the main thread
+                NSDictionary *userInfo = @{@"FacebookMe":resultD};
+                [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:userInfo];
+            });
+        }
+    }];
+}
+
 
 #pragma mark mainCategories
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page{
@@ -1000,6 +1058,25 @@ static BRDModel *_sharedInstance = nil;
     }
     
 }
+- (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey
+{
+    __block BRRecordVideo* video;
+    
+    [self.videosTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
+        BRRecordVideo* record = (BRRecordVideo*)obj;
+        if([record.youtubeKey isEqualToString:youtubeKey]){
+            video = record;
+            *stop = YES;
+        }
+        
+    }];
+    PRPLog(@"found video by key:%@ -[%@ , %@] \n ",
+           youtubeKey,
+           NSStringFromClass([self class]),
+           NSStringFromSelector(_cmd));
+    return video;
+}
+
 
 - (void)getSocketUrl
 {
@@ -1187,6 +1264,7 @@ static BRDModel *_sharedInstance = nil;
 - (void)authenticateWithFacebook {
     
     //Centralized iOS user Twitter, Facebook and Sina Weibo accounts are accessed by apps via the ACAccountStore 
+    //if(nil != self.facebookAccount)return;
     
     ACAccountStore *accountStore = [[ACAccountStore alloc] init];
     
@@ -1205,7 +1283,6 @@ static BRDModel *_sharedInstance = nil;
         if(granted) {
             //The completition handler may not fire in the main thread and as we are going to 
             NSLog(@"Facebook Authorized!");
-            
             /** 
              * The user granted us the basic read permission.
              * Now we can ask for more permissions
@@ -1227,6 +1304,15 @@ static BRDModel *_sharedInstance = nil;
                     //TODO - post to a friend's Facebook Wall
                     [self postToFacebookWall:self.postToFacebookMessage withFacebookID:self.postToFacebookID];
                     break;
+                case FacebookActionGetMe:
+                    //TODO - post to a friend's Facebook Wall
+                    [self fetchFacebookMe];
+                    break;
+ 
+                default:
+                    PRPLog(@"self.facebookAccount= %@-[%@ , %@]",
+                           self.facebookAccount,
+                           NSStringFromClass([self class]),NSStringFromSelector(_cmd));
             }
         } else {
             

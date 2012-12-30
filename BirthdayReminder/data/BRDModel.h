@@ -5,6 +5,7 @@
 //  Created by Nick Kuh on 26/07/2012.
 //  Copyright (c) 2012 Nick Kuh. All rights reserved.
 //
+#define BRNotificationFacebookMeDidUpdate        @"BRNotificationFacebookMeDidUpdate"
 
 #define BRNotificationAddressBookBirthdaysDidUpdate        @"BRNotificationAddressBookBirthdaysDidUpdate"
 #define BRNotificationFacebookBirthdaysDidUpdate            @"BRNotificationFacebookBirthdaysDidUpdate"
@@ -37,15 +38,18 @@ typedef enum subCategoriesSortType {
 @class BRRecordMainCategory;
 @class BRRecordSubCategory;
 @class BRRecordVideo;
+@class ACAccount;
 
 @interface BRDModel : NSObject
 
 + (BRDModel*)sharedInstance;
 
+
+@property(nonatomic, strong)NSDictionary* fbMe;
+@property(nonatomic, strong)NSString* fbName;
+@property(nonatomic, strong)NSString* fbId;
+
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
-
-
-
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
@@ -58,6 +62,7 @@ typedef enum subCategoriesSortType {
 
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
+- (void)fetchFacebookMe;
 
 @property BOOL  mainCategoriesSortIsDesc;
 @property mainCategoriesSortType mainCategoriesSortType;
@@ -87,6 +92,8 @@ typedef enum subCategoriesSortType {
 - (void)fetchVideosWithPage:(NSNumber*)page;
 - (void)fetchVideoByUid:(NSString*)uid;
 - (void)filterVideoByNameOrDesc:(NSString*)strSearch;
+- (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey;
+
 
 - (void)getSocketUrl;
 
@@ -95,7 +102,6 @@ typedef enum subCategoriesSortType {
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;
 
 -(void) updateCachedBirthdays;
-
 
 
 @end

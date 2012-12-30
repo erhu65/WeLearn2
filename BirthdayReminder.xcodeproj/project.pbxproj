@@ -134,6 +134,7 @@
 		B7101D64167E39770093DBC8 /* ArrowAsc.png in Resources */ = {isa = PBXBuildFile; fileRef = B7101D62167E39770093DBC8 /* ArrowAsc.png */; };
 		B7101D65167E39770093DBC8 /* ArrowAsc@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */; };
 		B7101D68167E40E90093DBC8 /* NSMutableArray+Shuffling.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101D67167E40E90093DBC8 /* NSMutableArray+Shuffling.m */; };
+		B710D79A168D9022002DC219 /* FbChatRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B710D799168D9022002DC219 /* FbChatRoomViewController.m */; };
 		B77A4CDE1678947A0021C984 /* UIView+position.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD51678947A0021C984 /* UIView+position.m */; };
 		B77A4CDF1678947A0021C984 /* Connectivity.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD71678947A0021C984 /* Connectivity.m */; };
 		B77A4CE01678947A0021C984 /* Geometry.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CD91678947A0021C984 /* Geometry.m */; };
@@ -356,6 +357,8 @@
 		B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ArrowAsc@2x.png"; sourceTree = "<group>"; };
 		B7101D66167E40E90093DBC8 /* NSMutableArray+Shuffling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Shuffling.h"; sourceTree = "<group>"; };
 		B7101D67167E40E90093DBC8 /* NSMutableArray+Shuffling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffling.m"; sourceTree = "<group>"; };
+		B710D798168D9022002DC219 /* FbChatRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbChatRoomViewController.h; sourceTree = "<group>"; };
+		B710D799168D9022002DC219 /* FbChatRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbChatRoomViewController.m; sourceTree = "<group>"; };
 		B77A4CD41678947A0021C984 /* UIView+position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+position.h"; path = "../../UIView+position.h"; sourceTree = "<group>"; };
 		B77A4CD51678947A0021C984 /* UIView+position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+position.m"; path = "../../UIView+position.m"; sourceTree = "<group>"; };
 		B77A4CD61678947A0021C984 /* Connectivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connectivity.h; sourceTree = "<group>"; };
@@ -691,6 +694,8 @@
 				B79DF3561680889E00510CA9 /* BRVideoViewController.m */,
 				B78A01891681E3CE0072810D /* BRVideoDetailViewController.h */,
 				B78A018A1681E3CE0072810D /* BRVideoDetailViewController.m */,
+				B710D798168D9022002DC219 /* FbChatRoomViewController.h */,
+				B710D799168D9022002DC219 /* FbChatRoomViewController.m */,
 				48BA416615A44FBE00F5885A /* BRHomeViewController.h */,
 				48BA416715A44FBE00F5885A /* BRHomeViewController.m */,
 				48BA416915A44FCC00F5885A /* BRBirthdayDetailViewController.h */,
@@ -1144,6 +1149,7 @@
 				B78B21D81682D875001A99B0 /* LBYouTubePlayerController.m in Sources */,
 				B78B220816835CB2001A99B0 /* MarqueeLabel.m in Sources */,
 				B78FF6121684756200E043BF /* WebViewJavascriptBridge.m in Sources */,
+				B710D79A168D9022002DC219 /* FbChatRoomViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

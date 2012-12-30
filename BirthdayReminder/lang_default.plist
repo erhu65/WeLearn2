@@ -12,6 +12,8 @@
 	<string>Videos</string>
 	<key>titleVideo</key>
 	<string>Video</string>
+	<key>titleChatRoom</key>
+	<string>Chat Room</string>
 	<key>sort</key>
 	<string>Sort:</string>
 	<key>noSort</key>
@@ -32,6 +34,10 @@
 	<string>Parse Error</string>
 	<key>infoNoData</key>
 	<string>No Data</string>
+	<key>infoConnectFBFirst</key>
+	<string>Plearse Connect Facebook First</string>
+	<key>warnEmptyText</key>
+	<string>Please fill the field</string>
 	<key>actionDimiss</key>
 	<string>Dimiss</string>
 	<key>actionBack</key>
@@ -42,5 +48,11 @@
 	<string>Zoom Out</string>
 	<key>actionZoomIn</key>
 	<string>Zoom In</string>
+	<key>actionJoin</key>
+	<string>Join</string>
+	<key>actionLeave</key>
+	<string>Leave</string>
+	<key>actionTalk</key>
+	<string>Talk</string>
 </dict>
 </plist>

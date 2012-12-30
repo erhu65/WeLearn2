@@ -162,6 +162,8 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    
     NSLog(@"viewWillDisappear");
 }
 
@@ -172,7 +174,6 @@
 }
 
 #pragma mark Segues
-
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSString *identifier = segue.identifier;
@@ -215,9 +216,7 @@
     }
 }
 
-
 #pragma mark Button Actions
-
 - (IBAction)facebookButtonTapped:(id)sender
 {
     UINavigationController *navigationController = [self.storyboard instantiateViewControllerWithIdentifier:@"PostToFacebookWall"];
@@ -322,13 +321,11 @@
         emailLink = [emailLink stringByAppendingString:@"?subject=Happy%20Birthday"];
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:emailLink]]) return emailLink;
     }
-
     
     return nil;
 }
 
 #pragma mark - UIActionSheetDelegate
-
 - (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     //check whether the user cancelled the delete instruction via the action sheet cancel button
@@ -354,7 +351,4 @@
            NSStringFromSelector(_cmd));
 
 }
-
-
-
 @end

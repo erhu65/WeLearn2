@@ -22,14 +22,23 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFacebookBirthdaysDidUpdate:) name:BRNotificationFacebookBirthdaysDidUpdate object:[BRDModel sharedInstance]];
+    
+    [[NSNotificationCenter defaultCenter] 
+     addObserver:self
+     selector:@selector(handleFacebookBirthdaysDidUpdate:) 
+     name:BRNotificationFacebookBirthdaysDidUpdate 
+     object:[BRDModel sharedInstance]];
+    
     [[BRDModel sharedInstance] fetchFacebookBirthdays];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookBirthdaysDidUpdate object:[BRDModel sharedInstance]];
+    [[NSNotificationCenter defaultCenter] 
+     removeObserver:self 
+     name:BRNotificationFacebookBirthdaysDidUpdate 
+     object:[BRDModel sharedInstance]];
 }
 
 -(void)handleFacebookBirthdaysDidUpdate:(NSNotification *)notification

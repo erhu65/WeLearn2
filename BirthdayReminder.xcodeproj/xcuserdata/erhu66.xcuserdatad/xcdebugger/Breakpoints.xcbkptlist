@@ -16,31 +16,5 @@
          landmarkName = "-done"
          landmarkType = "5">
       </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "378323235.787272"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "371"
-         endingLineNumber = "371"
-         landmarkName = "-enteredFullscreen:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "378323235.787272"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "375"
-         endingLineNumber = "375"
-         landmarkName = "-willExitFullscreen:"
-         landmarkType = "5">
-      </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>
