@@ -90,6 +90,7 @@
 
 	[actionSheet showFromRect:self.deleteButton.frame inView:self.view animated:YES];
 }
+
 #pragma mark - UIActionSheetDelegate
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {

@@ -12,5 +12,5 @@
 @interface BRVideoViewController : BRCoreViewController
 
 
-
+-(IBAction)unwindBackToBRVideoViewController:(UIStoryboardSegue *)segue;
 @end

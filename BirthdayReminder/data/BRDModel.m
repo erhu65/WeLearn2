@@ -1068,7 +1068,6 @@ static BRDModel *_sharedInstance = nil;
             video = record;
             *stop = YES;
         }
-        
     }];
     PRPLog(@"found video by key:%@ -[%@ , %@] \n ",
            youtubeKey,
@@ -1076,8 +1075,6 @@ static BRDModel *_sharedInstance = nil;
            NSStringFromSelector(_cmd));
     return video;
 }
-
-
 - (void)getSocketUrl
 {
 

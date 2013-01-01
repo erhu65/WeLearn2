@@ -123,6 +123,9 @@
 		48DEA96415C2F3C400397172 /* navigation-bar-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95015C2F3C400397172 /* navigation-bar-background@2x.png */; };
 		48DEA96515C2F3C400397172 /* tool-bar-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95115C2F3C400397172 /* tool-bar-background.png */; };
 		48DEA96615C2F3C400397172 /* tool-bar-background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */; };
+		B709512A1692DED0009D10F3 /* Tab1NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70951291692DED0009D10F3 /* Tab1NavigationController.m */; };
+		B709512E16933B99009D10F3 /* BRRecordFbChat.m in Sources */ = {isa = PBXBuildFile; fileRef = B709512D16933B99009D10F3 /* BRRecordFbChat.m */; };
+		B709513116933BDC009D10F3 /* BRCellfBChat.m in Sources */ = {isa = PBXBuildFile; fileRef = B709513016933BDC009D10F3 /* BRCellfBChat.m */; };
 		B7101CF6167DABD50093DBC8 /* BRMainCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */; };
 		B7101CFA167DAD8E0093DBC8 /* BRCellMainCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CF9167DAD8E0093DBC8 /* BRCellMainCategory.m */; };
 		B7101CFD167DADCD0093DBC8 /* BRRecordMainCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CFC167DADCD0093DBC8 /* BRRecordMainCategory.m */; };
@@ -339,6 +342,12 @@
 		48DEA95015C2F3C400397172 /* navigation-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation-bar-background@2x.png"; sourceTree = "<group>"; };
 		48DEA95115C2F3C400397172 /* tool-bar-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background.png"; sourceTree = "<group>"; };
 		48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background@2x.png"; sourceTree = "<group>"; };
+		B70951281692DED0009D10F3 /* Tab1NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tab1NavigationController.h; sourceTree = "<group>"; };
+		B70951291692DED0009D10F3 /* Tab1NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tab1NavigationController.m; sourceTree = "<group>"; };
+		B709512C16933B99009D10F3 /* BRRecordFbChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordFbChat.h; sourceTree = "<group>"; };
+		B709512D16933B99009D10F3 /* BRRecordFbChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordFbChat.m; sourceTree = "<group>"; };
+		B709512F16933BDC009D10F3 /* BRCellfBChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellfBChat.h; sourceTree = "<group>"; };
+		B709513016933BDC009D10F3 /* BRCellfBChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCellfBChat.m; sourceTree = "<group>"; };
 		B7101CF4167DABD50093DBC8 /* BRMainCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMainCategoryViewController.h; sourceTree = "<group>"; };
 		B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRMainCategoryViewController.m; sourceTree = "<group>"; };
 		B7101CF8167DAD8E0093DBC8 /* BRCellMainCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellMainCategory.h; sourceTree = "<group>"; };
@@ -507,6 +516,8 @@
 				B78845C9167EC7630015CE41 /* BRRecordSubCategory.m */,
 				B79DF35C168088FB00510CA9 /* BRRecordVideo.h */,
 				B79DF35D168088FB00510CA9 /* BRRecordVideo.m */,
+				B709512C16933B99009D10F3 /* BRRecordFbChat.h */,
+				B709512D16933B99009D10F3 /* BRRecordFbChat.m */,
 				485172FE15D931550085F77C /* BRDSettings.h */,
 				485172FF15D931550085F77C /* BRDSettings.m */,
 			);
@@ -686,6 +697,8 @@
 			children = (
 				48BEC16615A5B7EB00263FBD /* BRCoreViewController.h */,
 				48BEC16715A5B7EB00263FBD /* BRCoreViewController.m */,
+				B70951281692DED0009D10F3 /* Tab1NavigationController.h */,
+				B70951291692DED0009D10F3 /* Tab1NavigationController.m */,
 				B7101CF4167DABD50093DBC8 /* BRMainCategoryViewController.h */,
 				B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */,
 				B78845C1167EC69C0015CE41 /* BRSubCategoryViewController.h */,
@@ -778,6 +791,8 @@
 				B78845C6167EC7430015CE41 /* BRCellSubCategory.m */,
 				B79DF359168088DC00510CA9 /* BRCellVideo.h */,
 				B79DF35A168088DC00510CA9 /* BRCellVideo.m */,
+				B709512F16933BDC009D10F3 /* BRCellfBChat.h */,
+				B709513016933BDC009D10F3 /* BRCellfBChat.m */,
 				484F123115C5EC8200AF5BBD /* BRBlueButton.h */,
 				484F123215C5EC8200AF5BBD /* BRBlueButton.m */,
 				484F123515C5EC9B00AF5BBD /* BRRedButton.h */,
@@ -1150,6 +1165,9 @@
 				B78B220816835CB2001A99B0 /* MarqueeLabel.m in Sources */,
 				B78FF6121684756200E043BF /* WebViewJavascriptBridge.m in Sources */,
 				B710D79A168D9022002DC219 /* FbChatRoomViewController.m in Sources */,
+				B709512A1692DED0009D10F3 /* Tab1NavigationController.m in Sources */,
+				B709512E16933B99009D10F3 /* BRRecordFbChat.m in Sources */,
+				B709513116933BDC009D10F3 /* BRCellfBChat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

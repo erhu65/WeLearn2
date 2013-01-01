@@ -38,6 +38,7 @@ FbChatRoomViewControllerDelegate>
 @property (strong, nonatomic) MarqueeLabel*lbMarquee;
 
 @property(nonatomic, strong) FbChatRoomViewController* fbChatRoomViewController;
+@property (weak, nonatomic) IBOutlet UIView *vFbChatRoom;
 
 
 @end
@@ -272,15 +273,13 @@ FbChatRoomViewControllerDelegate>
     self.youtubePlayer.controlStyle = MPMovieControlStyleDefault;
     //self.youtubePlayer.initialPlaybackTime = 40.f;
 
-    [self.view insertSubview:self.youtubePlayer.view belowSubview:self.fbChatRoomViewController.view ];
-
     //self.youtubePlayer.view.userInteractionEnabled = NO;    
 //    self.youtubePlayer.movieSourceType = MPMovieSourceTypeStreaming;
 //    [self.youtubePlayer setInitialPlaybackTime:-1.f];
     //[self.youtubePlayer setFullscreen:YES animated:YES];
     [self.youtubePlayer prepareToPlay];
     [self.youtubePlayer play];
-    
+    [self.view insertSubview:self.youtubePlayer.view atIndex:1];
 //     UIPinchGestureRecognizer* pinchOutGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchOutGesture:)];
 //    [self.youtubePlayer.view addGestureRecognizer:pinchOutGesture];
 //    UIPinchGestureRecognizer* pinchInGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchInGesture:)];
@@ -291,9 +290,11 @@ FbChatRoomViewControllerDelegate>
     // Set the width of the container box to be 250
     self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:viewsDictionary];
     // Set the height of the container box to be 250
-    self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==190)]|" options:0 metrics:nil views:viewsDictionary];
+    self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==200)]|" options:0 metrics:nil views:viewsDictionary];
     [self.view addConstraints:self.hConstraintYoutubePlayer];
     [self.view addConstraints: self.vConstraintYoutubePlayer];
+    
+
 }
 
 #pragma mark FbChatRoomViewControllerDelegate method
@@ -304,6 +305,26 @@ FbChatRoomViewControllerDelegate>
     [[BRDModel sharedInstance] findVideoByYoutubeKey:self.fbChatRoomViewController.currentYoutubeKey];
     
 }
+-(BOOL)toggleOutterUI
+{
+    
+    [self toggleVideoZoom:nil];
+    return self.isZoomed;
+}
+-(void)triggerOuterGoBack
+{  
+    [BRDModel sharedInstance].videoSelectedUid = nil;
+    [BRDModel sharedInstance].currentSelectedVideo = nil;
+    self.fbChatRoomViewController.isLeaving = YES;
+    //stop youtube before leaving
+    self.youtubePlayer = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self]; 
+    
+    [self performSegueWithIdentifier:@"segueBackTovideos" sender:self];
+    //[self dismissViewControllerAnimated: YES completion: ^{
+    //}];
+}
+
 #pragma mark MPMediaPlayback delegate
 - (void)willEnterFullscreen:(NSNotification*)notification 
 {
@@ -382,38 +403,35 @@ FbChatRoomViewControllerDelegate>
     
     if (self.isZoomed)
     {
+        [self.view insertSubview:self.youtubePlayer.view atIndex:1];
         UIBarButtonItem *zoomBarbtn = [[UIBarButtonItem alloc]
                                     initWithTitle:self.lang[@"actionZoomIn"] 
                                     style:UIBarButtonItemStyleBordered
                                     target:self
                                     action:@selector(toggleVideoZoom:)];
         self.navigationItem.rightBarButtonItem = zoomBarbtn;
-
         self.navigationItem.rightBarButtonItem.title = self.lang[@"actionZoomIn"];
         // Set the width of the container box to be 250
         self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
-        
         // Set the height of the container box to be 250
-        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==190)]" options:0 metrics:nil views:views];
+        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==200)]" options:0 metrics:nil views:views];
     }
     else
     {
+        [self.view insertSubview:self.youtubePlayer.view atIndex:2];
         UIBarButtonItem *zoomBarbtn = [[UIBarButtonItem alloc]
                                        initWithTitle:self.lang[@"actionZoomOut"] 
                                        style:UIBarButtonItemStyleBordered
                                        target:self
                                        action:@selector(toggleVideoZoom:)];
         self.navigationItem.rightBarButtonItem = zoomBarbtn;
-        
         self.hConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[youtubePlayer]|" options:0 metrics:nil views:views];
-        
-        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[youtubePlayer]|" options:0 metrics:nil views:views];
+        self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[youtubePlayer]-40-|" options:0 metrics:nil views:views];
     }
     
     [self.view addConstraints:self.hConstraintYoutubePlayer];
     [self.view addConstraints:self.vConstraintYoutubePlayer];
     self.zoomed = !self.isZoomed;
-    
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
@@ -433,6 +451,27 @@ FbChatRoomViewControllerDelegate>
     //	}
 }
 
-
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+//	if ([identifier isEqualToString:@"DoneEdit"])
+//	{
+//		if ([self.textField.text length] > 0)
+//		{
+//			int value = [self.textField.text intValue];
+//			if (value >= 0 && value <= 100)
+//				return YES;
+//		}
+//        
+//		[[[UIAlertView alloc]
+//          initWithTitle:nil
+//          message:@"Value must be between 0 and 100."
+//          delegate:nil
+//          cancelButtonTitle:@"OK"
+//          otherButtonTitles:nil]
+//         show];
+//		return NO;
+//	}
+	return YES;
+}
 
 @end

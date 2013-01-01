@@ -54,5 +54,9 @@
 	<string>Leave</string>
 	<key>actionTalk</key>
 	<string>Talk</string>
+	<key>actionFull</key>
+	<string>Full</string>
+	<key>actionSplit</key>
+	<string>Split</string>
 </dict>
 </plist>

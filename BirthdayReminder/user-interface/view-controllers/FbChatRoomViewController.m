@@ -9,14 +9,16 @@
 #import "FbChatRoomViewController.h"
 #import "WebViewJavascriptBridge.h"
 #import "BRDModel.h"
+#import "BRRecordFbChat.h"
+#import "BRCellfBChat.h"
 #import "BRRecordSubCategory.h"
 #import "QuartzCore/QuartzCore.h"
 #import "UIView+position.h"
 
-
 #define KTempTfInKeyboard 7789
 
 @interface FbChatRoomViewController ()
+<UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webview;
 @property (weak, nonatomic) IBOutlet UITextView* tvOutPut;
@@ -24,16 +26,28 @@
 @property (weak, nonatomic) IBOutlet UIButton* chatButton;
 @property (strong, nonatomic) WebViewJavascriptBridge *javascriptBridge;
 @property (weak, nonatomic) IBOutlet UITextField *tfChat;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbRoomCount;
 @property (strong, nonatomic) IBOutlet UIToolbar *tb;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBarRoom;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnTalk;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnJoin;
 
 @property (weak, nonatomic) IBOutlet UILabel *lbChatRoomTitle;
+@property (weak, nonatomic) IBOutlet UITableView *tbFbChat;
+@property(strong, nonatomic) NSMutableArray* mArrFbChat;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityChatRoom;
 
 
 @property (nonatomic) BOOL isJoinFbChatRoom;
+
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *btnZoom;
+@property(nonatomic) BOOL isZoomed;
+@property (weak, nonatomic) IBOutlet UIView *vContainer;
+
+@property (nonatomic, strong) NSArray *hConstraintVContainer;
+@property (nonatomic, strong) NSArray *vConstraintVContainer;
 
 @end
 
@@ -43,6 +57,29 @@
     
 }
 @synthesize javascriptBridge = _bridge;
+
+
+-(void)setIsLeaving:(BOOL)isLeaving{
+    
+    _isLeaving = isLeaving;
+    if(isLeaving){
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+        //Clear A UIWebView to trigger window.onunload
+        [self.webview loadHTMLString:@"" baseURL:[NSURL URLWithString:@"http://google.com"]];    
+    }
+}
+
+
+-(NSString*)currentPlaybackTime{
+    if([_currentPlaybackTime isEqualToString:@"nan"])
+        
+        _currentPlaybackTime = @"0";
+    return _currentPlaybackTime;
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -59,11 +96,12 @@
     if(self){
         self.isJoinFbChatRoom = NO;
         self.isLeaving = NO;
+        self.isZoomed = YES;
+        self.mArrFbChat = [[NSMutableArray alloc] init];
         
     }
     return self;
 }
-
 
 - (void)viewDidLoad
 {
@@ -84,9 +122,11 @@
     self.lbChatRoomTitle.text = self.lang[@"titleChatRoom"];
     self.barBtnJoin.title = self.lang[@"actionJoin"];
     self.barBtnTalk.title = self.lang[@"actionTalk"];
-    
+    self.btnZoom.title = self.lang[@"actionFull"];
     //hide activityChatRoom first
     self.activityChatRoom.hidden = YES;
+    
+    self.tbFbChat.backgroundColor = [UIColor clearColor];
 
 }
 
@@ -139,9 +179,11 @@
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
     }
-
-    
-    NSDictionary* data = @{@"msg": newMsg};
+    NSDictionary* data = @{@"msg": newMsg,
+                           @"senderFbId": [BRDModel sharedInstance].fbId,
+                           @"currentYoutubeKey": self.currentYoutubeKey,
+                           @"currentPlaybackTime": self.currentPlaybackTime,
+    };
     
     [_bridge callHandler:@"JsSendMsgHandler" data:data responseCallback:^(id response) {
         NSLog(@"JsSendMsgHandler responded: %@", response);
@@ -169,9 +211,13 @@
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
     
-    NSDictionary* data = @{@"newName": newName,
+    NSDictionary* data =  @{@"newName": newName,
                             @"newRoom": room,
-                            @"newFbId": fbId};
+                            @"newFbId": fbId,
+                            @"senderFbId": [BRDModel sharedInstance].fbId,
+                            @"currentYoutubeKey": self.currentYoutubeKey,
+                            @"currentPlaybackTime": self.currentPlaybackTime};
+    
     [_bridge callHandler:@"JsJoinRoomHandler" 
                     data:data 
         responseCallback:^(id response) {
@@ -211,7 +257,6 @@
     
     [self callJsSendMsgHandler: tfTemp.text];
     [tfTemp resignFirstResponder];
-
 }
 
 -(IBAction)_prepareTextForSendMsgToRoom:(id)sender
@@ -230,35 +275,56 @@
         [WebViewJavascriptBridge enableLogging];
         
         _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webview handler:^(id data, WVJBResponseCallback responseCallback) {
+            
             NSLog(@"ObjC received message from JS: %@", data);
             responseCallback(@"Response for message from ObjC");
         }];
         
         [_bridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+            
             NSLog(@"testObjcCallback called: %@", data);
             responseCallback(@"Response from testObjcCallback");
         }];
         
         [_bridge registerHandler:@"iosGetMsgCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
-            
+        
             NSDictionary* resDic = (NSDictionary*)data;
             NSLog(@"iosGetMsgCallback called: %@", resDic);
             //NSString* type = resDic[@"type"];
-            NSString* roomCount = ( NSString*)resDic[@"roomCount"];
-            NSString* sender = ( NSString*)resDic[@"sender"];
-            NSString* message = ( NSString*)resDic[@"message"];
-            NSString* fbId = ( NSString*)resDic[@"fbId"];
+            NSString* roomCount = (NSString*)resDic[@"roomCount"];
+            NSString* sender = (NSString*)resDic[@"sender"];
+            NSString* senderFbId =  (NSString*)resDic[@"senderFbId"];
+            NSString* message = (NSString*)resDic[@"message"];
+            NSString* fbId = (NSString*)resDic[@"fbId"];
+            
+//            NSString* currentYoutubeKey = (NSString*)resDic[@"currentYoutubeKey"];
+//            NSString* currentPlaybackTime = (NSString*)resDic[@"currentPlaybackTime"];
+
             if([sender isEqualToString:@"me"]) fbId = [BRDModel sharedInstance].fbId;
             
             if([sender isEqualToString:@"server"]
                && [message rangeOfString:@"Good to see your"].location != NSNotFound){
                 self.isJoinFbChatRoom = YES;
+            
             }
             
-            NSString* strOutput = [NSString stringWithFormat:@"%@(%@) say: %@ at %@ count:%@", sender, fbId, message, [NSDate date] , roomCount];
-            NSString* strOutputOriginal = self.tvOutPut.text;
-            NSString* strOutputNew = [NSString stringWithFormat:@"%@ \n %@", strOutput, strOutputOriginal];
-            self.tvOutPut.text = strOutputNew;
+//            NSString* strOutput = [NSString stringWithFormat:@"%@(%@) say: %@ key:%@, playback:%@ at %@ count:%@", sender, fbId, message, currentYoutubeKey, currentPlaybackTime, [NSDate date] , roomCount];
+            
+            //NSString* strOutputOriginal = self.tvOutPut.text;
+            //NSString* strOutputNew = [NSString stringWithFormat:@"%@ \n %@", strOutput, strOutputOriginal];
+            //self.tvOutPut.text = strOutputNew;
+            
+            self.lbRoomCount.text = [NSString stringWithFormat:@"%@ people", roomCount];
+            BRRecordFbChat* recordNew = [[BRRecordFbChat alloc] initWithJsonDic:resDic];
+            [self.mArrFbChat insertObject:recordNew atIndex:0];
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            NSArray* arrIndexPathNew = @[indexPath];
+
+            [[self tbFbChat] beginUpdates];
+            [self.tbFbChat insertRowsAtIndexPaths:arrIndexPathNew withRowAnimation:UITableViewRowAnimationAutomatic];
+            [[self tbFbChat] endUpdates];
+            [[self tbFbChat] setContentOffset:CGPointZero animated:YES];
             
             self.activityChatRoom.hidden = YES;
             [self.activityChatRoom stopAnimating];
@@ -273,12 +339,12 @@
         }];
         
         [_bridge callHandler:@"testJavascriptHandler" data:[NSDictionary dictionaryWithObject:@"before ready" forKey:@"foo"]];
-        //node.js socket.io webview bridge end...        
+        //node.js socket.io webview bridge end... 
+        
         NSURL* url = [[NSURL alloc] initWithString:[BRDModel sharedInstance].socketUrl];
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
         [self.webview loadRequest:request];
         [_bridge send:@"A string sent from ObjC after Webview has loaded."];
-       
         self.barBtnJoin.title = self.lang[@"actionLeave"];
         self.barBtnJoin.enabled = FALSE;
         self.activityChatRoom.hidden = NO;
@@ -333,5 +399,59 @@
     [self.tb addSubview:tfTemp];
 	return self.tb ;
 }
+
+- (IBAction)toggleOutterUI:(UIBarButtonItem*)sender {
+    BOOL isZoomed = [self.delegate toggleOutterUI];
+    if(isZoomed){
+        sender.title = self.lang[@"actionSplit"];
+    } else {
+        sender.title = self.lang[@"actionFull"];
+    }
+}
+
+- (IBAction)_back:(id)sender {
+    
+    [self.delegate triggerOuterGoBack];
+//    [self dismissViewControllerAnimated:YES completion:^{
+//    
+//    }];
+}
+
+
+#pragma mark UITableViewDataSource
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BRCellfBChat *cellfBChat = (BRCellfBChat *)[self.tbFbChat dequeueReusableCellWithIdentifier:@"BRCellfBChat"];
+
+    BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
+    cellfBChat.record = record;
+    
+    UIImage *backgroundImage = [UIImage imageNamed:@"table-row-background.png"];
+    cellfBChat.backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
+    
+    return cellfBChat;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.mArrFbChat  count];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleInsert) {
+        
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
+
+
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tbFbChat deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
 
 @end

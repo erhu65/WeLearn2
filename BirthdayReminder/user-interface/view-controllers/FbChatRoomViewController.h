@@ -12,6 +12,8 @@
 
 @optional
 -(void)getOutterInfo;
+-(BOOL)toggleOutterUI;
+-(void)triggerOuterGoBack;
 @end
 
 @interface FbChatRoomViewController : BRCoreViewController
