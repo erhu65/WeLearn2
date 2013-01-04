@@ -127,7 +127,7 @@
     self.activityChatRoom.hidden = YES;
     
     self.tbFbChat.backgroundColor = [UIColor clearColor];
-
+    [BRStyleSheet styleLabel:self.lbRoomCount withType:BRLabelTypeLarge];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -155,7 +155,15 @@
 
 -(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
 {
-    //NSDictionary *userInfo = [notification userInfo];
+    NSDictionary *userInfo = [notification userInfo];
+    NSString* error = userInfo[@"error"];
+    if(nil != error){
+        [self showMsg:error type:msgLevelWarn]; 
+        self.barBtnJoin.title = kSharedModel.lang[@"actionJoin"];
+        self.barBtnJoin.enabled = YES;
+        return;
+    }
+    
     PRPLog(@"[BRDModel sharedInstance].fbName: %@-[%@ , %@]",
            [BRDModel sharedInstance].fbName,
            NSStringFromClass([self class]),
@@ -269,6 +277,7 @@
     
     NSString* btnTitle = sender.title;
 
+    
     if([btnTitle isEqualToString:self.lang[@"actionJoin"]] 
        && !self.isJoinFbChatRoom){
         
@@ -293,7 +302,7 @@
             //NSString* type = resDic[@"type"];
             NSString* roomCount = (NSString*)resDic[@"roomCount"];
             NSString* sender = (NSString*)resDic[@"sender"];
-            NSString* senderFbId =  (NSString*)resDic[@"senderFbId"];
+            //NSString* senderFbId =  (NSString*)resDic[@"senderFbId"];
             NSString* message = (NSString*)resDic[@"message"];
             NSString* fbId = (NSString*)resDic[@"fbId"];
             
@@ -305,16 +314,12 @@
             if([sender isEqualToString:@"server"]
                && [message rangeOfString:@"Good to see your"].location != NSNotFound){
                 self.isJoinFbChatRoom = YES;
-            
             }
-            
 //            NSString* strOutput = [NSString stringWithFormat:@"%@(%@) say: %@ key:%@, playback:%@ at %@ count:%@", sender, fbId, message, currentYoutubeKey, currentPlaybackTime, [NSDate date] , roomCount];
-            
             //NSString* strOutputOriginal = self.tvOutPut.text;
             //NSString* strOutputNew = [NSString stringWithFormat:@"%@ \n %@", strOutput, strOutputOriginal];
             //self.tvOutPut.text = strOutputNew;
-            
-            self.lbRoomCount.text = [NSString stringWithFormat:@"%@ people", roomCount];
+            self.lbRoomCount.text = [NSString stringWithFormat:@"%@: %@",kSharedModel.lang[@"onLine"], roomCount];
             BRRecordFbChat* recordNew = [[BRRecordFbChat alloc] initWithJsonDic:resDic];
             [self.mArrFbChat insertObject:recordNew atIndex:0];
             
@@ -330,10 +335,8 @@
             [self.activityChatRoom stopAnimating];
             self.barBtnTalk.enabled = YES;
             self.barBtnJoin.enabled = YES;
-            
             responseCallback(@"Response from iosGetMsgCallback: ios got chatroom msg");
         }];
-        
         [_bridge send:@"A string sent from ObjC before Webview has loaded." responseCallback:^(id responseData) {
             NSLog(@"objc got response! %@", responseData);
         }];
@@ -416,13 +419,13 @@
 //    
 //    }];
 }
-
-
 #pragma mark UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BRCellfBChat *cellfBChat = (BRCellfBChat *)[self.tbFbChat dequeueReusableCellWithIdentifier:@"BRCellfBChat"];
-
+    
+    cellfBChat.tb = tableView;
+    
     BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
     cellfBChat.record = record;
     
@@ -444,14 +447,16 @@
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
     }
 }
-
-
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tbFbChat deselectRowAtIndexPath:indexPath animated:YES];
-    
-}
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+}
+-(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
+    
+    BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
+    [self.delegate triggerOuterAction1:record];
+}
 
 @end

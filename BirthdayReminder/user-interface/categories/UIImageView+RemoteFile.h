@@ -11,5 +11,5 @@
 @interface UIImageView (RemoteFile)
 
 - (void)setImageWithRemoteFileURL:(NSString *)urlString placeHolderImage:(UIImage *)placeholderImage;
-
+- (void)setImageWithFbThumb:(NSString *)fbid placeHolderImage:(UIImage *)placeholderImage;
 @end

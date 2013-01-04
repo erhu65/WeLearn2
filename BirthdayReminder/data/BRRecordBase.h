@@ -12,5 +12,4 @@
 
 @property(nonatomic, strong)NSString* strImgUrl;
 @property(nonatomic, strong)NSData* dataImg;
-
 @end

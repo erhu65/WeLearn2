@@ -158,6 +158,13 @@
 		B78B21D81682D875001A99B0 /* LBYouTubePlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B21D61682D875001A99B0 /* LBYouTubePlayerController.m */; };
 		B78B220816835CB2001A99B0 /* MarqueeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B220716835CB2001A99B0 /* MarqueeLabel.m */; };
 		B78BE85C16764856006FE99C /* PRPDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BE85B16764856006FE99C /* PRPDebug.m */; };
+		B78BF86C169419130034BD02 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BF86B169419130034BD02 /* ThemeManager.m */; };
+		B78BF86E16941A2B0034BD02 /* theme_default.plist in Resources */ = {isa = PBXBuildFile; fileRef = B78BF86D16941A2B0034BD02 /* theme_default.plist */; };
+		B78BF9EB169432FA0034BD02 /* eyeball.png in Resources */ = {isa = PBXBuildFile; fileRef = B78BF9E9169432FA0034BD02 /* eyeball.png */; };
+		B78BF9EC169432FA0034BD02 /* eyeball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B78BF9EA169432FA0034BD02 /* eyeball@2x.png */; };
+		B78BF9EF16945C8D0034BD02 /* FbMsgBaordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BF9EE16945C8D0034BD02 /* FbMsgBaordViewController.m */; };
+		B78BF9F216945CEB0034BD02 /* BRRecordMsgBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BF9F116945CEB0034BD02 /* BRRecordMsgBoard.m */; };
+		B78BF9F516945DB10034BD02 /* BRCellMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BF9F416945DB10034BD02 /* BRCellMsg.m */; };
 		B78C303616770A6000B80BE7 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303316770A6000B80BE7 /* MasterViewController.m */; };
 		B78C303716770A6000B80BE7 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303516770A6000B80BE7 /* DetailViewController.m */; };
 		B78C304116770A8700B80BE7 /* NSDictionary+RWFlatten.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C303A16770A8700B80BE7 /* NSDictionary+RWFlatten.m */; };
@@ -344,10 +351,10 @@
 		48DEA95215C2F3C400397172 /* tool-bar-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool-bar-background@2x.png"; sourceTree = "<group>"; };
 		B70951281692DED0009D10F3 /* Tab1NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tab1NavigationController.h; sourceTree = "<group>"; };
 		B70951291692DED0009D10F3 /* Tab1NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tab1NavigationController.m; sourceTree = "<group>"; };
-		B709512C16933B99009D10F3 /* BRRecordFbChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordFbChat.h; sourceTree = "<group>"; };
-		B709512D16933B99009D10F3 /* BRRecordFbChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordFbChat.m; sourceTree = "<group>"; };
-		B709512F16933BDC009D10F3 /* BRCellfBChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellfBChat.h; sourceTree = "<group>"; };
-		B709513016933BDC009D10F3 /* BRCellfBChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCellfBChat.m; sourceTree = "<group>"; };
+		B709512C16933B99009D10F3 /* BRRecordFbChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRRecordFbChat.h; path = ../../data/BRRecordFbChat.h; sourceTree = "<group>"; };
+		B709512D16933B99009D10F3 /* BRRecordFbChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRRecordFbChat.m; path = ../../data/BRRecordFbChat.m; sourceTree = "<group>"; };
+		B709512F16933BDC009D10F3 /* BRCellfBChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellfBChat.h; path = ../components/BRCellfBChat.h; sourceTree = "<group>"; };
+		B709513016933BDC009D10F3 /* BRCellfBChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRCellfBChat.m; path = ../components/BRCellfBChat.m; sourceTree = "<group>"; };
 		B7101CF4167DABD50093DBC8 /* BRMainCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMainCategoryViewController.h; sourceTree = "<group>"; };
 		B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRMainCategoryViewController.m; sourceTree = "<group>"; };
 		B7101CF8167DAD8E0093DBC8 /* BRCellMainCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellMainCategory.h; sourceTree = "<group>"; };
@@ -407,6 +414,19 @@
 		B78B220716835CB2001A99B0 /* MarqueeLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MarqueeLabel.m; path = ../components/MarqueeLabel.m; sourceTree = "<group>"; };
 		B78BE85A16764856006FE99C /* PRPDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPDebug.h; sourceTree = "<group>"; };
 		B78BE85B16764856006FE99C /* PRPDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPDebug.m; sourceTree = "<group>"; };
+		B78BF86A169419130034BD02 /* ThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeManager.h; sourceTree = "<group>"; };
+		B78BF86B169419130034BD02 /* ThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
+		B78BF86D16941A2B0034BD02 /* theme_default.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = theme_default.plist; sourceTree = "<group>"; };
+		B78BF92B16942A780034BD02 /* BirthdayReminder copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BirthdayReminder copy-Info.plist"; path = "/Users/erhu66/Documents/Developer/welearn/BirthdayReminder copy-Info.plist"; sourceTree = "<absolute>"; };
+		B78BF9E816942C4F0034BD02 /* BirthdayReminder copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BirthdayReminder copy2-Info.plist"; path = "/Users/erhu66/Documents/Developer/welearn/BirthdayReminder copy2-Info.plist"; sourceTree = "<absolute>"; };
+		B78BF9E9169432FA0034BD02 /* eyeball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eyeball.png; sourceTree = "<group>"; };
+		B78BF9EA169432FA0034BD02 /* eyeball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eyeball@2x.png"; sourceTree = "<group>"; };
+		B78BF9ED16945C8D0034BD02 /* FbMsgBaordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FbMsgBaordViewController.h; sourceTree = "<group>"; };
+		B78BF9EE16945C8D0034BD02 /* FbMsgBaordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FbMsgBaordViewController.m; sourceTree = "<group>"; };
+		B78BF9F016945CEB0034BD02 /* BRRecordMsgBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRRecordMsgBoard.h; path = ../../data/BRRecordMsgBoard.h; sourceTree = "<group>"; };
+		B78BF9F116945CEB0034BD02 /* BRRecordMsgBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRRecordMsgBoard.m; path = ../../data/BRRecordMsgBoard.m; sourceTree = "<group>"; };
+		B78BF9F316945DB00034BD02 /* BRCellMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellMsg.h; path = ../components/BRCellMsg.h; sourceTree = "<group>"; };
+		B78BF9F416945DB10034BD02 /* BRCellMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRCellMsg.m; path = ../components/BRCellMsg.m; sourceTree = "<group>"; };
 		B78C303216770A6000B80BE7 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		B78C303316770A6000B80BE7 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		B78C303416770A6000B80BE7 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
@@ -516,8 +536,6 @@
 				B78845C9167EC7630015CE41 /* BRRecordSubCategory.m */,
 				B79DF35C168088FB00510CA9 /* BRRecordVideo.h */,
 				B79DF35D168088FB00510CA9 /* BRRecordVideo.m */,
-				B709512C16933B99009D10F3 /* BRRecordFbChat.h */,
-				B709512D16933B99009D10F3 /* BRRecordFbChat.m */,
 				485172FE15D931550085F77C /* BRDSettings.h */,
 				485172FF15D931550085F77C /* BRDSettings.m */,
 			);
@@ -531,6 +549,8 @@
 				487BA46D1594B02C00EEB099 /* BirthdayReminder */,
 				487BA4661594B02C00EEB099 /* Frameworks */,
 				487BA4641594B02C00EEB099 /* Products */,
+				B78BF92B16942A780034BD02 /* BirthdayReminder copy-Info.plist */,
+				B78BF9E816942C4F0034BD02 /* BirthdayReminder copy2-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -563,6 +583,7 @@
 		487BA46D1594B02C00EEB099 /* BirthdayReminder */ = {
 			isa = PBXGroup;
 			children = (
+				B78BF868169418F60034BD02 /* theme */,
 				B7101D06167DB4BC0093DBC8 /* constants.h */,
 				B7101D0E167DB6A50093DBC8 /* lang */,
 				48DEA8DC15C17F1D00397172 /* categories */,
@@ -615,6 +636,8 @@
 				B78C3050167733F800B80BE7 /* Arrow@2x.png */,
 				B7101D62167E39770093DBC8 /* ArrowAsc.png */,
 				B7101D63167E39770093DBC8 /* ArrowAsc@2x.png */,
+				B78BF9E9169432FA0034BD02 /* eyeball.png */,
+				B78BF9EA169432FA0034BD02 /* eyeball@2x.png */,
 				4851735315DBDDD00085F77C /* sms-icon.png */,
 				4851735415DBDDD00085F77C /* sms-icon@2x.png */,
 				4851735115DBA8040085F77C /* icon300x300.png */,
@@ -707,8 +730,8 @@
 				B79DF3561680889E00510CA9 /* BRVideoViewController.m */,
 				B78A01891681E3CE0072810D /* BRVideoDetailViewController.h */,
 				B78A018A1681E3CE0072810D /* BRVideoDetailViewController.m */,
-				B710D798168D9022002DC219 /* FbChatRoomViewController.h */,
-				B710D799168D9022002DC219 /* FbChatRoomViewController.m */,
+				B78BF9F716945EEF0034BD02 /* ChatRoom */,
+				B78BF9F616945EA60034BD02 /* FBMsgBoard */,
 				48BA416615A44FBE00F5885A /* BRHomeViewController.h */,
 				48BA416715A44FBE00F5885A /* BRHomeViewController.m */,
 				48BA416915A44FCC00F5885A /* BRBirthdayDetailViewController.h */,
@@ -791,8 +814,6 @@
 				B78845C6167EC7430015CE41 /* BRCellSubCategory.m */,
 				B79DF359168088DC00510CA9 /* BRCellVideo.h */,
 				B79DF35A168088DC00510CA9 /* BRCellVideo.m */,
-				B709512F16933BDC009D10F3 /* BRCellfBChat.h */,
-				B709513016933BDC009D10F3 /* BRCellfBChat.m */,
 				484F123115C5EC8200AF5BBD /* BRBlueButton.h */,
 				484F123215C5EC8200AF5BBD /* BRBlueButton.m */,
 				484F123515C5EC9B00AF5BBD /* BRRedButton.h */,
@@ -852,6 +873,42 @@
 				B78BE85B16764856006FE99C /* PRPDebug.m */,
 			);
 			name = lib;
+			sourceTree = "<group>";
+		};
+		B78BF868169418F60034BD02 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+				B78BF86A169419130034BD02 /* ThemeManager.h */,
+				B78BF86B169419130034BD02 /* ThemeManager.m */,
+				B78BF86D16941A2B0034BD02 /* theme_default.plist */,
+			);
+			name = theme;
+			sourceTree = "<group>";
+		};
+		B78BF9F616945EA60034BD02 /* FBMsgBoard */ = {
+			isa = PBXGroup;
+			children = (
+				B78BF9ED16945C8D0034BD02 /* FbMsgBaordViewController.h */,
+				B78BF9EE16945C8D0034BD02 /* FbMsgBaordViewController.m */,
+				B78BF9F016945CEB0034BD02 /* BRRecordMsgBoard.h */,
+				B78BF9F116945CEB0034BD02 /* BRRecordMsgBoard.m */,
+				B78BF9F316945DB00034BD02 /* BRCellMsg.h */,
+				B78BF9F416945DB10034BD02 /* BRCellMsg.m */,
+			);
+			name = FBMsgBoard;
+			sourceTree = "<group>";
+		};
+		B78BF9F716945EEF0034BD02 /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				B710D798168D9022002DC219 /* FbChatRoomViewController.h */,
+				B710D799168D9022002DC219 /* FbChatRoomViewController.m */,
+				B709512C16933B99009D10F3 /* BRRecordFbChat.h */,
+				B709512D16933B99009D10F3 /* BRRecordFbChat.m */,
+				B709512F16933BDC009D10F3 /* BRCellfBChat.h */,
+				B709513016933BDC009D10F3 /* BRCellfBChat.m */,
+			);
+			name = ChatRoom;
 			sourceTree = "<group>";
 		};
 		B78C303016770A4900B80BE7 /* subscripting */ = {
@@ -1082,6 +1139,9 @@
 				B7101D65167E39770093DBC8 /* ArrowAsc@2x.png in Resources */,
 				B78A018D1681E81D0072810D /* test.png in Resources */,
 				B78FF6111684756200E043BF /* WebViewJavascriptBridge.js.txt in Resources */,
+				B78BF86E16941A2B0034BD02 /* theme_default.plist in Resources */,
+				B78BF9EB169432FA0034BD02 /* eyeball.png in Resources */,
+				B78BF9EC169432FA0034BD02 /* eyeball@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1168,6 +1228,10 @@
 				B709512A1692DED0009D10F3 /* Tab1NavigationController.m in Sources */,
 				B709512E16933B99009D10F3 /* BRRecordFbChat.m in Sources */,
 				B709513116933BDC009D10F3 /* BRCellfBChat.m in Sources */,
+				B78BF86C169419130034BD02 /* ThemeManager.m in Sources */,
+				B78BF9EF16945C8D0034BD02 /* FbMsgBaordViewController.m in Sources */,
+				B78BF9F216945CEB0034BD02 /* BRRecordMsgBoard.m in Sources */,
+				B78BF9F516945DB10034BD02 /* BRCellMsg.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

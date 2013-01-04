@@ -15,9 +15,10 @@
 @property(nonatomic, strong)NSString* sender;
 @property(nonatomic, strong)NSString* socketOwnerFbId;
 @property(nonatomic, strong)NSString* senderFbId;
-@property(nonatomic, strong)NSString* message;
-@property(nonatomic, strong)NSString* youtubeKey;
-@property(nonatomic, strong)NSString* placbacktime;
+@property(nonatomic, strong)NSString* message;@property(nonatomic, strong)NSString* videoName;
+
+@property(nonatomic, strong)NSString* currentYoutubeKey;
+@property(nonatomic, strong)NSString* currentPlaybackTime;
 @property(nonatomic, strong)NSDate* created_at;
 
 -(id)initWithJsonDic:(NSDictionary *)dic;

@@ -253,4 +253,46 @@ static char kImagecCacheFileNameObjectKey;
         self.downloadHelper.data = [NSMutableData data];
     }
 }
+
+- (void)setImageWithFbThumb:(NSString *)fbid placeHolderImage:(UIImage *)placeholderImage{
+    
+    NSString* urlString = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?", fbid];
+    
+    if (self.url != nil && [self.url isEqualToString:urlString]) {
+        //if the url matches the existing url then ignore it
+        return;
+    }
+    self.cacheFileName = fbid;
+    NSString* cacheNamePath = [Utils filePathInCaches:self.cacheFileName withSuffix:nil];
+    BOOL isFileExist =  [[NSFileManager defaultManager] fileExistsAtPath:cacheNamePath];
+    if (isFileExist) {
+        self.image =  [Utils readCacheImage:cacheNamePath];
+        return;
+    } 
+    
+    [self.downloadHelper cancelConnection];
+    self.url = urlString;
+    //get a reference to the image cache singleton
+    ImageCache *imageCache = [UIImageView imageCache];
+    UIImage *image = [imageCache cachedImageForURL:urlString];
+    //check it we've already got a cached version of the image
+    if (image) {
+        self.image = image;
+        return;
+    }
+    
+    //no cached version so start downloading the remote file
+    self.image = placeholderImage;
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    self.downloadHelper.url = urlString;
+    //set the download helper as the delegate of the data download updates
+    self.downloadHelper.connection =(NSURLConnection *)[[NSURLConnection alloc] initWithRequest:request delegate:self.downloadHelper startImmediately:YES];
+    if (self.downloadHelper.connection) {
+        //create an empty mutable data container to add the data bytes to
+        self.downloadHelper.data = [NSMutableData data];
+    }
+}
+
 @end

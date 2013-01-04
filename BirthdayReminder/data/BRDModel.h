@@ -7,6 +7,8 @@
 //
 #define BRNotificationFacebookMeDidUpdate        @"BRNotificationFacebookMeDidUpdate"
 
+#define BRNotificationFacebookFriendsDidUpdate        @"BRNotificationFacebookFriendsDidUpdate"
+
 #define BRNotificationAddressBookBirthdaysDidUpdate        @"BRNotificationAddressBookBirthdaysDidUpdate"
 #define BRNotificationFacebookBirthdaysDidUpdate            @"BRNotificationFacebookBirthdaysDidUpdate"
 #define BRNotificationCachedBirthdaysDidUpdate          @"BRNotificationCachedBirthdaysDidUpdate"
@@ -18,7 +20,11 @@
 #define BRNotificationVideosDidUpdate            @"BRNotificationVideosDidUpdate"
 #define BRNotificationVideoDidUpdate            @"BRNotificationVideoDidUpdate"
 
+#define BRNotificationGetVideoMsgsDidUpdate @"BRNotificationGetVideoMsgsDidUpdate"
+#define BRNotificationDidPostVideoMsg @"BRNotificationPostVideoMsgDidUpdate"
+
 #define BRNotificationSocketURLDidUpdate            @"BRNotificationSocketURLDidUpdate"
+#define BRNotificationRegisterUdidDidUpdate            @"BRNotificationRegisterUdidDidUpdate"
 
 
 typedef enum mainCategoriesSortType {
@@ -45,9 +51,14 @@ typedef enum subCategoriesSortType {
 + (BRDModel*)sharedInstance;
 
 
+@property(nonatomic, strong)NSDictionary* lang;
+@property(nonatomic, strong)NSDictionary* theme;
+
 @property(nonatomic, strong)NSDictionary* fbMe;
 @property(nonatomic, strong)NSString* fbName;
 @property(nonatomic, strong)NSString* fbId;
+
+@property(nonatomic, strong)NSDictionary* mArrFriends;
 
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
 
@@ -63,6 +74,7 @@ typedef enum subCategoriesSortType {
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
 - (void)fetchFacebookMe;
+- (void)fetchFacebookFriends;
 
 @property BOOL  mainCategoriesSortIsDesc;
 @property mainCategoriesSortType mainCategoriesSortType;
@@ -86,6 +98,9 @@ typedef enum subCategoriesSortType {
 @property(nonatomic, strong)NSMutableArray* videosTemp;
 @property(nonatomic, strong)NSString* videoSelectedUid;
 @property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
+@property(nonatomic) double currentSelectedVideoPlayBackTime;
+
+@property(nonatomic, strong)NSMutableArray* videoMsgs;
 
 @property(nonatomic, strong)NSString* socketUrl;
 
@@ -94,8 +109,20 @@ typedef enum subCategoriesSortType {
 - (void)filterVideoByNameOrDesc:(NSString*)strSearch;
 - (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey;
 
+- (void)postMsg:(NSString*)message
+    ByVideoId:(NSString*) videoId
+           fbId:(NSString*)fbId 
+         fbName:(NSString*)fbNmae;
+
+- (void)fetchVideoMsgsByVideoId:(NSString*)videoId 
+                     withPage:(NSNumber*)page;
+-(void)delMsgById:(NSString*)msgId
+          VideoId:(NSString*)videoId;
+
+
 
 - (void)getSocketUrl;
+- (void)registerUdid:(NSString*)udid;
 
 
 -(void) importBirthdays:(NSArray *)birthdaysToImport;

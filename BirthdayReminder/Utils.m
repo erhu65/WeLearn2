@@ -469,9 +469,6 @@ static NSFileManager * _fileManager = nil;
     return number;
 }
 
-
-
-
 //Cache
 +(void) showImageAsync:(UIImageView*)imv_
                fromUrl:(NSString*)url_
@@ -568,7 +565,6 @@ static NSFileManager * _fileManager = nil;
             }
         });
     });
-
 }
 
 // adjust the height of a multi-line label to make it align vertical with top

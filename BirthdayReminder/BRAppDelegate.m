@@ -76,7 +76,14 @@ void exceptionHandler(NSException *exception)
      UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleSocketURLDidUpdate:) name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]]; 
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleRegisterUdidDidUpdate:) name:BRNotificationRegisterUdidDidUpdate object:[BRDModel sharedInstance]]; 
+
+    
     [[BRDModel sharedInstance] getSocketUrl];
+    
+    
+    
     
     return YES;
 }
@@ -113,13 +120,14 @@ void exceptionHandler(NSException *exception)
     
     NSString * tempToken = [deviceToken description];
     self.token = [tempToken stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    
-    self.token = [self.token stringByReplacingOccurrencesOfString:@"]]" withString:@""];
-    self.token = [[self.token componentsSeparatedByString:@""] componentsJoinedByString:@""];
-	PRPLog(@"got string token %@ -[%@ , %@]",
+    self.token = [self.token stringByReplacingOccurrencesOfString:@">" withString:@""];
+    self.token = [[self.token componentsSeparatedByString:@" "] componentsJoinedByString:@"" ];
+	
+    PRPLog(@"got string token %@ -[%@ , %@]",
            self.token,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));    
+     [[BRDModel sharedInstance] registerUdid:self.token];
 }
 
 
@@ -185,5 +193,29 @@ void exceptionHandler(NSException *exception)
 
     }
 
+}
+
+-(void)_handleRegisterUdidDidUpdate:(NSNotification*)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSString* errMsg = userInfo[@"errMsg"];
+    
+    if(errMsg != nil && [errMsg length] > 0){  
+        
+         if ([errMsg rangeOfString:@"already added"].location != NSNotFound)
+             return;
+        
+        // Notify the user
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" 
+                                                        message:errMsg 
+                                                       delegate:self
+                                              cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        PRPLog(@"register udid successfully-[%@ , %@]",
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+    }
 }
 @end

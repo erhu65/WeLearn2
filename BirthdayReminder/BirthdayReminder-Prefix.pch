@@ -16,4 +16,6 @@
     #import "ErrorHandler.h"
     #import "constants.h"
     #import "BRStyleSheet.h"
+    #import "BRDModel.h"
+
 #endif

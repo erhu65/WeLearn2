@@ -4,6 +4,10 @@
 <dict>
 	<key>sum</key>
 	<string>Sum</string>
+	<key>say</key>
+	<string>say:</string>
+	<key>onLine</key>
+	<string>On Line</string>
 	<key>titleMainCategories</key>
 	<string>Main Categories</string>
 	<key>titleSubCategories</key>
@@ -14,6 +18,8 @@
 	<string>Video</string>
 	<key>titleChatRoom</key>
 	<string>Chat Room</string>
+	<key>titleMsgBoard</key>
+	<string>Msg Board</string>
 	<key>sort</key>
 	<string>Sort:</string>
 	<key>noSort</key>
@@ -28,6 +34,12 @@
 	<string>Info</string>
 	<key>warn</key>
 	<string>Warn</string>
+	<key>warnEmptyText</key>
+	<string>Please fill the field</string>
+	<key>warnLoginFBFirst</key>
+	<string>Please login Facebook first</string>
+	<key>warnConnectFBFirst</key>
+	<string>Please connect Facebook fisrt</string>
 	<key>error_network_connection</key>
 	<string>Netowrk Connection Fail</string>
 	<key>error_parse_fail</key>
@@ -36,8 +48,6 @@
 	<string>No Data</string>
 	<key>infoConnectFBFirst</key>
 	<string>Plearse Connect Facebook First</string>
-	<key>warnEmptyText</key>
-	<string>Please fill the field</string>
 	<key>actionDimiss</key>
 	<string>Dimiss</string>
 	<key>actionBack</key>
@@ -54,9 +64,13 @@
 	<string>Leave</string>
 	<key>actionTalk</key>
 	<string>Talk</string>
+	<key>actionMsg</key>
+	<string>Msg</string>
 	<key>actionFull</key>
 	<string>Full</string>
 	<key>actionSplit</key>
 	<string>Split</string>
+	<key></key>
+	<string></string>
 </dict>
 </plist>

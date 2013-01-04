@@ -31,34 +31,55 @@
     // Configure the view for the selected state
 }
 
-
-
 -(void)setRecord:(BRRecordFbChat *)record{
     
-    self.lbFbUserName.text = record.sender;
+    self.lbFbUserName.text =  record.sender;
     self.lbFbUserMsg.text = record.message;
     
     NSString *formattedDateString = [self.dateFormatter stringFromDate:record.created_at];
     self.lbChatDatetime.text = formattedDateString;
+    self.lbVideoName.text = @"";
+    if([record.type isEqualToString:@"server"]){
 
-    
-    if (record.dataImg == nil)
-    {
+        self.imvThumb.image = [UIImage imageNamed:kSharedModel.theme[@"Icon"]];
+    } else if (record.dataImg == nil) {
         if ([record.strImgUrl length] > 0) {
-            [self.imvThumb setImageWithRemoteFileURL:record.strImgUrl placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
+            [self.imvThumb setImageWithFbThumb:record.senderFbId placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
         }
         else self.imvThumb.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
     }
     else {
         self.imvThumb.image = [UIImage imageWithData:record.dataImg];
     }
+    if([record.type isEqualToString:@"chat"]){
+        
+        self.lbVideoName.text = record.videoName;
+       self.accessoryView = [self _makeDetailDisclosureButton];
+    } else {
+        self.accessoryType = UITableViewCellAccessoryNone;
+    }
+}
+
+- (UIButton *) _makeDetailDisclosureButton
+{
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setFrame:CGRectMake(0, 0, 30, 30)];
+    [button setImage:[UIImage imageNamed:kSharedModel.theme[@"eyeball"]] forState:UIControlStateNormal];
+    [button addTarget: self
+               action: @selector(_accessoryButtonTapped:withEvent:)
+     forControlEvents: UIControlEventTouchUpInside];
+    return (button);
+}
+- (void) _accessoryButtonTapped: (UIControl *) button withEvent: (UIEvent *) event
+{
+    [self.tb.delegate tableView: self.tb accessoryButtonTappedForRowWithIndexPath:self.indexPath];
 }
 
 -(void) setLbFbUserName:(UILabel *)lbFbUserName
 {
     _lbFbUserName = lbFbUserName;
     if (_lbFbUserName) {
-        [BRStyleSheet styleLabel:_lbFbUserName withType:BRLabelTypeName];
+        [BRStyleSheet styleLabel:_lbFbUserName withType:BRLabelTypeDaysUntilBirthdaySubText];
     }
 }
 
@@ -75,9 +96,16 @@
 {
     _lbChatDatetime = lbChatDatetime;
     if (_lbChatDatetime) {
-        [BRStyleSheet styleLabel:_lbFbUserMsg withType:BRLabelTypeDaysUntilBirthday];
+        [BRStyleSheet styleLabel:_lbChatDatetime withType:BRLabelTypeDaysUntilBirthdaySubText];
     }
 }
 
+-(void)setLbVideoName:(UILabel *)lbVideoName{
+
+    _lbVideoName = lbVideoName;
+    if (_lbVideoName) {
+        [BRStyleSheet styleLabel:_lbVideoName withType:BRLabelTypeDaysUntilBirthdaySubText];
+    }
+}
 
 @end

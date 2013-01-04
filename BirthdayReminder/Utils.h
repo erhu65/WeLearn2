@@ -64,6 +64,7 @@
 
 + (double) radians:(double)degrees;
 + (double) degrees:(double)radians;
+
 //+(CLLocationDistance)fromLocation:(CLLocationCoordinate2D)locationA toLocation:(CLLocationCoordinate2D)locationB;
 
 + (NSUInteger)amountOfFreeMemory;

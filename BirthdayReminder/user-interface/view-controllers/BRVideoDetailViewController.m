@@ -9,11 +9,13 @@
 #import "BRVideoDetailViewController.h"
 #import "UIImageViewResizable.h"
 #import "BRRecordVideo.h"
+#import "BRRecordFbChat.h"
 #import "BRDModel.h"
 #import "MarqueeLabel.h"
 #import "WebViewJavascriptBridge.h"
 
 #import "FbChatRoomViewController.h"
+#import "FbMsgBaordViewController.h"
 //#import "UIImageView+RemoteFile.h"
 
 @interface UIWindow (AutoLayoutDebug) 
@@ -26,7 +28,8 @@
 MPMediaPlayback,
 UIScrollViewDelegate,
 UIAlertViewDelegate,
-FbChatRoomViewControllerDelegate>
+FbChatRoomViewControllerDelegate,
+FbMsgBaordViewControllerDelegate>
 
 //@property(nonatomic, strong) UIImageViewResizable* imvThumb;
 //@property(weak, nonatomic) IBOutlet UIScrollView *scrvThumb;
@@ -38,6 +41,7 @@ FbChatRoomViewControllerDelegate>
 @property (strong, nonatomic) MarqueeLabel*lbMarquee;
 
 @property(nonatomic, strong) FbChatRoomViewController* fbChatRoomViewController;
+@property(nonatomic, strong) FbMsgBaordViewController* fbMsgBoardviewController;
 @property (weak, nonatomic) IBOutlet UIView *vFbChatRoom;
 
 
@@ -52,6 +56,9 @@ FbChatRoomViewControllerDelegate>
         self.view = nil;
 		[self.fbChatRoomViewController willMoveToParentViewController:nil];
 		[self.fbChatRoomViewController removeFromParentViewController];
+        
+        [self.fbMsgBoardviewController willMoveToParentViewController:nil];
+        [self.fbMsgBoardviewController removeFromParentViewController];
 
     }
 }
@@ -121,6 +128,7 @@ FbChatRoomViewControllerDelegate>
                                              selector:@selector(moviePlayBackDidFinish:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification 
                                                object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideoDidUpdate:) name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]];
     
     if(![BRDModel sharedInstance].currentSelectedVideo){
@@ -132,7 +140,12 @@ FbChatRoomViewControllerDelegate>
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]];
+    
+    
     
 }
 - (void)viewDidAppear:(BOOL)animated {
@@ -240,6 +253,8 @@ FbChatRoomViewControllerDelegate>
 
 -(void)_showNextMovie
 {
+    kSharedModel.currentSelectedVideoPlayBackTime = 0.0f;
+    
     NSUInteger indexOfPerivousVideo = [[BRDModel sharedInstance].videos indexOfObject:[BRDModel sharedInstance].currentSelectedVideo];
     
     NSUInteger count = [[BRDModel sharedInstance].videos count];
@@ -252,6 +267,22 @@ FbChatRoomViewControllerDelegate>
         [self.youtubePlayer.view removeFromSuperview];
         self.youtubePlayer = nil; 
     }
+    
+    [self _handleVideoDidUpdate:nil];
+    //[self _showMovie:strYoutubeKeyNextVideo];
+}
+
+-(void)_showMovieByKey:(NSString*) youtubeKey playBackTime:(double)playbackTime
+{
+    [BRDModel sharedInstance].currentSelectedVideo = [kSharedModel findVideoByYoutubeKey:youtubeKey];
+    if(![BRDModel sharedInstance].currentSelectedVideo)return;
+    kSharedModel.currentSelectedVideoPlayBackTime = playbackTime;
+    
+    if(self.youtubePlayer){
+        [self.youtubePlayer.view removeFromSuperview];
+        self.youtubePlayer = nil; 
+    }
+    
     
     [self _handleVideoDidUpdate:nil];
     //[self _showMovie:strYoutubeKeyNextVideo];
@@ -271,8 +302,10 @@ FbChatRoomViewControllerDelegate>
     self.youtubePlayer.scalingMode = MPMovieScalingModeAspectFill;
     self.youtubePlayer.repeatMode = MPMovieRepeatModeNone;
     self.youtubePlayer.controlStyle = MPMovieControlStyleDefault;
-    //self.youtubePlayer.initialPlaybackTime = 40.f;
-
+    if(kSharedModel.currentSelectedVideoPlayBackTime > 0.0f ){
+        self.youtubePlayer.initialPlaybackTime = kSharedModel.currentSelectedVideoPlayBackTime;
+    }
+    
     //self.youtubePlayer.view.userInteractionEnabled = NO;    
 //    self.youtubePlayer.movieSourceType = MPMovieSourceTypeStreaming;
 //    [self.youtubePlayer setInitialPlaybackTime:-1.f];
@@ -293,8 +326,19 @@ FbChatRoomViewControllerDelegate>
     self.vConstraintYoutubePlayer = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[youtubePlayer(==200)]|" options:0 metrics:nil views:viewsDictionary];
     [self.view addConstraints:self.hConstraintYoutubePlayer];
     [self.view addConstraints: self.vConstraintYoutubePlayer];
-    
+}
 
+#pragma mark FbMsgBaordViewDelegate method
+-(void)FbMsgBaordViewTriggerOuterGoBack
+{  
+    [BRDModel sharedInstance].videoSelectedUid = nil;
+    [BRDModel sharedInstance].currentSelectedVideo = nil;
+    //stop youtube before leaving
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.youtubePlayer stop];
+    self.youtubePlayer = nil;
+    
+    [self performSegueWithIdentifier:@"segueBackTovideos" sender:self];
 }
 
 #pragma mark FbChatRoomViewControllerDelegate method
@@ -303,7 +347,6 @@ FbChatRoomViewControllerDelegate>
     self.fbChatRoomViewController.currentYoutubeKey = [BRDModel sharedInstance].currentSelectedVideo.youtubeKey;
     self.fbChatRoomViewController.currentPlaybackTime = [NSString stringWithFormat:@"%f", [self.youtubePlayer currentPlaybackTime]];
     [[BRDModel sharedInstance] findVideoByYoutubeKey:self.fbChatRoomViewController.currentYoutubeKey];
-    
 }
 -(BOOL)toggleOutterUI
 {
@@ -323,6 +366,34 @@ FbChatRoomViewControllerDelegate>
     [self performSegueWithIdentifier:@"segueBackTovideos" sender:self];
     //[self dismissViewControllerAnimated: YES completion: ^{
     //}];
+}
+-(void)triggerOuterAction1:(id)record_{
+    BRRecordFbChat* record = (BRRecordFbChat*)record_;
+    
+
+    
+    if([record.currentYoutubeKey length] > 0 
+       &&  [record.currentPlaybackTime length] > 0) {
+        
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+        
+        PRPLog(@"user selected currentPlaybackTime: %@ \n currentPlaybackTime: %@ \n -[%@ , %@]",
+               record.currentYoutubeKey,
+               record.currentPlaybackTime,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        [self _showMovieByKey:record.currentYoutubeKey 
+                 playBackTime:[record.currentPlaybackTime doubleValue]];
+    
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(moviePlayBackDidFinish:)
+                                                     name:MPMoviePlayerPlaybackDidFinishNotification 
+                                                   object:nil];
+    
+    }
+
+    
 }
 
 #pragma mark MPMediaPlayback delegate
@@ -439,12 +510,18 @@ FbChatRoomViewControllerDelegate>
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    //segueFbChatRoom
 	if ([segue.identifier isEqualToString:@"segueFbChatRoom"])
 	{
 		self.fbChatRoomViewController = segue.destinationViewController;
         self.fbChatRoomViewController.delegate = self;
 		//self.daysViewController.records = _records;
-	}
+	} else if ([segue.identifier isEqualToString:@"segueFbMsgBoard"]) {
+    
+		self.fbMsgBoardviewController = segue.destinationViewController;
+        self.fbMsgBoardviewController.videoId = kSharedModel.currentSelectedVideo.uid;
+        self.fbMsgBoardviewController.delegate = self;
+    }
     //	else if ([segue.identifier isEqualToString:@"EmbedGraph"])
     //	{
     //		self.graphViewController = segue.destinationViewController;
