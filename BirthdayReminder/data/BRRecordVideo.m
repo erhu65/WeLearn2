@@ -24,8 +24,12 @@
         self.imgName = [dic objectForKey:@"imgName"];
 
         self.strImgUrl = [NSString stringWithFormat:@"%@/uploads/%@", BASE_URL, self.imgName];
+        
         self.created_at = [dic objectForKey:@"created_at"];
         self.modified_at = [dic objectForKey:@"modified_at"];
+        
+        NSNumber* isFavorite = (NSNumber*) [dic objectForKey:@"isFavorite"];
+        self.isUserFavorite = [isFavorite boolValue];
     }
     return self;
 }

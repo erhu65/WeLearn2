@@ -18,4 +18,8 @@
 @property(nonatomic, weak)IBOutlet UILabel* lbName;
 @property(nonatomic, weak)IBOutlet UILabel* lbDesc;
 @property(nonatomic, weak)IBOutlet UIImageView* imvThumb;
+
+@property (weak, nonatomic) IBOutlet UIButton *btnFavorite;
+-(void)toggleBtnFavoriteTitle:(BOOL)isFavorite;
+
 @end

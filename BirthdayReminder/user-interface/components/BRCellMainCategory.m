@@ -64,7 +64,8 @@
         [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteAdd"]] forState:UIControlStateNormal];
     } else {
         [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteRemove"]] forState:UIControlStateNormal];
-    }}
+    }
+}
 -(void) setNameLb:(UILabel *)nameLb
 {
     _nameLb = nameLb;

@@ -18,6 +18,7 @@
 @property(nonatomic, strong)NSString* imgName;
 @property(nonatomic, strong)NSDate* created_at;
 @property(nonatomic, strong)NSDate* modified_at;
+@property BOOL isUserFavorite;
 
 -(id)initWithJsonDic:(NSDictionary *)dic;
 

@@ -473,10 +473,10 @@
 		B78FF6101684756200E043BF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		B79DF3551680889E00510CA9 /* BRVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRVideoViewController.h; sourceTree = "<group>"; };
 		B79DF3561680889E00510CA9 /* BRVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRVideoViewController.m; sourceTree = "<group>"; };
-		B79DF359168088DC00510CA9 /* BRCellVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellVideo.h; sourceTree = "<group>"; };
-		B79DF35A168088DC00510CA9 /* BRCellVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCellVideo.m; sourceTree = "<group>"; };
-		B79DF35C168088FB00510CA9 /* BRRecordVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordVideo.h; sourceTree = "<group>"; };
-		B79DF35D168088FB00510CA9 /* BRRecordVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordVideo.m; sourceTree = "<group>"; };
+		B79DF359168088DC00510CA9 /* BRCellVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellVideo.h; path = ../components/BRCellVideo.h; sourceTree = "<group>"; };
+		B79DF35A168088DC00510CA9 /* BRCellVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRCellVideo.m; path = ../components/BRCellVideo.m; sourceTree = "<group>"; };
+		B79DF35C168088FB00510CA9 /* BRRecordVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRRecordVideo.h; path = ../../data/BRRecordVideo.h; sourceTree = "<group>"; };
+		B79DF35D168088FB00510CA9 /* BRRecordVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRRecordVideo.m; path = ../../data/BRRecordVideo.m; sourceTree = "<group>"; };
 		B79DF35F1680C64F00510CA9 /* BRRecordBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordBase.h; sourceTree = "<group>"; };
 		B79DF3601680C64F00510CA9 /* BRRecordBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordBase.m; sourceTree = "<group>"; };
 		B7B10899169AAB7F00BC02D1 /* favoriteAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteAdd.png; sourceTree = "<group>"; };
@@ -540,8 +540,6 @@
 				B79DF3601680C64F00510CA9 /* BRRecordBase.m */,
 				B78845C8167EC7630015CE41 /* BRRecordSubCategory.h */,
 				B78845C9167EC7630015CE41 /* BRRecordSubCategory.m */,
-				B79DF35C168088FB00510CA9 /* BRRecordVideo.h */,
-				B79DF35D168088FB00510CA9 /* BRRecordVideo.m */,
 				485172FE15D931550085F77C /* BRDSettings.h */,
 				485172FF15D931550085F77C /* BRDSettings.m */,
 			);
@@ -728,6 +726,7 @@
 		48BA416415A44E3B00F5885A /* view-controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B7CA353A169B27860034FDD0 /* Videos */,
 				B78018F11698077B001CAFF6 /* MainCategory */,
 				48BEC16615A5B7EB00263FBD /* BRCoreViewController.h */,
 				48BEC16715A5B7EB00263FBD /* BRCoreViewController.m */,
@@ -735,8 +734,6 @@
 				B70951291692DED0009D10F3 /* Tab1NavigationController.m */,
 				B78845C1167EC69C0015CE41 /* BRSubCategoryViewController.h */,
 				B78845C2167EC69C0015CE41 /* BRSubCategoryViewController.m */,
-				B79DF3551680889E00510CA9 /* BRVideoViewController.h */,
-				B79DF3561680889E00510CA9 /* BRVideoViewController.m */,
 				B78A01891681E3CE0072810D /* BRVideoDetailViewController.h */,
 				B78A018A1681E3CE0072810D /* BRVideoDetailViewController.m */,
 				B78BF9F716945EEF0034BD02 /* ChatRoom */,
@@ -819,8 +816,6 @@
 				48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */,
 				B78845C5167EC7430015CE41 /* BRCellSubCategory.h */,
 				B78845C6167EC7430015CE41 /* BRCellSubCategory.m */,
-				B79DF359168088DC00510CA9 /* BRCellVideo.h */,
-				B79DF35A168088DC00510CA9 /* BRCellVideo.m */,
 				484F123115C5EC8200AF5BBD /* BRBlueButton.h */,
 				484F123215C5EC8200AF5BBD /* BRBlueButton.m */,
 				484F123515C5EC9B00AF5BBD /* BRRedButton.h */,
@@ -1003,6 +998,19 @@
 				B78FF6101684756200E043BF /* WebViewJavascriptBridge.m */,
 			);
 			name = WebViewJavascriptBridge;
+			sourceTree = "<group>";
+		};
+		B7CA353A169B27860034FDD0 /* Videos */ = {
+			isa = PBXGroup;
+			children = (
+				B79DF3551680889E00510CA9 /* BRVideoViewController.h */,
+				B79DF3561680889E00510CA9 /* BRVideoViewController.m */,
+				B79DF35C168088FB00510CA9 /* BRRecordVideo.h */,
+				B79DF35D168088FB00510CA9 /* BRRecordVideo.m */,
+				B79DF359168088DC00510CA9 /* BRCellVideo.h */,
+				B79DF35A168088DC00510CA9 /* BRCellVideo.m */,
+			);
+			name = Videos;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

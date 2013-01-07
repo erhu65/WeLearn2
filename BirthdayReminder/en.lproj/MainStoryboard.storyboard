@@ -1045,19 +1045,36 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSr-S7-5nk" userLabel="btnFavorite">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="34" id="EQK-6V-Gda"/>
+                                                        <constraint firstAttribute="height" constant="31" id="bRo-JE-buC"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <state key="normal" title="BtnFavorite">
+                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="YCb-1u-W9W" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" constant="8" type="user" id="5fJ-w5-Ncp"/>
                                             <constraint firstItem="YCb-1u-W9W" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="8" type="user" id="91Q-CG-DJx"/>
+                                            <constraint firstItem="DSr-S7-5nk" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="53" id="Bvp-5h-XED"/>
                                             <constraint firstItem="qlC-dd-33W" firstAttribute="top" secondItem="YCb-1u-W9W" secondAttribute="top" type="default" id="NW9-ve-7Aq"/>
-                                            <constraint firstItem="YCb-1u-W9W" firstAttribute="centerY" secondItem="Vys-aY-oHW" secondAttribute="centerY" type="default" id="lFQ-aw-JlS"/>
-                                            <constraint firstItem="vi6-3h-dv0" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" constant="33" id="v2l-CS-L0E"/>
+                                            <constraint firstAttribute="bottom" secondItem="DSr-S7-5nk" secondAttribute="bottom" constant="13" id="XQJ-fa-CwP"/>
+                                            <constraint firstItem="vi6-3h-dv0" firstAttribute="top" secondItem="Vys-aY-oHW" secondAttribute="top" constant="33" id="cKI-CK-FMT"/>
                                             <constraint firstItem="qlC-dd-33W" firstAttribute="trailing" secondItem="vi6-3h-dv0" secondAttribute="trailing" type="default" id="xSq-gE-2FJ"/>
+                                            <constraint firstItem="YCb-1u-W9W" firstAttribute="centerY" secondItem="Vys-aY-oHW" secondAttribute="centerY" type="default" id="xcb-1U-3fW"/>
                                             <constraint firstItem="qlC-dd-33W" firstAttribute="leading" secondItem="Vys-aY-oHW" secondAttribute="leading" constant="106" id="yO0-rp-Vgs"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="btnFavorite" destination="DSr-S7-5nk" id="mu4-nc-FWF"/>
                                             <outlet property="imvThumb" destination="YCb-1u-W9W" id="yol-Nt-zL4"/>
                                             <outlet property="lbDesc" destination="vi6-3h-dv0" id="kNh-a9-qZe"/>
                                             <outlet property="lbName" destination="qlC-dd-33W" id="UU8-kO-tVl"/>
@@ -3094,7 +3111,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRCellMainCategory" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellMainCategory.h"/>
             <relationships>
-                <relationship kind="action" name="toggleFavorite:"/>
                 <relationship kind="outlet" name="btnFavorite" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="descLb" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="nameLb" candidateClass="UILabel"/>
@@ -3119,6 +3135,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRCellVideo" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellVideo.h"/>
             <relationships>
+                <relationship kind="outlet" name="btnFavorite" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="imvThumb" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="lbDesc" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="lbName" candidateClass="UILabel"/>
@@ -3180,6 +3197,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRMainCategoryViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRMainCategoryViewController.h"/>
             <relationships>
+                <relationship kind="action" name="filterButtonPressed:"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
@@ -3226,8 +3244,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRSubCategoryViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRSubCategoryViewController.h"/>
             <relationships>
-                <relationship kind="action" name="filterButtonPressed:"/>
-                <relationship kind="action" name="navigationBack:"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="filterNameLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
@@ -3257,9 +3273,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         </class>
         <class className="CombinedViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CombinedViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancel:" candidateClass="UIStoryboardSegue"/>
-            </relationships>
         </class>
         <class className="DaysViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DaysViewController.h"/>
@@ -3301,8 +3314,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="FbMsgBaordViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FbMsgBaordViewController.h"/>
             <relationships>
-                <relationship kind="action" name="_back:"/>
-                <relationship kind="action" name="_prepareTextForSendMsgToRoom:"/>
                 <relationship kind="outlet" name="activityMsgBoard" candidateClass="UIActivityIndicatorView"/>
                 <relationship kind="outlet" name="barBtnBack" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="barBtnMsg" candidateClass="UIBarButtonItem"/>
@@ -3326,7 +3337,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="MasterViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MasterViewController.h"/>
             <relationships>
-                <relationship kind="action" name="sortChanged:" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="segmentedControl" candidateClass="UISegmentedControl"/>
                 <relationship kind="outlet" name="tableView" candidateClass="UITableView"/>
             </relationships>

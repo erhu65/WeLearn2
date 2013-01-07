@@ -25,11 +25,11 @@
 
 @interface BRVideoDetailViewController ()
 <LBYouTubePlayerControllerDelegate, 
-MPMediaPlayback,
 UIScrollViewDelegate,
 UIAlertViewDelegate,
 FbChatRoomViewControllerDelegate,
 FbMsgBaordViewControllerDelegate>
+//MPMediaPlayback,
 
 //@property(nonatomic, strong) UIImageViewResizable* imvThumb;
 //@property(weak, nonatomic) IBOutlet UIScrollView *scrvThumb;
@@ -282,8 +282,6 @@ FbMsgBaordViewControllerDelegate>
         [self.youtubePlayer.view removeFromSuperview];
         self.youtubePlayer = nil; 
     }
-    
-    
     [self _handleVideoDidUpdate:nil];
     //[self _showMovie:strYoutubeKeyNextVideo];
 }
@@ -350,7 +348,6 @@ FbMsgBaordViewControllerDelegate>
 }
 -(BOOL)toggleOutterUI
 {
-    
     [self toggleVideoZoom:nil];
     return self.isZoomed;
 }
@@ -368,10 +365,8 @@ FbMsgBaordViewControllerDelegate>
     //}];
 }
 -(void)triggerOuterAction1:(id)record_{
+    
     BRRecordFbChat* record = (BRRecordFbChat*)record_;
-    
-
-    
     if([record.currentYoutubeKey length] > 0 
        &&  [record.currentPlaybackTime length] > 0) {
         
@@ -411,6 +406,7 @@ FbMsgBaordViewControllerDelegate>
 {
     NSLog(@"willExitFullscreen");
 }
+
 
 //only get called in full screen mode
 - (void)exitedFullscreen:(NSNotification*)notification 

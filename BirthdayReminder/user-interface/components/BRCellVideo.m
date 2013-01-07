@@ -17,7 +17,6 @@
     self = [super initWithCoder:aDecoder];
     if(self){
         
-      
         
     }
     return self;
@@ -38,12 +37,24 @@
     if (record.dataImg == nil)
     {
         if ([record.strImgUrl length] > 0) {
+            
             [self.imvThumb setImageWithRemoteFileURL:record.strImgUrl placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
         }
         else self.imvThumb.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
     }
     else {
         self.imvThumb.image = [UIImage imageWithData:record.dataImg];
+    }
+    self.btnFavorite.tag = [self.indexPath row];
+    [self toggleBtnFavoriteTitle:record.isUserFavorite];
+}
+
+-(void)toggleBtnFavoriteTitle:(BOOL)isFavorite{
+    if(isFavorite) {
+        
+        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteAdd"]] forState:UIControlStateNormal];
+    } else {
+        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteRemove"]] forState:UIControlStateNormal];
     }
 }
 

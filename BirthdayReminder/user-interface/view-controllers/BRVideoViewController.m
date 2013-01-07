@@ -195,6 +195,7 @@ UISearchBarDelegate>
     BRRecordVideo *record = [BRDModel sharedInstance].videos[indexPath.row];
     cell.indexPath = indexPath;
     cell.record = record; 
+    [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 
@@ -204,6 +205,43 @@ UISearchBarDelegate>
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     //BRRecordVideo *record = [BRDModel sharedInstance].videos[indexPath.row];
 }
+
+-(void)_toggleFavoriteHandler:(UIButton*)sender{
+    
+    int selectedRow = sender.tag;
+    __block BRRecordVideo *record = [BRDModel sharedInstance].videos[selectedRow];
+    
+    [kSharedModel toggleFavoriteVideo:record.uid
+                                      byFbid:kSharedModel.fbId 
+                                 withBool:record.isUserFavorite 
+                             inSelectedIndex:selectedRow WithBlock:^(NSDictionary* userinfo){
+                                 NSString* error = userinfo[@"error"];
+                                 if(nil != error){
+                                     [self showMsg:error type:msgLevelWarn];
+                                     return;
+                                 }
+                                 NSString* msg = userinfo[@"msg"];
+                                 [self showMsg:kSharedModel.lang[msg] type:msgLevelInfo];
+                                 
+                                 NSNumber* updedIndex = (NSNumber*)userinfo[@"updedIndex"];
+                                 if(nil != updedIndex){
+                                     
+                                     record.isUserFavorite = !record.isUserFavorite;
+                                     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[updedIndex integerValue] inSection:0];
+                                     
+                                     BRCellVideo *cell = (BRCellVideo *) [self.tb cellForRowAtIndexPath:indexPath];
+                                     [cell toggleBtnFavoriteTitle:record.isUserFavorite];
+                                     
+                                     PRPLog(@"updedIndex: %d, record.isUserFavorite:%d you can upd the btn title-[%@ , %@]",
+                                            [updedIndex integerValue],
+                                            record.isUserFavorite,
+                                            NSStringFromClass([self class]),
+                                            NSStringFromSelector(_cmd));
+                                     
+                                 }
+                             }];
+}
+
 
 #pragma mark UIScrollViewDelegate 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

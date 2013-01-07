@@ -106,6 +106,11 @@ WithBlock:(void (^)(NSDictionary* userInfo))block;
 @property(nonatomic, strong)NSString* videoSelectedUid;
 @property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
 @property(nonatomic) double currentSelectedVideoPlayBackTime;
+-(void)toggleFavoriteVideo:(NSString*)uid
+                           byFbid:(NSString*)fbId
+                      withBool:(BOOL)isMyFavorite
+                  inSelectedIndex:(int)selectedIndex
+                        WithBlock:(void (^)(NSDictionary* userInfo))block;
 
 @property(nonatomic, strong)NSMutableArray* videoMsgs;
 

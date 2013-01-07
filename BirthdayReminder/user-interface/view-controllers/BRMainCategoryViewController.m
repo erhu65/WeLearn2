@@ -118,7 +118,6 @@ UIScrollViewDelegate>
     [self showHud:YES];    
     [[BRDModel sharedInstance] fetchMainCategoriesWithPage:self.page];
 }
-
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -277,8 +276,6 @@ UIScrollViewDelegate>
 
     }
 }
-
-
 #pragma mark UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -299,7 +296,7 @@ UIScrollViewDelegate>
 	addItemsTrigger = NO;
 }
 
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 	// Trigger the offset if the user has pulled back more than 50 pixels
 	if (scrollView.contentOffset.y < -80.0f)
@@ -343,7 +340,6 @@ UIScrollViewDelegate>
                              [[BRDModel sharedInstance] mainCategoriesSort];
                          }
                            [self.tb reloadData];
-                         
                      }];
 }
 - (void)showFilterTable
