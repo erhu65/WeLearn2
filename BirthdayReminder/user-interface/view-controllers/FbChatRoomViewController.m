@@ -414,6 +414,8 @@
 
 - (IBAction)_back:(id)sender {
     
+    UIBarButtonItem* barBtnBack = (UIBarButtonItem* )sender;
+    barBtnBack.enabled = NO;    
     [self.delegate triggerOuterGoBack];
 //    [self dismissViewControllerAnimated:YES completion:^{
 //    

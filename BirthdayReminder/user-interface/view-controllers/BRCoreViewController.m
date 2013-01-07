@@ -38,9 +38,14 @@
     [self.view insertSubview:backgroundView atIndex:0];
     
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleFacebookMeDidUpdate:) name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
+}
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
     
    if(HUD!= nil){
       [HUD hide:NO];
@@ -121,4 +126,25 @@
     [self.navigationController popViewControllerAnimated:YES];
 
 }
+
+
+-(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSString* error = userInfo[@"error"];
+    NSString* msg = userInfo[@"msg"];
+    if(nil != error){
+        [self showMsg:error type:msgLevelWarn]; 
+        
+        return;
+    }
+    
+    if(nil != msg){
+        [self showMsg:msg type:msgLevelInfo]; 
+        return;
+    }    
+    
+}
+
+
 @end

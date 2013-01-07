@@ -11,7 +11,14 @@
 #import "BRStyleSheet.h"
 #import "UIImageView+RemoteFile.h"
 
+
+@interface BRCellMainCategory ()
+
+
+@end
+
 @implementation BRCellMainCategory
+
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     
@@ -47,6 +54,7 @@
     
     self.nameLb.text = record.name;
     self.descLb.text = record.desc;
+    self.btnFavorite.tag = [self.indexPath row];
     
 }
 
@@ -65,5 +73,12 @@
         [BRStyleSheet styleLabel:_descLb withType:BRLabelTypeBirthdayDate];
     }
 }
+
+- (IBAction)toggleFavorite:(id)sender {
+    
+    
+    [self.tb selectRowAtIndexPath:self.indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+}
+
 
 @end

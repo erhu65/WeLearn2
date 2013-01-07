@@ -10,7 +10,8 @@
 
 @interface BRCellMainCategory : UITableViewCell
 
-
+@property (weak, nonatomic) IBOutlet UIButton *btnFavorite;
+@property(nonatomic, weak) UITableView* tb;
 @property(nonatomic, strong)BRRecordMainCategory* record;
 @property(nonatomic, strong)NSIndexPath* indexPath;
 @property(nonatomic, weak)IBOutlet UILabel* nameLb;

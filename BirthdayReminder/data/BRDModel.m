@@ -24,7 +24,9 @@ typedef enum : int
 {
     FacebookActionGetFriendsBirthdays = 1,
     FacebookActionPostToWall,
-    FacebookActionGetMe
+    FacebookActionGetMe,
+    FacebookActionToggleMainCategoryFIsUserFavorite
+
 }FacebookAction;
 
 @interface BRDModel()
@@ -49,6 +51,16 @@ static BRDModel *_sharedInstance = nil;
 		_sharedInstance = [[BRDModel alloc] init];
         _sharedInstance.lang = [LangManager sharedManager].dic;
         _sharedInstance.theme = [ThemeManager sharedManager].dic;
+        
+        NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+        NSString* fbId = [defaults objectForKey:KUserDefaultFbId];
+        NSString* fbName = [defaults objectForKey:KUserDefaultFbName];
+        if(nil != fbId && nil != fbName) {
+            _sharedInstance.fbId = fbId;
+            _sharedInstance.fbName = fbName;
+        }
+        
+        
 
 	}
 	return _sharedInstance;
@@ -286,14 +298,13 @@ static BRDModel *_sharedInstance = nil;
                [defaults setObject:weakSelf.fbName forKey:KUserDefaultFbName];
                [defaults synchronize];
                
-               
-               
                 PRPLog(@"Facebook returned friends: %@ -[%@ , %@]",
                        resultD,
                        NSStringFromClass([self class]),
                        NSStringFromSelector(_cmd));
 //                //update the view on the main thread
-                NSDictionary *userInfo = @{@"FacebookMe":resultD};
+                NSDictionary *userInfo = @{@"FacebookMe":resultD,
+               @"msg": self.lang[@"actionFbAuthOkYouCanDoItAgain"]};
                 [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:userInfo];
             });
         }
@@ -470,6 +481,174 @@ static BRDModel *_sharedInstance = nil;
         
     });
 }
+-(void)toggleFavoriteMainCateogry:(NSString*)sn
+                           byFbid:(NSString*)fbId
+                      withNewBool:(BOOL)isMyFavorite
+                  inSelectedIndex:(int)selectedIndex
+WithBlock:(void (^)(NSDictionary* userInfo))block{
+
+    if (nil == fbId) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
+    
+    //[self.mainCategories removeAllObjects];
+    
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        //            
+        //        });
+        //        __block NSMutableArray *randomNumbers = nil;
+        //        /* Read the numbers from disk and sort them in an
+        //         ascending fashion */
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        // 
+        //        });
+        NSString* urlMainCategoresUpdFollowers = [NSString stringWithFormat:@"%@/MainCategories/%@", BASE_URL, sn];
+        NSURL *url = [NSURL URLWithString:urlMainCategoresUpdFollowers];
+        
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"POST"];
+        
+        NSString *body = [NSString stringWithFormat:@"fbId=%@&isMyFavorite=%d&_method=%@", fbId,isMyFavorite, @"put"];
+        
+        [urlRequest setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg = @"";
+
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        PRPLog(@"urlMainCategoresUpdFollowers: %@\n  -[%@ , %@]",
+               urlMainCategoresUpdFollowers,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            //            PRPLog(@"response %@ -[%@ , %@]",
+            //                   [response description],
+            //                   NSStringFromClass([self class]),
+            //                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    NSString* isAlreadyAdded = [deserializedDictionary objectForKey:@"isAlreadyAdded"]; 
+                    if(isAlreadyAdded) errMsg = isAlreadyAdded;
+                    
+                    NSString* error = [deserializedDictionary objectForKey:@"error"]; 
+                    if(error) errMsg = error;
+
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+            
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSDictionary *userInfo;
+            
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                
+               userInfo = @{@"updedIndex":[NSNumber numberWithInt:selectedIndex]};
+            }
+            
+            block(userInfo);
+            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationMainCategoriesDidUpdate object:self userInfo:userInfo];
+            
+        });
+        
+    });
+}
+
 
 -(void)mainCategoriesSort{
 
@@ -1877,6 +2056,11 @@ static BRDModel *_sharedInstance = nil;
 
 - (void)authenticateWithFacebook {
     
+    if(nil != self.fbId){
+        [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
+        return;
+    }
+
     //Centralized iOS user Twitter, Facebook and Sina Weibo accounts are accessed by apps via the ACAccountStore 
     //if(nil != self.facebookAccount)return;
 
@@ -1922,12 +2106,16 @@ static BRDModel *_sharedInstance = nil;
                     //TODO - post to a friend's Facebook Wall
                     [self fetchFacebookMe];
                     break;
- 
+                case FacebookActionToggleMainCategoryFIsUserFavorite:
+                    [self fetchFacebookMe];
+                 
+                    
                 default:
                     PRPLog(@"self.facebookAccount= %@-[%@ , %@]",
                            self.facebookAccount,
                            NSStringFromClass([self class]),NSStringFromSelector(_cmd));
             }
+            
         } else {
             
             if ([error code] == ACErrorAccountNotFound) {

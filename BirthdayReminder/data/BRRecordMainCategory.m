@@ -15,11 +15,15 @@
     self = [super init];
     if (self) {
         
-        self.uid = (NSString*)[dic objectForKey:@"_id"];
+        self.uid = [dic objectForKey:@"_id"];
+        self.sn = [dic objectForKey:@"sn"];
         self.name = [dic objectForKey:@"name"];
         self.desc = [dic objectForKey:@"desc"];
         self.created_at = [dic objectForKey:@"created_at"];
         self.modified_at = [dic objectForKey:@"modified_at"];
+        
+        NSNumber* isUserFavorite = (NSNumber*) [dic objectForKey:@"isMyFavorite"];
+        self.isUserFavorite = [isUserFavorite boolValue];
     }
     return self;
 }

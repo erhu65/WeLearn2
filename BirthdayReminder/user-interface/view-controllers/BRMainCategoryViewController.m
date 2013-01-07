@@ -105,7 +105,7 @@ UIScrollViewDelegate>
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleMainCategoriesDidUpdate:) name:BRNotificationMainCategoriesDidUpdate object:[BRDModel sharedInstance]];
-   
+    
     [self _populateLang];
     
     if( [[BRDModel sharedInstance].mainCategories count] ==0){
@@ -162,8 +162,6 @@ UIScrollViewDelegate>
     }
     
 }
-
-
 -(void)_populateLang
 {
     self.sortLb.text = self.lang[@"sort"];
@@ -192,8 +190,10 @@ UIScrollViewDelegate>
         BRCellMainCategory *cell =  (BRCellMainCategory *)[self.tb dequeueReusableCellWithIdentifier:CellIdentifier];
         
         BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[indexPath.row];
+        cell.tb = tableView;
         cell.indexPath = indexPath;
         cell.record = record;
+        [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     } else {
 		cell.textLabel.text = filterNames[indexPath.row];
@@ -219,6 +219,33 @@ UIScrollViewDelegate>
 
     return cell;
 }
+-(void)_toggleFavoriteHandler:(UIButton*)sender{
+    
+    int selectedRow = sender.tag;
+    __block BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[selectedRow];
+    
+    [kSharedModel toggleFavoriteMainCateogry:record.sn 
+                                      byFbid:kSharedModel.fbId 
+                                 withNewBool:record.isUserFavorite 
+                             inSelectedIndex:selectedRow WithBlock:^(NSDictionary* userinfo){
+                                 NSString* error = userinfo[@"error"];
+                                 if(nil != error){
+                                     [self showMsg:error type:msgLevelWarn];
+                                     return;
+                                 }
+                                 NSString* updedIndex = userinfo[@"updedIndex"];
+                                 if(nil != updedIndex){
+                                     
+                                     record.isUserFavorite = !record.isUserFavorite;
+                                     PRPLog(@"updedIndex: %d, record.isUserFavorite:%d you can upd the btn title-[%@ , %@]",
+                                            [updedIndex integerValue],
+                                            record.isUserFavorite,
+                                            NSStringFromClass([self class]),
+                                            NSStringFromSelector(_cmd));
+
+                                 }
+                             }];
+}
 
 #pragma mark UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -238,8 +265,7 @@ UIScrollViewDelegate>
         [self hideFilterTable];
         
     } else {
-        
-//        BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[indexPath.row];
+
     }
 }
 

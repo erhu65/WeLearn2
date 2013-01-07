@@ -2,75 +2,81 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>sum</key>
-	<string>Sum</string>
-	<key>say</key>
-	<string>say:</string>
-	<key>onLine</key>
-	<string>On Line</string>
-	<key>titleMainCategories</key>
-	<string>Main Categories</string>
-	<key>titleSubCategories</key>
-	<string>Sub Categories</string>
-	<key>titleVideos</key>
-	<string>Videos</string>
-	<key>titleVideo</key>
-	<string>Video</string>
-	<key>titleChatRoom</key>
-	<string>Chat Room</string>
-	<key>titleMsgBoard</key>
-	<string>Msg Board</string>
-	<key>sort</key>
-	<string>Sort:</string>
-	<key>noSort</key>
-	<string>NO Sort</string>
-	<key>byDate</key>
-	<string>By Date</string>
-	<key>byName</key>
-	<string>By Name</string>
-	<key>error</key>
-	<string>Error</string>
-	<key>info</key>
-	<string>Info</string>
-	<key>warn</key>
-	<string>Warn</string>
-	<key>warnEmptyText</key>
-	<string>Please fill the field</string>
-	<key>warnLoginFBFirst</key>
-	<string>Please login Facebook first</string>
-	<key>warnConnectFBFirst</key>
-	<string>Please connect Facebook fisrt</string>
-	<key>error_network_connection</key>
-	<string>Netowrk Connection Fail</string>
-	<key>error_parse_fail</key>
-	<string>Parse Error</string>
-	<key>infoNoData</key>
-	<string>No Data</string>
-	<key>infoConnectFBFirst</key>
-	<string>Plearse Connect Facebook First</string>
-	<key>actionDimiss</key>
-	<string>Dimiss</string>
-	<key>actionBack</key>
-	<string>Back</string>
-	<key>actionSearch</key>
-	<string>Search</string>
-	<key>actionZoomOut</key>
-	<string>Zoom Out</string>
-	<key>actionZoomIn</key>
-	<string>Zoom In</string>
-	<key>actionJoin</key>
-	<string>Join</string>
-	<key>actionLeave</key>
-	<string>Leave</string>
-	<key>actionTalk</key>
-	<string>Talk</string>
-	<key>actionMsg</key>
-	<string>Msg</string>
-	<key>actionFull</key>
-	<string>Full</string>
-	<key>actionSplit</key>
-	<string>Split</string>
 	<key></key>
 	<string></string>
+	<key>titleMainCategories</key>
+	<string>Main Categories</string>
+	<key>error_network_connection</key>
+	<string>Netowrk Connection Fail</string>
+	<key>byName</key>
+	<string>By Name</string>
+	<key>titleChatRoom</key>
+	<string>Chat Room</string>
+	<key>actionSplit</key>
+	<string>Split</string>
+	<key>say</key>
+	<string>say:</string>
+	<key>sum</key>
+	<string>Sum</string>
+	<key>actionMsg</key>
+	<string>Msg</string>
+	<key>actionZoomOut</key>
+	<string>Zoom Out</string>
+	<key>sort</key>
+	<string>Sort:</string>
+	<key>actionLeave</key>
+	<string>Leave</string>
+	<key>onLine</key>
+	<string>On Line</string>
+	<key>titleVideo</key>
+	<string>Video</string>
+	<key>actionDimiss</key>
+	<string>Dimiss</string>
+	<key>infoConnectFBFirst</key>
+	<string>Plearse Connect Facebook First</string>
+	<key>titleSubCategories</key>
+	<string>Sub Categories</string>
+	<key>error_parse_fail</key>
+	<string>Parse Error</string>
+	<key>info</key>
+	<string>Info</string>
+	<key>titleMsgBoard</key>
+	<string>Msg Board</string>
+	<key>actionJoin</key>
+	<string>Join</string>
+	<key>byDate</key>
+	<string>By Date</string>
+	<key>actionSearch</key>
+	<string>Search</string>
+	<key>infoNoData</key>
+	<string>No Data</string>
+	<key>actionZoomIn</key>
+	<string>Zoom In</string>
+	<key>actionBack</key>
+	<string>Back</string>
+	<key>warnConnectFBFirst</key>
+	<string>Please connect Facebook fisrt</string>
+	<key>warnEmptyText</key>
+	<string>Please fill the field</string>
+	<key>actionTalk</key>
+	<string>Talk</string>
+	<key>actionAddFavorite</key>
+	<string>Add Favorite</string>
+	<key>actionRemoveFavorite</key>
+	<string>RemoveFavorite</string>
+	<key>actionFbAuthOkYouCanDoItAgain</key>
+	<string>Facebook Login OK You can do it again</string>
+	<key>noSort</key>
+	<string>NO Sort</string>
+	<key>titleVideos</key>
+	<string>Videos</string>
+	<key>error</key>
+	<string>Error</string>
+	<key>warnLoginFBFirst</key>
+	<string>Please login Facebook first</string>
+	<key>warn</key>
+	<string>Warn</string>
+	<key>actionFull</key>
+	<string>Full</string>
 </dict>
 </plist>

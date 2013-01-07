@@ -125,6 +125,8 @@ UIScrollViewDelegate>
     if(nil != error){
         [self showMsg:error type:msgLevelWarn]; 
         self.barBtnMsg.enabled = YES;
+        [self.activityMsgBoard stopAnimating];
+        self.activityMsgBoard.hidden = YES;
         return;
     }
     
@@ -143,6 +145,8 @@ UIScrollViewDelegate>
     if(nil != error && error.length > 0){
         [self showMsg:error type:msgLevelWarn]; 
         self.barBtnMsg.enabled = YES;
+        [self.activityMsgBoard stopAnimating];
+        self.activityMsgBoard.hidden = YES;
         return;
     }
     //NSDictionary *userInfo = [notification userInfo];
@@ -209,7 +213,6 @@ UIScrollViewDelegate>
         });
     }
 
-    
     self.barBtnMsg.enabled = FALSE;
     self.activityMsgBoard.hidden = NO;
     [self.activityMsgBoard startAnimating];
