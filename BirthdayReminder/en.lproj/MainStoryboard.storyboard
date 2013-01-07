@@ -3261,8 +3261,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRVideoViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRVideoViewController.h"/>
             <relationships>
-                <relationship kind="action" name="filterButtonPressed:"/>
-                <relationship kind="action" name="navigationBack:"/>
                 <relationship kind="action" name="unwindBackToBRVideoViewController:" candidateClass="UIStoryboardSegue"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
