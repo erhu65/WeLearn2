@@ -6,5 +6,9 @@
 	<string>Icon.png</string>
 	<key>eyeball</key>
 	<string>eyeball.png</string>
+	<key>favoriteAdd</key>
+	<string>favoriteAdd.png</string>
+	<key>favoriteRemove</key>
+	<string>favoriteRemove.png</string>
 </dict>
 </plist>

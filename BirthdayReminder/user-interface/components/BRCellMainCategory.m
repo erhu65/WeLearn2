@@ -55,9 +55,16 @@
     self.nameLb.text = record.name;
     self.descLb.text = record.desc;
     self.btnFavorite.tag = [self.indexPath row];
-    
+    [self toggleBtnFavoriteTitle:record.isUserFavorite];
 }
 
+-(void)toggleBtnFavoriteTitle:(BOOL)isFavorite{
+    if(isFavorite) {
+        
+        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteAdd"]] forState:UIControlStateNormal];
+    } else {
+        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteRemove"]] forState:UIControlStateNormal];
+    }}
 -(void) setNameLb:(UILabel *)nameLb
 {
     _nameLb = nameLb;

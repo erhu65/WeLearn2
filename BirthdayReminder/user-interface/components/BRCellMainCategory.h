@@ -17,4 +17,7 @@
 @property(nonatomic, weak)IBOutlet UILabel* nameLb;
 @property(nonatomic, weak)IBOutlet UILabel* descLb;
 
+-(void)toggleBtnFavoriteTitle:(BOOL)isFavorite;
 @end
+
+

@@ -191,6 +191,10 @@
 		B79DF35B168088DC00510CA9 /* BRCellVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF35A168088DC00510CA9 /* BRCellVideo.m */; };
 		B79DF35E168088FB00510CA9 /* BRRecordVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF35D168088FB00510CA9 /* BRRecordVideo.m */; };
 		B79DF3611680C64F00510CA9 /* BRRecordBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF3601680C64F00510CA9 /* BRRecordBase.m */; };
+		B7B1089D169AAB7F00BC02D1 /* favoriteAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B10899169AAB7F00BC02D1 /* favoriteAdd.png */; };
+		B7B1089E169AAB7F00BC02D1 /* favoriteRemove.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089A169AAB7F00BC02D1 /* favoriteRemove.png */; };
+		B7B1089F169AAB7F00BC02D1 /* favoriteRemove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */; };
+		B7B108A0169AAB7F00BC02D1 /* favoriteAdd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -475,6 +479,10 @@
 		B79DF35D168088FB00510CA9 /* BRRecordVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordVideo.m; sourceTree = "<group>"; };
 		B79DF35F1680C64F00510CA9 /* BRRecordBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordBase.h; sourceTree = "<group>"; };
 		B79DF3601680C64F00510CA9 /* BRRecordBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordBase.m; sourceTree = "<group>"; };
+		B7B10899169AAB7F00BC02D1 /* favoriteAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteAdd.png; sourceTree = "<group>"; };
+		B7B1089A169AAB7F00BC02D1 /* favoriteRemove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteRemove.png; sourceTree = "<group>"; };
+		B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteRemove@2x.png"; sourceTree = "<group>"; };
+		B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteAdd@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -581,8 +589,10 @@
 		487BA46D1594B02C00EEB099 /* BirthdayReminder */ = {
 			isa = PBXGroup;
 			children = (
-				B78BF868169418F60034BD02 /* theme */,
 				B7101D06167DB4BC0093DBC8 /* constants.h */,
+				487BA4761594B02C00EEB099 /* BRAppDelegate.h */,
+				487BA4771594B02C00EEB099 /* BRAppDelegate.m */,
+				B78BF868169418F60034BD02 /* theme */,
 				B7101D0E167DB6A50093DBC8 /* lang */,
 				48DEA8DC15C17F1D00397172 /* categories */,
 				B77A4CD21678946C0021C984 /* Utilities */,
@@ -593,8 +603,6 @@
 				48BA416415A44E3B00F5885A /* view-controllers */,
 				4867FEA415C15BCE0051C7DB /* model */,
 				48BA416315A44E3B00F5885A /* user-interface */,
-				487BA4761594B02C00EEB099 /* BRAppDelegate.h */,
-				487BA4771594B02C00EEB099 /* BRAppDelegate.m */,
 				487BA4791594B02C00EEB099 /* MainStoryboard.storyboard */,
 				487BA4BD1597724200EEB099 /* resources */,
 				487BA46E1594B02C00EEB099 /* Supporting Files */,
@@ -630,6 +638,10 @@
 			children = (
 				48DD475315DE7FD600CE9A51 /* Icon@2x.png */,
 				48DD475115DE7FD000CE9A51 /* Icon.png */,
+				B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */,
+				B7B10899169AAB7F00BC02D1 /* favoriteAdd.png */,
+				B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */,
+				B7B1089A169AAB7F00BC02D1 /* favoriteRemove.png */,
 				B78C304F167733F800B80BE7 /* Arrow.png */,
 				B78C3050167733F800B80BE7 /* Arrow@2x.png */,
 				B7101D62167E39770093DBC8 /* ArrowAsc.png */,
@@ -1150,6 +1162,10 @@
 				B78BF86E16941A2B0034BD02 /* theme_default.plist in Resources */,
 				B78BF9EB169432FA0034BD02 /* eyeball.png in Resources */,
 				B78BF9EC169432FA0034BD02 /* eyeball@2x.png in Resources */,
+				B7B1089D169AAB7F00BC02D1 /* favoriteAdd.png in Resources */,
+				B7B1089E169AAB7F00BC02D1 /* favoriteRemove.png in Resources */,
+				B7B1089F169AAB7F00BC02D1 /* favoriteRemove@2x.png in Resources */,
+				B7B108A0169AAB7F00BC02D1 /* favoriteAdd@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

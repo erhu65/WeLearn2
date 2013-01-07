@@ -225,6 +225,7 @@ UIScrollViewDelegate>
     __block BRRecordMainCategory *record = [BRDModel sharedInstance].mainCategories[selectedRow];
     
     [kSharedModel toggleFavoriteMainCateogry:record.sn 
+                                         uid:record.uid
                                       byFbid:kSharedModel.fbId 
                                  withNewBool:record.isUserFavorite 
                              inSelectedIndex:selectedRow WithBlock:^(NSDictionary* userinfo){
@@ -233,10 +234,18 @@ UIScrollViewDelegate>
                                      [self showMsg:error type:msgLevelWarn];
                                      return;
                                  }
-                                 NSString* updedIndex = userinfo[@"updedIndex"];
+                                 NSString* msg = userinfo[@"msg"];
+                                [self showMsg:kSharedModel.lang[msg] type:msgLevelInfo];
+                                 
+                                 NSNumber* updedIndex = (NSNumber*)userinfo[@"updedIndex"];
                                  if(nil != updedIndex){
                                      
                                      record.isUserFavorite = !record.isUserFavorite;
+                                     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[updedIndex integerValue] inSection:0];
+                                                      
+                                      BRCellMainCategory *cell = (BRCellMainCategory *) [self.tb cellForRowAtIndexPath:indexPath];
+                                      [cell toggleBtnFavoriteTitle:record.isUserFavorite];
+                                     
                                      PRPLog(@"updedIndex: %d, record.isUserFavorite:%d you can upd the btn title-[%@ , %@]",
                                             [updedIndex integerValue],
                                             record.isUserFavorite,

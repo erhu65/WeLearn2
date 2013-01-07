@@ -82,7 +82,9 @@ typedef enum subCategoriesSortType {
 @property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
 @property(nonatomic, strong)BRRecordMainCategory* currentSelectMainCategory;
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page;
--(void)toggleFavoriteMainCateogry:(NSString*)uid
+
+-(void)toggleFavoriteMainCateogry:(NSString*)sn
+                              uid:(NSString*)uid
                            byFbid:(NSString*)fbId
                       withNewBool:(BOOL)isMyFavorite
                   inSelectedIndex:(int)selectedIndex

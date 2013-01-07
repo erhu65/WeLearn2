@@ -8,8 +8,18 @@
 	<string>Main Categories</string>
 	<key>error_network_connection</key>
 	<string>Netowrk Connection Fail</string>
+	<key>actionFbAuthOkYouCanDoItAgain</key>
+	<string>Facebook Login OK You can do it again</string>
 	<key>byName</key>
 	<string>By Name</string>
+	<key>actionRemoveFavorite</key>
+	<string>Remove Favorite</string>
+	<key>actionAddFavorite</key>
+	<string>Add Favorite</string>
+	<key>actionRemoveFavoriteSuccessfully</key>
+	<string>Remove favorite successfully</string>
+	<key>actionAddFavoriteSuccessfully</key>
+	<string>Add favorite successfully</string>
 	<key>titleChatRoom</key>
 	<string>Chat Room</string>
 	<key>actionSplit</key>
@@ -60,12 +70,6 @@
 	<string>Please fill the field</string>
 	<key>actionTalk</key>
 	<string>Talk</string>
-	<key>actionAddFavorite</key>
-	<string>Add Favorite</string>
-	<key>actionRemoveFavorite</key>
-	<string>RemoveFavorite</string>
-	<key>actionFbAuthOkYouCanDoItAgain</key>
-	<string>Facebook Login OK You can do it again</string>
 	<key>noSort</key>
 	<string>NO Sort</string>
 	<key>titleVideos</key>

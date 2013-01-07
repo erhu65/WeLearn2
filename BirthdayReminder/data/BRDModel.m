@@ -340,8 +340,14 @@ static BRDModel *_sharedInstance = nil;
 //            
 // 
 //        });
+        NSString* fbId;
+        if(nil != self.fbId) {
+            fbId = self.fbId;
+        } else {
+            fbId = @"";
+        }
         NSString* urlMainCategores = [NSString stringWithFormat:@"%@/MainCategories", BASE_URL];
-        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d", [page intValue]];
+        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d&fbId=%@", [page intValue], fbId];
         NSURL *url = [NSURL URLWithString:urlMainCategores];
         
         //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
@@ -482,10 +488,11 @@ static BRDModel *_sharedInstance = nil;
     });
 }
 -(void)toggleFavoriteMainCateogry:(NSString*)sn
+                              uid:(NSString*)uid
                            byFbid:(NSString*)fbId
                       withNewBool:(BOOL)isMyFavorite
                   inSelectedIndex:(int)selectedIndex
-WithBlock:(void (^)(NSDictionary* userInfo))block{
+                        WithBlock:(void (^)(NSDictionary* userInfo))block{
 
     if (nil == fbId) {
         self.currentFacebookAction = FacebookActionGetMe;
@@ -521,14 +528,15 @@ WithBlock:(void (^)(NSDictionary* userInfo))block{
         NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
         [urlRequest setTimeoutInterval:30.0f];
         [urlRequest setHTTPMethod:@"POST"];
-        
-        NSString *body = [NSString stringWithFormat:@"fbId=%@&isMyFavorite=%d&_method=%@", fbId,isMyFavorite, @"put"];
+        NSString* actioinDoFavorite = (!isMyFavorite)?@"add":@"del";
+        NSString *body = [NSString stringWithFormat:@"fbId=%@&mainCategoryId=%@&actioinDoFavorite=%@&_method=%@", fbId, uid, actioinDoFavorite, @"put"];
         
         [urlRequest setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
+        NSString* errMsg;
+        NSString* msg;
 
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
@@ -576,8 +584,7 @@ WithBlock:(void (^)(NSDictionary* userInfo))block{
                            NSStringFromClass([self class]),
                            NSStringFromSelector(_cmd));
                     
-                    NSString* isAlreadyAdded = [deserializedDictionary objectForKey:@"isAlreadyAdded"]; 
-                    if(isAlreadyAdded) errMsg = isAlreadyAdded;
+                    msg = [deserializedDictionary objectForKey:@"msg"]; 
                     
                     NSString* error = [deserializedDictionary objectForKey:@"error"]; 
                     if(error) errMsg = error;
@@ -637,7 +644,8 @@ WithBlock:(void (^)(NSDictionary* userInfo))block{
                 userInfo = @{@"error":errMsg};
             } else {
                 
-               userInfo = @{@"updedIndex":[NSNumber numberWithInt:selectedIndex]};
+               userInfo = @{@"updedIndex":[NSNumber numberWithInt:selectedIndex]
+                ,@"msg": msg};
             }
             
             block(userInfo);
