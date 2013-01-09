@@ -58,7 +58,7 @@ typedef enum subCategoriesSortType {
 @property(nonatomic, strong)NSString* fbName;
 @property(nonatomic, strong)NSString* fbId;
 
-@property(nonatomic, strong)NSDictionary* mArrFriends;
+@property(nonatomic, strong)NSMutableArray* mArrFriends;
 
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
 
@@ -74,7 +74,6 @@ typedef enum subCategoriesSortType {
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
 - (void)fetchFacebookMe;
-- (void)fetchFacebookFriends;
 
 @property BOOL  mainCategoriesSortIsDesc;
 @property BOOL isUserMainCategoryFavoriteNeedUpdate;

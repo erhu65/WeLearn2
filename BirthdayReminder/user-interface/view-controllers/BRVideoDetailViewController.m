@@ -193,7 +193,6 @@ FbMsgBaordViewControllerDelegate>
         self.lbMarquee.enabled = YES;
         self.lbMarquee.shadowOffset = CGSizeMake(0.0, -1.0);
         [BRStyleSheet styleLabel:(UILabel*)self.lbMarquee withType:BRLabelTypeName];
-        
         self.lbMarquee.backgroundColor = [UIColor clearColor];
         self.lbMarquee.font = [UIFont fontWithName:@"Helvetica-Bold" size:17.000];
         self.lbMarquee.text = [NSString stringWithFormat:@"%@~%@ --- %@: %@", self.currentSelectedVideo.mainCategoryName, 
@@ -312,6 +311,7 @@ FbMsgBaordViewControllerDelegate>
     if(self.currentSelectedVideoPlayBackTime > 0.0f ){
         self.youtubePlayer.initialPlaybackTime = self.currentSelectedVideoPlayBackTime;
     }
+    
     //self.youtubePlayer.view.userInteractionEnabled = NO;    
 //    self.youtubePlayer.movieSourceType = MPMovieSourceTypeStreaming;
 //    [self.youtubePlayer setInitialPlaybackTime:-1.f];
@@ -514,7 +514,24 @@ FbMsgBaordViewControllerDelegate>
 	{
 		self.fbChatRoomViewController = segue.destinationViewController;
         self.fbChatRoomViewController.delegate = self;
-        self.fbChatRoomViewController.room = self.videoSelecteSubCategoryId;
+        if(nil == self.videoSelecteSubCategoryId){
+            
+            NSString* room;
+            if(nil != self.fbFriend){
+            
+                room =  self.fbFriend.facebookID;
+            } else if(nil != kSharedModel.fbId){
+                
+                room =  kSharedModel.fbId;
+            } else {
+                room = @"globalRoom";
+            }
+            
+            self.fbChatRoomViewController.room = room;
+        } else {
+            self.fbChatRoomViewController.room = self.videoSelecteSubCategoryId;
+        }
+        
         self.fbChatRoomViewController.currentYoutubeKey = self.currentSelectedVideo.youtubeKey;
 		//self.daysViewController.records = _records;
 	} else if ([segue.identifier isEqualToString:@"segueFbMsgBoard"]) {

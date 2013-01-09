@@ -8,7 +8,7 @@
 
 #import "BRCoreViewController.h"
 
-@interface BRImportViewController : BRCoreViewController<UITableViewDelegate, UITableViewDataSource>
+@interface BRImportViewController : BRCoreViewController
 
 @property (strong, nonatomic) NSArray *birthdays;
 
@@ -18,5 +18,5 @@
 - (IBAction)didTapImportButton:(id)sender;
 - (IBAction)didTapSelectAllButton:(id)sender;
 - (IBAction)didTapSelectNoneButton:(id)sender;
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 @end

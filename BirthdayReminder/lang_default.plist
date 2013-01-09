@@ -22,18 +22,16 @@
 	<string>Favorite Categories</string>
 	<key>titleFavoriteVideos</key>
 	<string>Favorite videos</string>
+	<key>titleFriendsFavoriteVideos</key>
+	<string>Friends&apos; Favorite videos</string>
+	<key>titleWhosFavoriteVideos</key>
+	<string>Favorite Videos</string>
 	<key>actionAddFavorite</key>
 	<string>Add Favorite</string>
 	<key>titleChatRoom</key>
 	<string>Chat Room</string>
 	<key>actionSplit</key>
 	<string>Split</string>
-	<key>actionOK</key>
-	<string>OK</string>
-	<key>actionCancel</key>
-	<string>Cancel</string>
-	<key>actionFull</key>
-	<string>Full</string>
 	<key>say</key>
 	<string>say:</string>
 	<key>sum</key>
@@ -42,6 +40,8 @@
 	<string>Msg</string>
 	<key>actionZoomOut</key>
 	<string>Zoom Out</string>
+	<key>warnAreYouSore</key>
+	<string>Are you sure?</string>
 	<key>sort</key>
 	<string>Sort:</string>
 	<key>actionLeave</key>
@@ -58,6 +58,8 @@
 	<string>Sub Categories</string>
 	<key>error_parse_fail</key>
 	<string>Parse Error</string>
+	<key>warnAreYouSoreRemoveFavoriteMainCategory</key>
+	<string>Are you sure to remove the favorite main category?</string>
 	<key>info</key>
 	<string>Info</string>
 	<key>titleMsgBoard</key>
@@ -68,6 +70,8 @@
 	<string>By Date</string>
 	<key>actionSearch</key>
 	<string>Search</string>
+	<key>actionOK</key>
+	<string>OK</string>
 	<key>infoNoData</key>
 	<string>No Data</string>
 	<key>actionZoomIn</key>
@@ -76,6 +80,8 @@
 	<string>Back</string>
 	<key>warnConnectFBFirst</key>
 	<string>Please connect Facebook fisrt</string>
+	<key>warnAreYouSoreRemoveFavoriteVideo</key>
+	<string>Are you sure to remove the favorite video?</string>
 	<key>warnEmptyText</key>
 	<string>Please fill the field</string>
 	<key>actionTalk</key>
@@ -86,17 +92,15 @@
 	<string>Videos</string>
 	<key>error</key>
 	<string>Error</string>
+	<key>actionCancel</key>
+	<string>Cancel</string>
 	<key>warnLoginFBFirst</key>
 	<string>Please login Facebook first</string>
 	<key>warn</key>
 	<string>Warn</string>
 	<key>warnNoFBAccountFound</key>
 	<string>No Facebook Account Found</string>
-	<key>warnAreYouSore</key>
-	<string>Are you sure?</string>
-	<key>warnAreYouSoreRemoveFavoriteMainCategory</key>
-	<string>Are you sure to remove the favorite main category?</string>
-	<key>warnAreYouSoreRemoveFavoriteVideo</key>
-	<string>Are you sure to remove the favorite video?</string>
+	<key>actionFull</key>
+	<string>Full</string>
 </dict>
 </plist>

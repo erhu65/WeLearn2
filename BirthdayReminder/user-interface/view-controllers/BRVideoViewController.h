@@ -7,7 +7,7 @@
 //
 
 #import "BRCoreViewController.h"
-
+#import "BRDBirthday.h"
 
 @interface BRVideoViewController : BRCoreViewController
 
@@ -18,6 +18,10 @@
 
 @property(nonatomic, strong)NSString* subCategoriesSelectedUid;
 @property(nonatomic, strong)BRRecordSubCategory* currentSelectSubCategory;
+
+@property(nonatomic, strong)NSString* friendFbId;
+@property(nonatomic, strong)BRDBirthday* fbFriend;
+
 
 -(IBAction)unwindBackToBRVideoViewController:(UIStoryboardSegue *)segue;
 @end

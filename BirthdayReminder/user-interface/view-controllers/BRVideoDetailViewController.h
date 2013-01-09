@@ -8,6 +8,7 @@
 
 #import "BRCoreViewController.h"
 #import "LBYouTube.h" 
+#import "BRDBirthday.h"
 @interface BRVideoDetailViewController : BRCoreViewController
 
 @property(nonatomic, strong)NSMutableArray* docs;
@@ -15,5 +16,6 @@
 @property(nonatomic, strong)NSString* videoSelectedUid;
 @property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
 @property(nonatomic) double currentSelectedVideoPlayBackTime;
+@property(nonatomic, strong)BRDBirthday* fbFriend;
 
 @end

@@ -1,20 +1,19 @@
 //
-//  Tab3NavigationController.m
+//  Tab4NavigationController.m
 //  BirthdayReminder
 //
 //  Created by Peter2 on 1/9/13.
 //  Copyright (c) 2013 Nick Kuh. All rights reserved.
 //
 
-#import "Tab3NavigationController.h"
+#import "Tab4NavigationController.h"
 #import "MyUnwindSegue.h"
 
-@interface Tab3NavigationController ()
+@interface Tab4NavigationController ()
 
 @end
 
-@implementation Tab3NavigationController
-
+@implementation Tab4NavigationController
 
 - (UIStoryboardSegue *)segueForUnwindingToViewController:(UIViewController *)toViewController fromViewController:(UIViewController *)fromViewController identifier:(NSString *)identifier
 {

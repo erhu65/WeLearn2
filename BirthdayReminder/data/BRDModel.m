@@ -77,13 +77,13 @@ static BRDModel *_sharedInstance = nil;
     return _facebookAccount;
 }
 //
-//-(NSMutableArray*)mainCategories{
-//    
-//    if(!_mainCategories){
-//        _mainCategories = [NSMutableArray array];
-//    }
-//    return _mainCategories;
-//}
+-(NSMutableArray*)mArrFriends{
+    
+    if( nil == _mArrFriends){
+        _mArrFriends = [[NSMutableArray alloc] init];
+    } 
+    return _mArrFriends;
+}
 //
 //-(NSMutableArray*)subCategories{
 //    
@@ -228,6 +228,7 @@ static BRDModel *_sharedInstance = nil;
                 //create an instance of BRDBirthdayImport
                 NSLog(@"Found a Facebook Birthday: %@",facebookDictionary);
                 birthday = [[BRDBirthdayImport alloc] initWithFacebookDictionary:facebookDictionary];
+                [self.mArrFriends addObject:birthday];
                 [birthdays addObject: birthday];
             }
             
@@ -308,11 +309,7 @@ static BRDModel *_sharedInstance = nil;
         }
     }];
 }
-- (void)fetchFacebookFriends
-{
-    //TODO: fetch user's FB friends to store in an array
-    //FIXME: 
-}
+
 
 #pragma mark mainCategories
 - (void)fetchMainCategoriesWithPage:(NSNumber*)page
@@ -1535,16 +1532,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block{
                                deserializedDictionary,
                                NSStringFromClass([self class]),
                                NSStringFromSelector(_cmd));
-                        
-                        page = [deserializedDictionary objectForKey:@"page"];
-                        lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
-                        
-                        PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
-                               page,
-                               lastPage,
-                               NSStringFromClass([self class]),
-                               NSStringFromSelector(_cmd));
-                        
+                                            
                         page = [deserializedDictionary objectForKey:@"page"];
                         lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
                         
@@ -2580,7 +2568,8 @@ withBlock:(void (^)(NSDictionary* userInfo))block
 
 - (void)authenticateWithFacebook {
     
-    if(nil != self.fbId){
+    if(nil != self.fbId 
+       && self.currentFacebookAction != FacebookActionGetFriendsBirthdays){
         [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
         return;
     }

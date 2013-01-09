@@ -1268,6 +1268,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                                             <outlet property="imvThumb" destination="5t6-hM-QnA" id="gDo-d4-Rvm"/>
                                             <outlet property="lbDesc" destination="lOs-60-heU" id="4M1-5C-P3R"/>
                                             <outlet property="lbName" destination="4ZZ-ku-YH1" id="9X4-hj-7h8"/>
+                                            <segue destination="rmd-sX-1BB" kind="custom" identifier="segueVideo" customClass="MyCustomSegue" trigger="accessoryAction" id="JfJ-xR-hEQ"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1342,22 +1343,121 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="INk-qo-2NP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050" y="1192"/>
+            <point key="canvasLocation" x="1030" y="1192"/>
         </scene>
-        <!--View Controller-->
+        <!--Friend List View Controller-->
         <scene sceneID="YAS-eC-lvt">
             <objects>
-                <viewController id="5dP-9w-RsO" sceneMemberID="viewController">
+                <viewController id="5dP-9w-RsO" customClass="BRFBFriendListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Cs-l4-BK0">
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="QiF-h6-KL7">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="460" type="user" id="kX3-9B-cBQ"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="1Q8-Vj-fo1" customClass="BRCellFriend">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="72"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="71"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7u-aj-ecI">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="52" id="OWD-Y3-CQO"/>
+                                                        <constraint firstAttribute="width" constant="52" id="tbw-uY-ZS2"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="icon-days-remaining.png" translatesAutoresizingMaskIntoConstraints="NO" id="2m3-ZT-334"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4w-t1-LDc">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="177" id="hih-GA-mJw"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIW-ec-HgL">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="cvj-vn-23H"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="XNf-4W-7ud">
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="37" id="1Hn-m4-oZO"/>
+                                                        <constraint firstAttribute="height" constant="20" id="OC8-KZ-I0n"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nnt-lh-i0l">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="Bnn-YF-j1V"/>
+                                                        <constraint firstAttribute="width" constant="51" id="Nn4-ov-whn"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="2m3-ZT-334" secondAttribute="trailing" constant="9" id="4vk-uH-ijG"/>
+                                            <constraint firstItem="j4w-t1-LDc" firstAttribute="leading" secondItem="rIW-ec-HgL" secondAttribute="leading" type="default" id="5Dd-yq-l76"/>
+                                            <constraint firstItem="l7u-aj-ecI" firstAttribute="top" secondItem="1Q8-Vj-fo1" secondAttribute="top" constant="13" id="5sN-mR-cV4"/>
+                                            <constraint firstItem="j4w-t1-LDc" firstAttribute="leading" secondItem="1Q8-Vj-fo1" secondAttribute="leading" constant="76" id="C2A-pN-O7e"/>
+                                            <constraint firstItem="l7u-aj-ecI" firstAttribute="bottom" secondItem="nnt-lh-i0l" secondAttribute="bottom" type="default" id="TwL-fK-gP1"/>
+                                            <constraint firstItem="j4w-t1-LDc" firstAttribute="top" secondItem="1Q8-Vj-fo1" secondAttribute="top" constant="22" id="YT7-Vc-G0U"/>
+                                            <constraint firstItem="XNf-4W-7ud" firstAttribute="centerY" secondItem="2m3-ZT-334" secondAttribute="centerY" type="default" id="bqy-Lo-VBZ"/>
+                                            <constraint firstItem="j4w-t1-LDc" firstAttribute="trailing" secondItem="rIW-ec-HgL" secondAttribute="trailing" type="default" id="dB5-5a-o6s"/>
+                                            <constraint firstItem="nnt-lh-i0l" firstAttribute="leading" secondItem="rIW-ec-HgL" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="fAK-y0-bMQ"/>
+                                            <constraint firstItem="rIW-ec-HgL" firstAttribute="bottom" secondItem="2m3-ZT-334" secondAttribute="bottom" type="default" id="lcp-AS-dZX"/>
+                                            <constraint firstItem="l7u-aj-ecI" firstAttribute="centerY" secondItem="XNf-4W-7ud" secondAttribute="centerY" type="default" id="pDx-h6-Hr1"/>
+                                            <constraint firstAttribute="trailing" secondItem="XNf-4W-7ud" secondAttribute="trailing" constant="16" id="qcl-Yf-MAn"/>
+                                            <constraint firstItem="l7u-aj-ecI" firstAttribute="leading" secondItem="1Q8-Vj-fo1" secondAttribute="leading" constant="11" id="rJl-BS-ifm"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="birthdayLabel" destination="rIW-ec-HgL" id="Zn5-dq-Wjr"/>
+                                            <outlet property="iconView" destination="l7u-aj-ecI" id="Epb-wg-XTF"/>
+                                            <outlet property="nameLabel" destination="j4w-t1-LDc" id="7Z0-e6-TOJ"/>
+                                            <outlet property="remainingDaysImageView" destination="2m3-ZT-334" id="Sqi-3J-RVd"/>
+                                            <outlet property="remainingDaysLabel" destination="XNf-4W-7ud" id="kOY-Wa-j9t"/>
+                                            <outlet property="remainingDaysSubTextLabel" destination="nnt-lh-i0l" id="trM-CV-6io"/>
+                                            <segue destination="Y6g-IP-xY5" kind="push" identifier="segueVideos" trigger="accessoryAction" id="LoV-6v-b2s"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="5dP-9w-RsO" id="fXe-M0-XoZ"/>
+                                    <outlet property="delegate" destination="5dP-9w-RsO" id="FeP-Lq-SkP"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QiF-h6-KL7" firstAttribute="leading" secondItem="4Cs-l4-BK0" secondAttribute="leading" type="user" id="9gF-ZR-dMW"/>
+                            <constraint firstItem="QiF-h6-KL7" firstAttribute="trailing" secondItem="4Cs-l4-BK0" secondAttribute="trailing" type="user" id="IFr-V6-NrC"/>
+                            <constraint firstItem="QiF-h6-KL7" firstAttribute="top" secondItem="4Cs-l4-BK0" secondAttribute="top" type="user" id="f7n-kj-tcx"/>
+                            <constraint firstItem="QiF-h6-KL7" firstAttribute="leading" secondItem="4Cs-l4-BK0" secondAttribute="leading" type="user" id="fWT-Gk-2ZO"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="tAz-XL-zU1"/>
+                    <connections>
+                        <outlet property="tableView" destination="QiF-h6-KL7" id="Y8s-0e-KFH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DWh-6c-yhZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050" y="2011"/>
+            <point key="canvasLocation" x="1099" y="2011"/>
         </scene>
         <!--Auto Layout View Controller - Cool App Name-->
         <scene sceneID="nxU-IH-WuJ">
@@ -2801,10 +2901,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1030" y="384"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Tab3 Navigation Controller - Item-->
         <scene sceneID="h6o-pr-W2K">
             <objects>
-                <navigationController id="beh-VK-zoT" sceneMemberID="viewController">
+                <navigationController id="beh-VK-zoT" customClass="Tab3NavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="KMn-BL-e6w"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6ki-51-PmU">
@@ -2820,10 +2920,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="524" y="1192"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Tab4 Navigation Controller - Item-->
         <scene sceneID="Mpl-0g-1OU">
             <objects>
-                <navigationController id="6Y7-9k-OSo" sceneMemberID="viewController">
+                <navigationController id="6Y7-9k-OSo" customClass="Tab4NavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="SN8-fL-W77"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YQD-cx-v1K">
@@ -3211,7 +3311,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1s7-IH-YGY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3027" y="-66"/>
+            <point key="canvasLocation" x="3003" y="-150"/>
         </scene>
         <!--Navigation Controller - Item-->
         <scene sceneID="xHP-aP-JOo">
@@ -3320,6 +3420,17 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRBlueButton" superclassName="UIButton">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRBlueButton.h"/>
         </class>
+        <class className="BRCellFriend" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellFriend.h"/>
+            <relationships>
+                <relationship kind="outlet" name="birthdayLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="iconView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="nameLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="remainingDaysImageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="remainingDaysLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="remainingDaysSubTextLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
         <class className="BRCellMainCategory" superclassName="UITableViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRCellMainCategory.h"/>
             <relationships>
@@ -3376,6 +3487,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         </class>
         <class className="BRErrorHandlerViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRErrorHandlerViewController.h"/>
+        </class>
+        <class className="BRFBFriendListViewController" superclassName="BRImportViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BRFBFriendListViewController.h"/>
         </class>
         <class className="BRHomeViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRHomeViewController.h"/>
@@ -3472,7 +3586,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="BRVideoViewController" superclassName="BRCoreViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BRVideoViewController.h"/>
             <relationships>
-                <relationship kind="action" name="filterButtonPressed:"/>
                 <relationship kind="action" name="unwindBackToBRVideoViewController:" candidateClass="UIStoryboardSegue"/>
                 <relationship kind="outlet" name="filterBar" candidateClass="UIView"/>
                 <relationship kind="outlet" name="sortBtn" candidateClass="UIButton"/>
@@ -3565,6 +3678,12 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <class className="Tab2NavigationController" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/Tab2NavigationController.h"/>
         </class>
+        <class className="Tab3NavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Tab3NavigationController.h"/>
+        </class>
+        <class className="Tab4NavigationController" superclassName="UINavigationController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/Tab4NavigationController.h"/>
+        </class>
         <class className="UIStoryboardSegue" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
         </class>
@@ -3575,7 +3694,9 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="T6y-mz-9qV"/>
+        <segue reference="LoV-6v-b2s"/>
+        <segue reference="TEX-gC-Khe"/>
+        <segue reference="3HC-2d-uQQ"/>
         <segue reference="mom-eS-TxU"/>
     </inferredMetricsTieBreakers>
 </document>

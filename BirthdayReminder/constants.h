@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-//#define BASE_URL          @"http://nameless-dawn-4099.herokuapp.com"
-#define BASE_URL          @"http://localhost:3000"
+#define BASE_URL          @"http://nameless-dawn-4099.herokuapp.com"
+//#define BASE_URL          @"http://localhost:3000"
 
 #define KUserDefaultFbId @"fbId"
 #define KUserDefaultFbName @"fbName"

@@ -126,6 +126,8 @@
 		B709512A1692DED0009D10F3 /* Tab1NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70951291692DED0009D10F3 /* Tab1NavigationController.m */; };
 		B709512E16933B99009D10F3 /* BRRecordFbChat.m in Sources */ = {isa = PBXBuildFile; fileRef = B709512D16933B99009D10F3 /* BRRecordFbChat.m */; };
 		B709513116933BDC009D10F3 /* BRCellfBChat.m in Sources */ = {isa = PBXBuildFile; fileRef = B709513016933BDC009D10F3 /* BRCellfBChat.m */; };
+		B70F4233169DE13100A6D383 /* BRFBFriendListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B70F4232169DE13100A6D383 /* BRFBFriendListViewController.m */; };
+		B70F4236169DE3A500A6D383 /* BRCellFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = B70F4235169DE3A500A6D383 /* BRCellFriend.m */; };
 		B7101CF6167DABD50093DBC8 /* BRMainCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */; };
 		B7101CFA167DAD8E0093DBC8 /* BRCellMainCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CF9167DAD8E0093DBC8 /* BRCellMainCategory.m */; };
 		B7101CFD167DADCD0093DBC8 /* BRRecordMainCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B7101CFC167DADCD0093DBC8 /* BRRecordMainCategory.m */; };
@@ -160,6 +162,7 @@
 		B78B9803169BEB310062E2D2 /* Tab2NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78B9802169BEB310062E2D2 /* Tab2NavigationController.m */; };
 		B78BE85C16764856006FE99C /* PRPDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BE85B16764856006FE99C /* PRPDebug.m */; };
 		B78BEF41169D5CE200B321D2 /* Tab3NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BEF40169D5CE100B321D2 /* Tab3NavigationController.m */; };
+		B78BEF44169DBB0300B321D2 /* Tab4NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BEF43169DBB0200B321D2 /* Tab4NavigationController.m */; };
 		B78BF86C169419130034BD02 /* ThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B78BF86B169419130034BD02 /* ThemeManager.m */; };
 		B78BF86E16941A2B0034BD02 /* theme_default.plist in Resources */ = {isa = PBXBuildFile; fileRef = B78BF86D16941A2B0034BD02 /* theme_default.plist */; };
 		B78BF9EB169432FA0034BD02 /* eyeball.png in Resources */ = {isa = PBXBuildFile; fileRef = B78BF9E9169432FA0034BD02 /* eyeball.png */; };
@@ -256,8 +259,8 @@
 		4851735715DBF1BC0085F77C /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		4867FEA115C15B970051C7DB /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4867FEA615C15BE70051C7DB /* BirthdayReminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BirthdayReminder.xcdatamodel; sourceTree = "<group>"; };
-		4867FEA815C15D000051C7DB /* BRDBirthday.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDBirthday.h; sourceTree = "<group>"; };
-		4867FEA915C15D000051C7DB /* BRDBirthday.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRDBirthday.m; sourceTree = "<group>"; };
+		4867FEA815C15D000051C7DB /* BRDBirthday.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRDBirthday.h; path = ../../data/BRDBirthday.h; sourceTree = "<group>"; };
+		4867FEA915C15D000051C7DB /* BRDBirthday.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRDBirthday.m; path = ../../data/BRDBirthday.m; sourceTree = "<group>"; };
 		4867FEAB15C15ED70051C7DB /* BRDModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRDModel.h; sourceTree = "<group>"; };
 		4867FEAC15C15ED70051C7DB /* BRDModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRDModel.m; sourceTree = "<group>"; };
 		487BA4631594B02C00EEB099 /* BirthdayReminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BirthdayReminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -322,8 +325,8 @@
 		48DEA8FA15C2AC7800397172 /* app-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app-background@2x.png"; sourceTree = "<group>"; };
 		48DEA91A15C2B5B900397172 /* icon-days-remaining.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-days-remaining.png"; sourceTree = "<group>"; };
 		48DEA91B15C2B5B900397172 /* icon-days-remaining@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-days-remaining@2x.png"; sourceTree = "<group>"; };
-		48DEA92315C2E2D200397172 /* BRBirthdayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRBirthdayTableViewCell.h; sourceTree = "<group>"; };
-		48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRBirthdayTableViewCell.m; sourceTree = "<group>"; };
+		48DEA92315C2E2D200397172 /* BRBirthdayTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRBirthdayTableViewCell.h; path = ../components/BRBirthdayTableViewCell.h; sourceTree = "<group>"; };
+		48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRBirthdayTableViewCell.m; path = ../components/BRBirthdayTableViewCell.m; sourceTree = "<group>"; };
 		48DEA92615C2E65E00397172 /* table-row-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table-row-background.png"; sourceTree = "<group>"; };
 		48DEA92715C2E65E00397172 /* table-row-background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table-row-background@2x.png"; sourceTree = "<group>"; };
 		48DEA92815C2E65E00397172 /* table-row-icing-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "table-row-icing-background.png"; sourceTree = "<group>"; };
@@ -361,6 +364,10 @@
 		B709512D16933B99009D10F3 /* BRRecordFbChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRRecordFbChat.m; path = ../../data/BRRecordFbChat.m; sourceTree = "<group>"; };
 		B709512F16933BDC009D10F3 /* BRCellfBChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellfBChat.h; path = ../components/BRCellfBChat.h; sourceTree = "<group>"; };
 		B709513016933BDC009D10F3 /* BRCellfBChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRCellfBChat.m; path = ../components/BRCellfBChat.m; sourceTree = "<group>"; };
+		B70F4231169DE13100A6D383 /* BRFBFriendListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRFBFriendListViewController.h; sourceTree = "<group>"; };
+		B70F4232169DE13100A6D383 /* BRFBFriendListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRFBFriendListViewController.m; sourceTree = "<group>"; };
+		B70F4234169DE3A500A6D383 /* BRCellFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCellFriend.h; sourceTree = "<group>"; };
+		B70F4235169DE3A500A6D383 /* BRCellFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCellFriend.m; sourceTree = "<group>"; };
 		B7101CF4167DABD50093DBC8 /* BRMainCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRMainCategoryViewController.h; sourceTree = "<group>"; };
 		B7101CF5167DABD50093DBC8 /* BRMainCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRMainCategoryViewController.m; sourceTree = "<group>"; };
 		B7101CF8167DAD8E0093DBC8 /* BRCellMainCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellMainCategory.h; path = ../components/BRCellMainCategory.h; sourceTree = "<group>"; };
@@ -424,6 +431,8 @@
 		B78BE85B16764856006FE99C /* PRPDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPDebug.m; sourceTree = "<group>"; };
 		B78BEF3F169D5CE100B321D2 /* Tab3NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tab3NavigationController.h; sourceTree = "<group>"; };
 		B78BEF40169D5CE100B321D2 /* Tab3NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tab3NavigationController.m; sourceTree = "<group>"; };
+		B78BEF42169DBB0200B321D2 /* Tab4NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tab4NavigationController.h; sourceTree = "<group>"; };
+		B78BEF43169DBB0200B321D2 /* Tab4NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tab4NavigationController.m; sourceTree = "<group>"; };
 		B78BF86A169419130034BD02 /* ThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeManager.h; sourceTree = "<group>"; };
 		B78BF86B169419130034BD02 /* ThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThemeManager.m; sourceTree = "<group>"; };
 		B78BF86D16941A2B0034BD02 /* theme_default.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = theme_default.plist; sourceTree = "<group>"; };
@@ -536,8 +545,6 @@
 			isa = PBXGroup;
 			children = (
 				4867FEA515C15BE70051C7DB /* BirthdayReminder.xcdatamodeld */,
-				4867FEA815C15D000051C7DB /* BRDBirthday.h */,
-				4867FEA915C15D000051C7DB /* BRDBirthday.m */,
 				4867FEAB15C15ED70051C7DB /* BRDModel.h */,
 				4867FEAC15C15ED70051C7DB /* BRDModel.m */,
 				48D8C2E515D40D2E00DB56F4 /* BRDBirthdayImport.h */,
@@ -738,12 +745,15 @@
 				B78B9802169BEB310062E2D2 /* Tab2NavigationController.m */,
 				B78BEF3F169D5CE100B321D2 /* Tab3NavigationController.h */,
 				B78BEF40169D5CE100B321D2 /* Tab3NavigationController.m */,
+				B78BEF42169DBB0200B321D2 /* Tab4NavigationController.h */,
+				B78BEF43169DBB0200B321D2 /* Tab4NavigationController.m */,
 				B78018F11698077B001CAFF6 /* MainCategory */,
 				B78B9805169C5C170062E2D2 /* SubCategory */,
 				B7CA353A169B27860034FDD0 /* Videos */,
 				B78B9807169C66280062E2D2 /* VideoDetail */,
 				B78BF9F716945EEF0034BD02 /* ChatRoom */,
 				B78BF9F616945EA60034BD02 /* FBMsgBoard */,
+				B78BEF71169DDB2C00B321D2 /* FriendsList */,
 				48BA416615A44FBE00F5885A /* BRHomeViewController.h */,
 				48BA416715A44FBE00F5885A /* BRHomeViewController.m */,
 				48BA416915A44FCC00F5885A /* BRBirthdayDetailViewController.h */,
@@ -754,12 +764,12 @@
 				48BEC16B15A5BF6D00263FBD /* BRNotesEditViewController.m */,
 				48BEC17A15A5C44D00263FBD /* BRNotificationTimeViewController.h */,
 				48BEC17B15A5C44D00263FBD /* BRNotificationTimeViewController.m */,
-				4802EBDB15D3B93900C009A8 /* BRImportViewController.h */,
-				4802EBDC15D3B93900C009A8 /* BRImportViewController.m */,
 				485172A715D7D68F0085F77C /* BRImportFacebookViewController.h */,
 				485172A815D7D68F0085F77C /* BRImportFacebookViewController.m */,
 				488C355715D3C51400370951 /* BRImportAddressBookViewController.h */,
 				488C355815D3C51400370951 /* BRImportAddressBookViewController.m */,
+				48DEA92315C2E2D200397172 /* BRBirthdayTableViewCell.h */,
+				48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */,
 				485172BE15D8FA0D0085F77C /* BRPostToFacebookWallViewController.h */,
 				485172BF15D8FA0D0085F77C /* BRPostToFacebookWallViewController.m */,
 				485172FB15D92ED70085F77C /* BRSettingsViewController.h */,
@@ -818,8 +828,6 @@
 				B7101D5A167E02100093DBC8 /* HiddenHeaderView.xib */,
 				B7101D4F167DED370093DBC8 /* MBProgressHUD.h */,
 				B7101D50167DED370093DBC8 /* MBProgressHUD.m */,
-				48DEA92315C2E2D200397172 /* BRBirthdayTableViewCell.h */,
-				48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */,
 				484F123115C5EC8200AF5BBD /* BRBlueButton.h */,
 				484F123215C5EC8200AF5BBD /* BRBlueButton.m */,
 				484F123515C5EC9B00AF5BBD /* BRRedButton.h */,
@@ -914,6 +922,21 @@
 				B78BE85B16764856006FE99C /* PRPDebug.m */,
 			);
 			name = lib;
+			sourceTree = "<group>";
+		};
+		B78BEF71169DDB2C00B321D2 /* FriendsList */ = {
+			isa = PBXGroup;
+			children = (
+				4802EBDB15D3B93900C009A8 /* BRImportViewController.h */,
+				4802EBDC15D3B93900C009A8 /* BRImportViewController.m */,
+				B70F4231169DE13100A6D383 /* BRFBFriendListViewController.h */,
+				B70F4232169DE13100A6D383 /* BRFBFriendListViewController.m */,
+				4867FEA815C15D000051C7DB /* BRDBirthday.h */,
+				4867FEA915C15D000051C7DB /* BRDBirthday.m */,
+				B70F4234169DE3A500A6D383 /* BRCellFriend.h */,
+				B70F4235169DE3A500A6D383 /* BRCellFriend.m */,
+			);
+			name = FriendsList;
 			sourceTree = "<group>";
 		};
 		B78BF868169418F60034BD02 /* theme */ = {
@@ -1292,6 +1315,9 @@
 				B78BF9F516945DB10034BD02 /* BRCellMsg.m in Sources */,
 				B78B9803169BEB310062E2D2 /* Tab2NavigationController.m in Sources */,
 				B78BEF41169D5CE200B321D2 /* Tab3NavigationController.m in Sources */,
+				B78BEF44169DBB0300B321D2 /* Tab4NavigationController.m in Sources */,
+				B70F4233169DE13100A6D383 /* BRFBFriendListViewController.m in Sources */,
+				B70F4236169DE3A500A6D383 /* BRCellFriend.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

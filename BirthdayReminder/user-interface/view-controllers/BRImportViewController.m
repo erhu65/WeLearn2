@@ -12,7 +12,7 @@
 #import "BRDModel.h"
 
 @interface BRImportViewController ()
-
+<UITableViewDelegate, UITableViewDataSource>
 //Keeps track of selected rows
 @property (nonatomic, strong) NSMutableDictionary *selectedIndexPathToBirthday;
 

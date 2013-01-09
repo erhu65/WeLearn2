@@ -53,10 +53,27 @@ typedef enum videosFilterMode {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
     
-   if(HUD!= nil){
+   if(nil != HUD){
       [HUD hide:NO];
     }
+    [self _findAndResignFirstResponder:self.view];
+    //prevent crash when clicking tab veray quickly...
+    
 }
+
+-(BOOL) _findAndResignFirstResponder:(UIView *)theView{
+    if([theView isFirstResponder]){
+        [theView resignFirstResponder];
+        return YES;
+    }
+    for(UIView *subView in theView.subviews){
+        if([self _findAndResignFirstResponder:subView]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
 
 -(IBAction)cancelAndDismiss:(id)sender
 {

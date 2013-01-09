@@ -21,7 +21,8 @@
 typedef enum videoFilterMode {
     videoFilterFilterModeAll = 0,
     videoFilterFilterModeFavorite = 1,
-    videoFilterFilterModeVideoFavorite = 2
+    videoFilterFilterModeVideoFavorite = 2,
+    videoFilterFilterModeVideoFavoriteFriends = 3
 } videoFilterMode;
 
 @interface UIWindow (AutoLayoutDebug) 
@@ -123,9 +124,6 @@ UIAlertViewDelegate>
 	// Do any additional setup after loading the view.
     self.tb.autoresizesSubviews = YES;
     
-    
-
-   
     self.sortLb.text = self.lang[@"actionSearch"];
  
     UIBarButtonItem *btnBack = [[UIBarButtonItem alloc]
@@ -138,7 +136,12 @@ UIAlertViewDelegate>
     if(self.mode == videoFilterFilterModeVideoFavorite){
         self.title =  kSharedModel.lang[@"titleFavoriteVideos"];
         self.navigationItem.leftBarButtonItem = nil;
-    } else {
+    } else if (self.mode == videoFilterFilterModeVideoFavoriteFriends) {
+        self.title = [NSString stringWithFormat:@"%@ %@", self.fbFriend.name, kSharedModel.lang[@"titleWhosFavoriteVideos"]];
+        
+        
+        
+    }else {
         self.title = [NSString stringWithFormat:@"%@~%@",  self.currentSelectSubCategory.name, self.currentSelectMainCategory.name];
     }
 
@@ -158,7 +161,9 @@ UIAlertViewDelegate>
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideosDidUpdate:) name:BRNotificationVideosDidUpdate object:[BRDModel sharedInstance]];
     
     if([self.docsTemp count] == 0 
-       || (self.mode == videoFilterFilterModeVideoFavorite && kSharedModel.isUserVideoFavoriteNeedUpdate)
+       || (self.mode == videoFilterFilterModeVideoFavorite && kSharedModel.isUserVideoFavoriteNeedUpdate
+           )
+       || self.mode == videoFilterFilterModeVideoFavoriteFriends
        ){
         [self _handleRefreshFromFirstPage:nil];
     }
@@ -208,9 +213,17 @@ UIAlertViewDelegate>
     
     [self showHud:YES];    
     __weak __block BRVideoViewController *weakSelf = self;
-    if(self.mode == videoFilterFilterModeVideoFavorite){
+    if(self.mode == videoFilterFilterModeVideoFavorite
+       || self.mode == videoFilterFilterModeVideoFavoriteFriends
+       ){
+        NSString* fbId;
+        if(self.mode == videoFilterFilterModeVideoFavorite){
+            fbId = kSharedModel.fbId;
+        } else if(self.mode == videoFilterFilterModeVideoFavoriteFriends) {
+            fbId = self.fbFriend.facebookID;
+        }
     
-        [kSharedModel fetchUserFavoriteVideosWithPage:self.page fbId:kSharedModel.fbId withBlock:^(NSDictionary* res){
+        [kSharedModel fetchUserFavoriteVideosWithPage:self.page fbId:fbId withBlock:^(NSDictionary* res){
             kSharedModel.isUserVideoFavoriteNeedUpdate = NO;
             [weakSelf hideHud:YES];
             
@@ -629,7 +642,15 @@ UIAlertViewDelegate>
         BRVideoDetailViewController.videoSelectedUid = record.uid;
         BRVideoDetailViewController.currentSelectedVideo = record;
         BRVideoDetailViewController.docs = self.docsTemp;
-        BRVideoDetailViewController.videoSelecteSubCategoryId = self.currentSelectSubCategory.uid;
+        if(nil != self.currentSelectSubCategory){
+            
+            BRVideoDetailViewController.videoSelecteSubCategoryId = self.currentSelectSubCategory.uid;
+        }
+        
+        //come from facebook's friends favorite videos
+        if(nil !=  self.fbFriend){
+            BRVideoDetailViewController.fbFriend = self.fbFriend;
+        }
         //[BRDModel sharedInstance].currentSelectedVideo = record;
         
 //        [BRDModel sharedInstance].videoSelectedUid = record.uid;
