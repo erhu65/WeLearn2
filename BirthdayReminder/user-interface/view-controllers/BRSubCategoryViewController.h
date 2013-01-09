@@ -12,5 +12,7 @@
 
 @interface BRSubCategoryViewController : BRCoreViewController
 
+@property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
+@property(nonatomic, strong)BRRecordMainCategory* currentSelectMainCategory;
 
 @end

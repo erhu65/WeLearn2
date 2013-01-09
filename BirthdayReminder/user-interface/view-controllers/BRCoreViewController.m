@@ -8,6 +8,11 @@
 
 #import "BRCoreViewController.h"
 
+typedef enum videosFilterMode {
+    videosFilterModeAll = 0,
+    videosFilterModeFavorite = 1
+} videosFilterMode;
+
 
 @interface BRCoreViewController ()
 {
@@ -18,6 +23,7 @@
 @end
 
 @implementation BRCoreViewController
+
 
 
 -(id)initWithCoder:(NSCoder *)aDecoder{
@@ -130,6 +136,7 @@
 
 -(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
 {
+    [self hideHud:YES];  
     NSDictionary *userInfo = [notification userInfo];
     NSString* error = userInfo[@"error"];
     NSString* msg = userInfo[@"msg"];
@@ -142,7 +149,9 @@
     if(nil != msg){
         [self showMsg:msg type:msgLevelInfo]; 
         return;
-    }    
+    } 
+
+    
     
 }
 

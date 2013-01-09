@@ -47,14 +47,19 @@
     }
     self.btnFavorite.tag = [self.indexPath row];
     [self toggleBtnFavoriteTitle:record.isUserFavorite];
+    
+    if(nil == _record 
+       || _record != record){
+        _record = record;
+    }
 }
 
 -(void)toggleBtnFavoriteTitle:(BOOL)isFavorite{
     if(isFavorite) {
         
-        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteAdd"]] forState:UIControlStateNormal];
-    } else {
         [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteRemove"]] forState:UIControlStateNormal];
+    } else {
+        [self.btnFavorite setImage:[UIImage imageNamed:kSharedModel.theme[@"favoriteAdd"]] forState:UIControlStateNormal];
     }
 }
 

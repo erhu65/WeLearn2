@@ -9,6 +9,8 @@
 #import "BRCellSubCategory.h"
 #import "BRRecordMainCategory.h"
 #import "BRRecordSubCategory.h"
+#import "BRVideoViewController.h"
+
 #import "BRDModel.h"
 #import "NSMutableArray+Shuffling.h"
 
@@ -21,6 +23,8 @@
 <UITableViewDelegate, 
 UITableViewDataSource,
 UIScrollViewDelegate>
+
+@property(nonatomic, strong)NSMutableArray* docs;
 
 @property(nonatomic, strong)NSNumber* page;
 @property(nonatomic, strong)NSNumber* lastPage;
@@ -46,6 +50,14 @@ UIScrollViewDelegate>
     NSArray *verticalConstraintsBeforeAnimation; 
     NSArray *verticalConstraintsAfterAnimation;
 }
+
+-(NSMutableArray*)docs{
+    if(nil == _docs){
+        _docs = [[NSMutableArray alloc] init];
+    }
+    return _docs;
+}
+
 -(NSNumber*)page{
     if(_page == nil){
         _page = [[NSNumber alloc] initWithInt:0];
@@ -76,9 +88,8 @@ UIScrollViewDelegate>
         activeFilterIndex = mainCategoriesSortTypeNoSort;
         [BRDModel sharedInstance].mainCategoriesSortType = activeFilterIndex;
         [BRDModel sharedInstance].mainCategoriesSortIsDesc = FALSE;
-
-        
     }
+    
     return self;
 }
 - (void)viewDidLoad
@@ -94,7 +105,7 @@ UIScrollViewDelegate>
     
     self.filterNameLabel.text = filterNames[activeFilterIndex];
     
-    self.title = [BRDModel sharedInstance].currentSelectMainCategory.name;
+    self.title = self.currentSelectMainCategory.name;
     
     self.sortLb.text = self.lang[@"sort"];
     self.filterNameLabel.text = @"";
@@ -109,33 +120,61 @@ UIScrollViewDelegate>
 
 -(void)navigationBack:(id)sender  {
     
-    [[BRDModel sharedInstance].subCategories removeAllObjects];
-    [BRDModel sharedInstance].mainCategoriesSelectedUid = nil;
-    [BRDModel sharedInstance].currentSelectSubCategory = nil;
+    //[[BRDModel sharedInstance].subCategories removeAllObjects];
+    //[BRDModel sharedInstance].mainCategoriesSelectedUid = nil;
+    //[BRDModel sharedInstance].currentSelectSubCategory = nil;
     [super navigationBack:sender];
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSubCategoriesDidUpdate:) name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSubCategoriesDidUpdate:) name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
     
-    if( [[BRDModel sharedInstance].subCategories count] ==0){
+    if(self.docs.count ==0){
         [self _handleRefresh];
     }
 }
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationSubCategoriesDidUpdate object:[BRDModel sharedInstance]];
 }
 
 
 
 -(void)_handleRefresh{
     
-    [self showHud:YES];    
-    [[BRDModel sharedInstance] fetchSubCategoriesWithPage:self.page];
+    [self showHud:YES];   
+    __weak __block BRSubCategoryViewController *weakSelf = self;
+    [kSharedModel fetchSubCategoriesWithPage:self.page 
+                             mainCategoryUid:self.mainCategoriesSelectedUid withBlock:^(NSDictionary* res){              
+         [weakSelf hideHud:YES];
+         NSString* errMsg = res[@"error"];
+         weakSelf.page = res[@"page"];
+         weakSelf.lastPage = res[@"lastPage"];
+         
+         NSMutableArray* mTempArr =(NSMutableArray*)res[@"mTempArr"];
+         NSRange range = NSMakeRange(0, mTempArr.count); 
+         NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndexesInRange:range];
+         [weakSelf.docs insertObjects:mTempArr atIndexes:indexes];
+         if(nil != errMsg){
+             [weakSelf handleErrMsg:errMsg];
+         } else {
+             PRPLog(@"self.docs.count: %d-[%@ , %@]",
+                    weakSelf.docs.count,
+                    NSStringFromClass([self class]),
+                    NSStringFromSelector(_cmd));
+             if(weakSelf.docs.count > 0){
+                 
+                 weakSelf.sortBtn.enabled = YES;
+                 [weakSelf.tb reloadData];
+             } else {
+                 [weakSelf showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+                 weakSelf.sortBtn.enabled = NO;
+             }
+         }
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -157,38 +196,34 @@ UIScrollViewDelegate>
            NSStringFromSelector(_cmd));
 }
 
--(void)handleSubCategoriesDidUpdate:(NSNotification *)notification
-{
-    [self hideHud:YES];
-    NSDictionary *userInfo = [notification userInfo];
-    NSString* errMsg = userInfo[@"errMsg"];
-    self.page = userInfo[@"page"];
-    self.lastPage = userInfo[@"lastPage"];
-    
-    if(errMsg!= nil && [errMsg length] > 0){
- 
-        [self showMsg:errMsg type:msgLevelError];
-    } else {
-        PRPLog(@"[BRDModel sharedInstance].subCategories.count: %d-[%@ , %@]",
-               [BRDModel sharedInstance].subCategories.count,
-               NSStringFromClass([self class]),
-               NSStringFromSelector(_cmd));
-        if([BRDModel sharedInstance].subCategories.count > 0){
-            [self.tb reloadData];
-            self.sortBtn.enabled = YES;
-        } else {
-            [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
-            self.sortBtn.enabled = NO;
-        }
-       
-    }
-    
-}
+//-(void)handleSubCategoriesDidUpdate:(NSNotification *)notification
+//{
+//    [self hideHud:YES];
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSString* errMsg = userInfo[@"errMsg"];
+//    self.page = userInfo[@"page"];
+//    self.lastPage = userInfo[@"lastPage"];
+//    
+//    if(errMsg!= nil && [errMsg length] > 0){
+// 
+//        [self showMsg:errMsg type:msgLevelError];
+//    } else {
+//        
+//        
+//        if([BRDModel sharedInstance].subCategories.count > 0){
+//            [self.tb reloadData];
+//            self.sortBtn.enabled = YES;
+//        } else {
+//            [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+//            self.sortBtn.enabled = NO;
+//        }
+//    }
+//}
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.tb)
-		return [[BRDModel sharedInstance].subCategories count];
+		return self.docs.count;
     else 
         return [filterNames count];
 }
@@ -206,7 +241,7 @@ UIScrollViewDelegate>
         static NSString *CellIdentifier = @"BRSublCategory";
         BRCellSubCategory *cell =  (BRCellSubCategory *)[self.tb dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        BRRecordSubCategory *record = [BRDModel sharedInstance].subCategories[indexPath.row];
+        BRRecordSubCategory *record = self.docs[indexPath.row];
         cell.indexPath = indexPath;
         cell.record = record; 
         return cell;
@@ -242,8 +277,11 @@ UIScrollViewDelegate>
     
     if (tableView == filterTableView) {
         if(activeFilterIndex == indexPath.row){
+            
             [BRDModel sharedInstance].subCategoriesSortIsDesc =  ![BRDModel sharedInstance].subCategoriesSortIsDesc;
+            
         } else {
+            
             [BRDModel sharedInstance].subCategoriesSortIsDesc = FALSE;
         }
         
@@ -300,6 +338,7 @@ UIScrollViewDelegate>
            [BRDModel sharedInstance].subCategoriesSortIsDesc,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
+    
     UIImage* img_;
     if([BRDModel sharedInstance].subCategoriesSortIsDesc){
         img_ = [UIImage imageNamed:@"Arrow.png"]; 
@@ -320,10 +359,11 @@ UIScrollViewDelegate>
                          [self.view addConstraint: self.spaceBetweenFilterBarAndMainTable];
                          if([BRDModel sharedInstance].subCategoriesSortType == subCategoriesSortTypeNoSort){
                              
-                             [[BRDModel sharedInstance].subCategories shuffle];
+                             [self.docs shuffle];
                          } else {
-                             [[BRDModel sharedInstance] subCategoriesSort];
+                             self.docs = [kSharedModel subCategoriesSort:self.docs];
                          }
+                         
                          [self.tb reloadData];
                          
                      }];
@@ -372,7 +412,8 @@ UIScrollViewDelegate>
     [self.view addConstraints:constraints];
     
     [UIView animateWithDuration:0.3f animations:^ {
-        [self.view layoutIfNeeded]; }];
+        [self.view layoutIfNeeded]; 
+    }];
     
 }
 
@@ -385,14 +426,19 @@ UIScrollViewDelegate>
         
         BRCellSubCategory *cell =  (BRCellSubCategory *)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
-        BRRecordSubCategory* record =  [[BRDModel sharedInstance].subCategories objectAtIndex:[indexPath row]];
-        [BRDModel sharedInstance].currentSelectSubCategory = record;
-        [BRDModel sharedInstance].subCategoriesSelectedUid = record.uid;
-        PRPLog(@"\n [BRDModel sharedInstance].subCategoriesSelectedUid %@ \n-[%@ , %@]",
-               [BRDModel sharedInstance].subCategoriesSelectedUid,
-               NSStringFromClass([self class]),
-               NSStringFromSelector(_cmd));   
-        //        UINavigationController *navigationController = segue.destinationViewController;
+        BRRecordSubCategory* record =  self.docs[indexPath.row];
+        
+//        [BRDModel sharedInstance].currentSelectSubCategory = record;
+//        [BRDModel sharedInstance].subCategoriesSelectedUid = record.uid;
+//        PRPLog(@"\n [BRDModel sharedInstance].subCategoriesSelectedUid %@ \n-[%@ , %@]",
+//               [BRDModel sharedInstance].subCategoriesSelectedUid,
+//               NSStringFromClass([self class]),
+//               NSStringFromSelector(_cmd));   
+                BRVideoViewController *BRVideoViewController = segue.destinationViewController;
+        BRVideoViewController.currentSelectSubCategory = record;
+        BRVideoViewController.subCategoriesSelectedUid = record.uid;
+        BRVideoViewController.currentSelectMainCategory = self.currentSelectMainCategory;
+        BRVideoViewController.mainCategoriesSelectedUid = self.mainCategoriesSelectedUid;
         
         //        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
         //        BRSubCategoryViewController_.m = self.birthday;

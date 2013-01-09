@@ -17,17 +17,16 @@
         
         self.type = [dic objectForKey:@"type"];
         self.sender = [dic objectForKey:@"sender"];
-        self.socketOwnerFbId = [dic objectForKey:@"fbId"];
+        self.socketOwnerFbId = [dic objectForKey:@"senderFbId"];
         self.senderFbId = [dic objectForKey:@"senderFbId"];
         self.message = [dic objectForKey:@"message"];
         self.currentYoutubeKey = [dic objectForKey:@"currentYoutubeKey"];
-        if([self.currentYoutubeKey length] > 0){
-            BRRecordVideo* video =  [kSharedModel findVideoByYoutubeKey:self.currentYoutubeKey];
-            self.videoName = video.name;
-        } else {
-            
-            self.videoName = @"";
-        }
+//        if([self.currentYoutubeKey length] > 0){
+//            BRRecordVideo* video =  [kSharedModel findVideoByYoutubeKey:self.currentYoutubeKey];
+//            self.videoName = video.name;
+//        } else {
+//            
+        self.videoName = @"";
         self.currentPlaybackTime = [dic objectForKey:@"currentPlaybackTime"];
         self.created_at = [NSDate date];
         

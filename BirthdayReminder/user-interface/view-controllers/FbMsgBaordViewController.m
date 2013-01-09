@@ -54,18 +54,14 @@ UIScrollViewDelegate>
     if(self){
         self.mArrMsg = [[NSMutableArray alloc] init];
         addItemsTrigger = NO;
-
-
     }
     return self;
 }
-
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
     self.lbTitle.text = kSharedModel.lang[@"titleMsgBoard"];
     self.barBtnBack.title = kSharedModel.lang[@"actionBack"];
     self.barBtnMsg.title = kSharedModel.lang[@"actionMsg"];
@@ -86,7 +82,6 @@ UIScrollViewDelegate>
     self.tbMsgBoard.dataSource = self;
     self.tbMsgBoard.delegate = self;
     self.barBtnBack.enabled = NO;
-
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -149,6 +144,7 @@ UIScrollViewDelegate>
         self.activityMsgBoard.hidden = YES;
         return;
     }
+    
     //NSDictionary *userInfo = [notification userInfo];
     PRPLog(@"post msg successfully do refresh table view -[%@ , %@]",
            NSStringFromClass([self class]),
@@ -160,7 +156,7 @@ UIScrollViewDelegate>
         [self.tbMsgBoard scrollToRowAtIndexPath:firstRow atScrollPosition:UITableViewRowAnimationTop animated:YES];
     }
     [self _fetchMsgs:@0 videoId:self.videoId];
-
+    
 }
 
 -(void)_fetchMsgs:(NSNumber*)page 
@@ -230,7 +226,7 @@ UIScrollViewDelegate>
         return;
     } 
     NSString* msg = (tfTemp.text.length > 0)?tfTemp.text:self.tfMsg.text;
-    NSString* videoId = kSharedModel.currentSelectedVideo.uid;
+    NSString* videoId = self.currentSelectedVideo.uid;
     PRPLog(@"fbName:%@ \n fbId:%@ \n msg:%@ \n videoId:%@ \n -[%@ , %@]",
            [BRDModel sharedInstance].fbName,
            [BRDModel sharedInstance].fbId,
@@ -339,7 +335,7 @@ UIScrollViewDelegate>
         //add code here for when you hit delete
         // Animate the deletion from the table.
         
-        [kSharedModel delMsgById:record._id VideoId:kSharedModel.currentSelectedVideo.uid];
+        [kSharedModel delMsgById:record._id VideoId:self.currentSelectedVideo.uid];
         
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         

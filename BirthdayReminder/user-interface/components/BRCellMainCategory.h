@@ -8,6 +8,8 @@
 
 @class BRRecordMainCategory;
 
+
+
 @interface BRCellMainCategory : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *btnFavorite;

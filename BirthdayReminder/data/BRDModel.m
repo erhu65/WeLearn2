@@ -76,22 +76,22 @@ static BRDModel *_sharedInstance = nil;
     }
     return _facebookAccount;
 }
-
--(NSMutableArray*)mainCategories{
-    
-    if(!_mainCategories){
-        _mainCategories = [NSMutableArray array];
-    }
-    return _mainCategories;
-}
-
--(NSMutableArray*)subCategories{
-    
-    if(!_subCategories){
-        _subCategories = [NSMutableArray array];
-    }
-    return _subCategories;
-}
+//
+//-(NSMutableArray*)mainCategories{
+//    
+//    if(!_mainCategories){
+//        _mainCategories = [NSMutableArray array];
+//    }
+//    return _mainCategories;
+//}
+//
+//-(NSMutableArray*)subCategories{
+//    
+//    if(!_subCategories){
+//        _subCategories = [NSMutableArray array];
+//    }
+//    return _subCategories;
+//}
 
 
 -(void) extractBirthdaysFromAddressBook:(ABAddressBookRef)addressBook
@@ -252,8 +252,6 @@ static BRDModel *_sharedInstance = nil;
         [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
         return;
     }
-
-    
     if (self.facebookAccount == nil) {
         self.currentFacebookAction = FacebookActionGetMe;
         [self authenticateWithFacebook];
@@ -317,8 +315,14 @@ static BRDModel *_sharedInstance = nil;
 }
 
 #pragma mark mainCategories
-- (void)fetchMainCategoriesWithPage:(NSNumber*)page{
+- (void)fetchMainCategoriesWithPage:(NSNumber*)page
+                          WithBlock:(void (^)(NSDictionary* userInfo))block{
     
+    if (nil == self.fbId) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
     //[self.mainCategories removeAllObjects];
     
     dispatch_queue_t concurrentQueue = 
@@ -357,10 +361,10 @@ static BRDModel *_sharedInstance = nil;
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
+        NSString* errMsg;
         NSNumber* page = @0;
         NSNumber* lastPage = @0;
-        
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
                                                          error:&error];
@@ -416,15 +420,16 @@ static BRDModel *_sharedInstance = nil;
                            NSStringFromClass([self class]),
                            NSStringFromSelector(_cmd));
                     
-                    NSArray* MainCategories = [deserializedDictionary objectForKey:@"MainCategories"]; 
-                    
+                    NSArray* MainCategories = [deserializedDictionary objectForKey:@"MainCategories"];
+
                     [MainCategories enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
                         //create an instance of BRDBirthdayImport
                         NSDictionary* dicRecord = (NSDictionary*)obj;
                         BRRecordMainCategory* record = [[BRRecordMainCategory alloc] initWithJsonDic:dicRecord];
-                
+                        
+                        [mArrTemp addObject:record];
                         //[self.mainCategories addObject: record];
-                        [self.mainCategories insertObject:record atIndex:0];
+                        //[self.mainCategories insertObject:record atIndex:0];
 
                     }];
                     
@@ -477,15 +482,190 @@ static BRDModel *_sharedInstance = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            NSDictionary *userInfo = @{@"errMsg":errMsg,
-                                        @"page":page,
-                                        @"lastPage": lastPage};
+            NSDictionary *userInfo;
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{
+                @"docs": [mArrTemp mutableCopy],
+                @"page":page,
+                @"lastPage": lastPage};
+                
+            }
+            block(userInfo);
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationMainCategoriesDidUpdate object:self userInfo:userInfo];
+//            NSDictionary *userInfo = @{@"errMsg":errMsg,
+//                                       @"docs": [self.mainCategories mutableCopy],
+//                                        @"page":page,
+//                                        @"lastPage": lastPage};
+//            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationMainCategoriesDidUpdate object:self userInfo:userInfo];
         
         });
         
     });
+}
+
+- (void)fetchMainCategoriesFavoriteWithPage:(NSNumber*)page
+                                       byFB:(NSString*)fbId
+                                  WithBlock:(void (^)(NSDictionary* userInfo))block{
+    
+    if (nil == fbId) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
+
+
+    //[self.mainCategories removeAllObjects];
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        NSString* urlMainCategores = [NSString stringWithFormat:@"%@/MainCategories", BASE_URL];
+        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d&fbId=%@&favorite=yes", [page intValue], fbId];
+        NSURL *url = [NSURL URLWithString:urlMainCategores];
+        
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg;
+        NSNumber* page = @0;
+        NSNumber* lastPage = @0;
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        PRPLog(@"http request url: %@\n  -[%@ , %@]",
+               urlMainCategores,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    
+                    page = (NSNumber*)[deserializedDictionary objectForKey:@"page"];
+                    lastPage = (NSNumber*) [deserializedDictionary objectForKey:@"lastPage"]; 
+                    
+                    NSArray* MainCategories = [deserializedDictionary objectForKey:@"MainCategories"];     
+                    
+                    PRPLog(@"MainCategories.count:%d, page= %@  lastPage= %@  -[%@ , %@]",
+                           MainCategories.count,
+                           page,
+                           lastPage,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+
+                    [MainCategories enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                        //create an instance of BRDBirthdayImport
+                        NSDictionary* dicRecord = (NSDictionary*)obj;
+                        BRRecordMainCategory* record = [[BRRecordMainCategory alloc] initWithJsonDic:dicRecord];
+                        [mArrTemp addObject:record];
+                        
+                    }];
+                    
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+            
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSDictionary *userInfo;
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                
+                userInfo = @{
+                @"docs": [mArrTemp mutableCopy],
+                @"page":page,
+                @"lastPage": lastPage};
+                
+            }
+            block(userInfo);
+        });
+        
+    });
+
 }
 -(void)toggleFavoriteMainCateogry:(NSString*)sn
                               uid:(NSString*)uid
@@ -806,9 +986,9 @@ static BRDModel *_sharedInstance = nil;
 
 }
 
--(void)mainCategoriesSort{
+-(NSMutableArray*)mainCategoriesSort:(NSMutableArray*)docs{
 
-     self.mainCategories = [[self.mainCategories sortedArrayUsingComparator: ^(id a, id b) {
+     NSMutableArray* tempDocs = [[docs sortedArrayUsingComparator: ^(id a, id b) {
         BRRecordMainCategory *A = ( BRRecordMainCategory* ) a;
         BRRecordMainCategory *B = ( BRRecordMainCategory* ) b;
         
@@ -853,11 +1033,15 @@ static BRDModel *_sharedInstance = nil;
         } 
   
     }] mutableCopy];
+    
+    return tempDocs;
 }
 
 
 #pragma mark subCategories
-- (void)fetchSubCategoriesWithPage:(NSNumber*)page{
+- (void)fetchSubCategoriesWithPage:(NSNumber*)page
+                   mainCategoryUid:(NSString*)mainCategoryUid
+withBlock:(void (^)(NSDictionary* userInfo))block{
     
     //[self.mainCategories removeAllObjects];
     
@@ -882,7 +1066,7 @@ static BRDModel *_sharedInstance = nil;
         //        });
         NSString* urlMainCategores = [NSString stringWithFormat:@"%@/SubCategories", BASE_URL];
         //urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?page=%d", [page intValue]];
-        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?main=%@", self.mainCategoriesSelectedUid];
+        urlMainCategores = [urlMainCategores stringByAppendingFormat:@"?main=%@", mainCategoryUid];
         NSURL *url = [NSURL URLWithString:urlMainCategores];
         
         //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
@@ -892,10 +1076,11 @@ static BRDModel *_sharedInstance = nil;
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
+        NSString* errMsg;
         NSNumber* page = @0;
         NSNumber* lastPage = @0;
-        
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
+
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
                                                          error:&error];
@@ -957,9 +1142,8 @@ static BRDModel *_sharedInstance = nil;
                         //create an instance of BRDBirthdayImport
                         NSDictionary* dicRecord = (NSDictionary*)obj;
                         BRRecordSubCategory* record = [[BRRecordSubCategory alloc] initWithJsonDic:dicRecord];
-                        
-                        //[self.subCategories addObject: record];
-                        [self.subCategories insertObject:record atIndex:0];
+                        [mArrTemp addObject:record];
+                        //[self.subCategories insertObject:record atIndex:0];
                         
                     }];
                 
@@ -1011,20 +1195,30 @@ static BRDModel *_sharedInstance = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *userInfo = @{@"errMsg":errMsg,
-            @"page":page,
-            @"lastPage": lastPage};
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationSubCategoriesDidUpdate object:self userInfo:userInfo];
+            NSDictionary *userInfo;
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{
+                @"mTempArr": [mArrTemp mutableCopy],
+                @"page":page,
+                @"lastPage": lastPage};
+            }
+            block(userInfo);            
+//            NSDictionary *userInfo = @{@"errMsg":errMsg,
+//            @"page":page,
+//            @"lastPage": lastPage};
+//            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationSubCategoriesDidUpdate object:self userInfo:userInfo];
             
         });
         
     });
 }
 
--(void)subCategoriesSort{
+-(NSMutableArray*)subCategoriesSort:(NSMutableArray*)docs;{
     
-    self.subCategories = [[self.subCategories sortedArrayUsingComparator: ^(id a, id b) {
+    NSMutableArray* tempDocs = [[docs sortedArrayUsingComparator: ^(id a, id b) {
         BRRecordSubCategory *A = ( BRRecordSubCategory* ) a;
         BRRecordSubCategory *B = ( BRRecordSubCategory* ) b;
         
@@ -1060,28 +1254,31 @@ static BRDModel *_sharedInstance = nil;
                 secondDate = B.created_at;
                 
             } else {
+                
                 firstDate = B.created_at;
                 secondDate = A.created_at;
-            }            
+            }
             
             return [firstDate compare:secondDate];
-            
         } 
         
     }] mutableCopy];
+    return tempDocs;
 }
 
 
 #pragma mark Videos
--(NSMutableArray*)videos{
-    
-    if(!_videos){
-        _videos = [NSMutableArray array];
-    }
-    return _videos;
-}
+//-(NSMutableArray*)videos{
+//    
+//    if(!_videos){
+//        _videos = [NSMutableArray array];
+//    }
+//    return _videos;
+//}
 
-- (void)fetchVideosWithPage:(NSNumber*)page{
+- (void)fetchVideosWithPage:(NSNumber*)page
+    withSubCategoryId:(NSString*)subCategoryId
+    withBlock:(void (^)(NSDictionary* userInfo))block{
     
     //[self.mainCategories removeAllObjects];
     
@@ -1102,7 +1299,7 @@ static BRDModel *_sharedInstance = nil;
         
         NSString* urlVideos= [NSString stringWithFormat:@"%@/Videos", BASE_URL];
         urlVideos = [urlVideos stringByAppendingFormat:@"?page=%d", [page intValue]];
-        urlVideos = [urlVideos stringByAppendingFormat:@"&sub=%@&fbId=%@", self.subCategoriesSelectedUid, fbId];
+        urlVideos = [urlVideos stringByAppendingFormat:@"&sub=%@&fbId=%@", subCategoryId, fbId];
         PRPLog(@"http request url: %@\n  -[%@ , %@]",
                urlVideos,
                NSStringFromClass([self class]),
@@ -1116,10 +1313,10 @@ static BRDModel *_sharedInstance = nil;
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
+        NSString* errMsg;
         NSNumber* page = @0;
         NSNumber* lastPage = @0;
-        
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
                                                          error:&error];
@@ -1186,9 +1383,9 @@ static BRDModel *_sharedInstance = nil;
                             //create an instance of BRDBirthdayImport
                             NSDictionary* dicRecord = (NSDictionary*)obj;
                             BRRecordVideo* record = [[BRRecordVideo alloc] initWithJsonDic:dicRecord];
-                            
+                            [mArrTemp addObject:record];
                             //[self.subCategories addObject: record];
-                            [self.videos insertObject:record atIndex:0];
+                            //[self.videos insertObject:record atIndex:0];
                             
                         }];
                     }
@@ -1241,45 +1438,50 @@ static BRDModel *_sharedInstance = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *userInfo = @{@"errMsg":errMsg,
-            @"page":page,
-            @"lastPage": lastPage};
-            self.videosTemp = [self.videos mutableCopy];
-            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideosDidUpdate object:self userInfo:userInfo];
+            NSDictionary *userInfo;
+            
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{
+                @"mTempArr": [mArrTemp mutableCopy],
+                @"page":page,
+                @"lastPage": lastPage};
+            }
+            block(userInfo);   
+            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideosDidUpdate object:self userInfo:userInfo];
             
         });
         
     });
 }
+- (void)fetchUserFavoriteVideosWithPage:(NSNumber*)page 
+                                   fbId:(NSString*)fbId
+                              withBlock:(void (^)(NSDictionary* userInfo))block{
 
-- (void)fetchVideoByUid:(NSString*)uid
-{
-    //[self.mainCategories removeAllObjects];
+    
+    if (nil == fbId) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
+    
     dispatch_queue_t concurrentQueue = 
     dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
     /* If we have not already saved an array of 10,000
      random numbers to the disk before, generate these numbers now
      and then save them to the disk in an array */
     dispatch_async(concurrentQueue, ^{
         
-        //        dispatch_sync(concurrentQueue, ^{
-        //            
-        //            
-        //        });
-        //        __block NSMutableArray *randomNumbers = nil;
-        //        /* Read the numbers from disk and sort them in an
-        //         ascending fashion */
-        //        dispatch_sync(concurrentQueue, ^{
-        //            
-        // 
-        //        });
-        NSString* urlVideos= [NSString stringWithFormat:@"%@/Videos/%@", BASE_URL, uid];
-        PRPLog(@"http request url: %@\n  -[%@ , %@]",
-               urlVideos,
+        NSString* userFavoriteVideosurlVideos= [NSString stringWithFormat:@"%@/Videos?page=%d&favorite=yes&fbId=%@", BASE_URL, [page intValue], fbId];
+        PRPLog(@"http userFavoriteVideosurlVideos : %@\n  -[%@ , %@]",
+               userFavoriteVideosurlVideos,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-        
-        NSURL *url = [NSURL URLWithString:urlVideos];
+        NSURL *url = [NSURL URLWithString:userFavoriteVideosurlVideos];
+          
         //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
         NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
         [urlRequest setTimeoutInterval:30.0f];
@@ -1287,8 +1489,10 @@ static BRDModel *_sharedInstance = nil;
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
-  
+        NSString* errMsg;
+        NSNumber* page = @0;
+        NSNumber* lastPage = @0;
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
                                                          error:&error];
@@ -1332,10 +1536,34 @@ static BRDModel *_sharedInstance = nil;
                                NSStringFromClass([self class]),
                                NSStringFromSelector(_cmd));
                         
-          
-                        NSDictionary* videoDic = [deserializedDictionary objectForKey:@"video"]; 
-                        self.currentSelectedVideo = [[BRRecordVideo alloc] initWithJsonDic:videoDic];
+                        page = [deserializedDictionary objectForKey:@"page"];
+                        lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
                         
+                        PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                               page,
+                               lastPage,
+                               NSStringFromClass([self class]),
+                               NSStringFromSelector(_cmd));
+                        
+                        page = [deserializedDictionary objectForKey:@"page"];
+                        lastPage = [deserializedDictionary objectForKey:@"lastPage"]; 
+                        
+                        PRPLog(@"page= %@ \n lastPage= %@  -[%@ , %@]",
+                               page,
+                               lastPage,
+                               NSStringFromClass([self class]),
+                               NSStringFromSelector(_cmd));
+                        NSArray* videos = [deserializedDictionary objectForKey:@"docs"]; 
+                        
+                        [videos enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                            //create an instance of BRDBirthdayImport
+                            NSDictionary* dicRecord = (NSDictionary*)obj;
+                            BRRecordVideo* record = [[BRRecordVideo alloc] initWithJsonDic:dicRecord];
+                            [mArrTemp addObject:record];
+                            //[self.subCategories addObject: record];
+                            //[self.videos insertObject:record atIndex:0];
+                            
+                        }];
                     }
                     
                 } else if ([jsonObject isKindOfClass:[NSArray class]]){
@@ -1386,42 +1614,186 @@ static BRDModel *_sharedInstance = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *userInfo = @{@"errMsg":errMsg};
-            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideoDidUpdate object:self userInfo:userInfo];
+            NSDictionary *userInfo;
+            
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{
+                @"mTempArr": [mArrTemp mutableCopy],
+                @"page":page,
+                @"lastPage": lastPage};
+            }
+            block(userInfo);   
+            
+            //            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideosDidUpdate object:self userInfo:userInfo];
             
         });
         
     });
 }
 
-- (void)filterVideoByNameOrDesc:(NSString*)searchFor
+- (void)fetchVideoByUid:(NSString*)uid
+withBlock:(void (^)(NSDictionary* userInfo))block
 {
-    __block NSMutableArray* arrayTemp = [[NSMutableArray alloc] init];
-    
-    self.videos = nil;
-    [self.videosTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
-        BRRecordVideo* record = (BRRecordVideo*)obj;
-        if ([record.name rangeOfString:searchFor].location != NSNotFound
-            ||[record.desc rangeOfString:searchFor].location != NSNotFound
-            ) {
+    //[self.mainCategories removeAllObjects];
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        //            
+        //        });
+        //        __block NSMutableArray *randomNumbers = nil;
+        //        /* Read the numbers from disk and sort them in an
+        //         ascending fashion */
+        //        dispatch_sync(concurrentQueue, ^{
+        //            
+        // 
+        //        });
+        NSString* urlVideos= [NSString stringWithFormat:@"%@/Videos/%@", BASE_URL, uid];
+        PRPLog(@"http request url: %@\n  -[%@ , %@]",
+               urlVideos,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        NSURL *url = [NSURL URLWithString:urlVideos];
+        //NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg;
+        NSDictionary* tempDic = [[NSDictionary alloc] init];
+  
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        if ([data length] > 0 &&
+            error == nil){
             
-            [arrayTemp insertObject:record atIndex:0];
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            //            PRPLog(@"response %@ -[%@ , %@]",
+            //                   [response description],
+            //                   NSStringFromClass([self class]),
+            //                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    if([deserializedDictionary objectForKey:@"error"]){
+                        errMsg = [deserializedDictionary objectForKey:@"error"];
+                    } else {
+                        PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                               deserializedDictionary,
+                               NSStringFromClass([self class]),
+                               NSStringFromSelector(_cmd));
+                        
+          
+                        NSDictionary* videoDic = [deserializedDictionary objectForKey:@"video"];
+                        tempDic = videoDic;
+//                        self.currentSelectedVideo = [[BRRecordVideo alloc] initWithJsonDic:videoDic];
+                        
+                    }
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *deserializedArray = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           deserializedArray,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            }else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+            
+            
+        }
+        else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        }
+        else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
         }
         
-    }];
-    
-    if([searchFor length]>0){
-        self.videos = arrayTemp;
-    } else {
-        self.videos = [BRDModel sharedInstance].videosTemp;
-    }
-    
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            NSDictionary *userInfo;
+            
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{
+                @"tempDic": tempDic};
+            }
+            block(userInfo);   
+            
+            
+//            NSDictionary *userInfo = @{@"errMsg":errMsg};
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationVideoDidUpdate object:self userInfo:userInfo];
+            
+        });
+        
+    });
 }
-- (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey
+
+- (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey fromDocs:(NSMutableArray*)docs
 {
     __block BRRecordVideo* video;
     
-    [self.videosTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
+    [docs enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
         BRRecordVideo* record = (BRRecordVideo*)obj;
         if([record.youtubeKey isEqualToString:youtubeKey]){
             video = record;
@@ -2272,9 +2644,9 @@ static BRDModel *_sharedInstance = nil;
             
             if ([error code] == ACErrorAccountNotFound) {
                 NSLog(@"No Facebook Account Found");
-
+                
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSDictionary *userInfo = @{@"error": self.lang[@"warnConnectFBFirst"]};
+                    NSDictionary *userInfo = @{@"error": self.lang[@"warnNoFBAccountFound"]};
                     [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:userInfo];
                 });
         

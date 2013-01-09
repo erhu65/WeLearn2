@@ -8,22 +8,32 @@
 	<string>Main Categories</string>
 	<key>error_network_connection</key>
 	<string>Netowrk Connection Fail</string>
-	<key>actionFbAuthOkYouCanDoItAgain</key>
-	<string>Facebook Login OK You can do it again</string>
-	<key>byName</key>
-	<string>By Name</string>
-	<key>actionRemoveFavorite</key>
-	<string>Remove Favorite</string>
-	<key>actionAddFavorite</key>
-	<string>Add Favorite</string>
-	<key>actionRemoveFavoriteSuccessfully</key>
-	<string>Remove favorite successfully</string>
 	<key>actionAddFavoriteSuccessfully</key>
 	<string>Add favorite successfully</string>
+	<key>byName</key>
+	<string>By Name</string>
+	<key>actionFbAuthOkYouCanDoItAgain</key>
+	<string>Facebook Login OK You can do it again</string>
+	<key>actionRemoveFavorite</key>
+	<string>Remove Favorite</string>
+	<key>actionRemoveFavoriteSuccessfully</key>
+	<string>Remove favorite successfully</string>
+	<key>titleFavoriteCategory</key>
+	<string>Favorite Categories</string>
+	<key>titleFavoriteVideos</key>
+	<string>Favorite videos</string>
+	<key>actionAddFavorite</key>
+	<string>Add Favorite</string>
 	<key>titleChatRoom</key>
 	<string>Chat Room</string>
 	<key>actionSplit</key>
 	<string>Split</string>
+	<key>actionOK</key>
+	<string>OK</string>
+	<key>actionCancel</key>
+	<string>Cancel</string>
+	<key>actionFull</key>
+	<string>Full</string>
 	<key>say</key>
 	<string>say:</string>
 	<key>sum</key>
@@ -80,7 +90,13 @@
 	<string>Please login Facebook first</string>
 	<key>warn</key>
 	<string>Warn</string>
-	<key>actionFull</key>
-	<string>Full</string>
+	<key>warnNoFBAccountFound</key>
+	<string>No Facebook Account Found</string>
+	<key>warnAreYouSore</key>
+	<string>Are you sure?</string>
+	<key>warnAreYouSoreRemoveFavoriteMainCategory</key>
+	<string>Are you sure to remove the favorite main category?</string>
+	<key>warnAreYouSoreRemoveFavoriteVideo</key>
+	<string>Are you sure to remove the favorite video?</string>
 </dict>
 </plist>

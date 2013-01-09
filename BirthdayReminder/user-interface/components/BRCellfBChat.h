@@ -8,6 +8,13 @@
 
 @class BRRecordFbChat;
 
+@protocol BRCellfBChatDelegate <NSObject>
+
+@required
+-(void)BRCellfBChatDelegateCellTapped:(BRRecordFbChat*)record;
+
+@end
+
 @interface BRCellfBChat : UITableViewCell
 
 @property(nonatomic, weak)UITableView* tb;
@@ -21,4 +28,5 @@
 @property(nonatomic, weak)IBOutlet UIImageView* imvThumb;
 
 @property(nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, weak)id<BRCellfBChatDelegate>deletate;
 @end

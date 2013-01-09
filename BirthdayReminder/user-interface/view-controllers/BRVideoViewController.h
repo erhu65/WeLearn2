@@ -12,5 +12,12 @@
 @interface BRVideoViewController : BRCoreViewController
 
 
+@property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
+@property(nonatomic, strong)BRRecordMainCategory* currentSelectMainCategory;
+
+
+@property(nonatomic, strong)NSString* subCategoriesSelectedUid;
+@property(nonatomic, strong)BRRecordSubCategory* currentSelectSubCategory;
+
 -(IBAction)unwindBackToBRVideoViewController:(UIStoryboardSegue *)segue;
 @end

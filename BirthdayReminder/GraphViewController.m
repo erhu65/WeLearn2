@@ -65,7 +65,8 @@
 
 - (void)setRecord:(Record *)newRecord
 {
-	if (_record != newRecord)
+	if (nil == newRecord 
+        || _record != newRecord)
 	{
 		_record = newRecord;
 		[self redrawGraph];

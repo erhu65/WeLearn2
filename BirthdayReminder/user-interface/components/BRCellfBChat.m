@@ -39,6 +39,7 @@
     NSString *formattedDateString = [self.dateFormatter stringFromDate:record.created_at];
     self.lbChatDatetime.text = formattedDateString;
     self.lbVideoName.text = @"";
+    
     if([record.type isEqualToString:@"server"]){
 
         self.imvThumb.image = [UIImage imageNamed:kSharedModel.theme[@"Icon"]];
@@ -47,16 +48,22 @@
             [self.imvThumb setImageWithFbThumb:record.senderFbId placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
         }
         else self.imvThumb.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
-    }
-    else {
+    } else {
         self.imvThumb.image = [UIImage imageWithData:record.dataImg];
     }
+    
     if([record.type isEqualToString:@"chat"]){
         
-        self.lbVideoName.text = record.videoName;
+       self.lbVideoName.text = record.videoName;
        self.accessoryView = [self _makeDetailDisclosureButton];
     } else {
         self.accessoryType = UITableViewCellAccessoryNone;
+        self.accessoryView = nil;
+    }
+    
+    if(nil == _record 
+       || _record != record){
+        _record = record;
     }
 }
 
@@ -72,7 +79,11 @@
 }
 - (void) _accessoryButtonTapped: (UIControl *) button withEvent: (UIEvent *) event
 {
-    [self.tb.delegate tableView: self.tb accessoryButtonTappedForRowWithIndexPath:self.indexPath];
+    if([self.deletate respondsToSelector:@selector(BRCellfBChatDelegateCellTapped:)] 
+       && nil != self.record){
+        [self.deletate BRCellfBChatDelegateCellTapped:self.record];
+    }
+//    [self.tb.delegate tableView: self.tb accessoryButtonTappedForRowWithIndexPath:self.indexPath];
 }
 
 -(void) setLbFbUserName:(UILabel *)lbFbUserName

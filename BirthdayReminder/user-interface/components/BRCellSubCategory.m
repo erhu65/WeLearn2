@@ -46,8 +46,12 @@
 -(void)setRecord:(BRRecordSubCategory *)record{
     
     self.nameLb.text = record.name;
-    self.descLb.text = record.desc; 
+    self.descLb.text = record.desc;
     
+    if(nil == _record 
+       || _record != record){
+        _record = record;
+    }
 }
 
 -(void) setNameLb:(UILabel *)nameLb
@@ -57,7 +61,6 @@
         [BRStyleSheet styleLabel:_nameLb withType:BRLabelTypeName];
     }
 }
-
 -(void) setDescLb:(UILabel *)descLb
 {
     _descLb = descLb;
@@ -65,6 +68,4 @@
         [BRStyleSheet styleLabel:_descLb withType:BRLabelTypeBirthdayDate];
     }
 }
-
-
 @end

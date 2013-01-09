@@ -58,6 +58,11 @@
     }
     else self.imvThumb.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
     self.accessoryType = UITableViewCellAccessoryNone;
+    
+    if(nil == _record 
+       || _record != record){
+        _record = record;
+    }
 }
 
 

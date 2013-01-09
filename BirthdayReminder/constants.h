@@ -119,7 +119,6 @@ typedef enum regenerate_barcode_type {
 } regenerate_barcode_type;
 
 
-
 typedef enum btnKind {
     k_btn_back = 2001,
     k_yes = 2002,
@@ -142,12 +141,10 @@ typedef enum mainBtnKind {
 
 
 typedef enum tabKind {
-    k_tab_main = 3001,
-    k_tab_bonus = 3002,
-    k_tab_my_code = 3003,
-    k_tab_vip = 3004,
-    k_tab_Instruction = 3005,
-    
+    tabKindMainCategoryAll = 0,
+    tabKindMainCategoryFavorite = 1,
+    tabKindVideoFavorite = 2,
+    tabKindSetting = 3,    
 } tabKind;
 
 typedef enum tabKindImg {

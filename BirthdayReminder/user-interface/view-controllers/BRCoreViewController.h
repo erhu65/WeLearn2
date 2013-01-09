@@ -28,4 +28,5 @@ typedef enum msgLevel {
 -(void)showHud:(BOOL) isAnimation;
 -(void)hideHud:(BOOL) isAnimation;
 -(IBAction)navigationBack:(id)sender;
+-(void)_handleFacebookMeDidUpdate:(NSNotification *)notification;
 @end

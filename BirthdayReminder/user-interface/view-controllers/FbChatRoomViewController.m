@@ -18,7 +18,8 @@
 #define KTempTfInKeyboard 7789
 
 @interface FbChatRoomViewController ()
-<UITableViewDataSource,UITableViewDelegate>
+<UITableViewDataSource,UITableViewDelegate,
+BRCellfBChatDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webview;
 @property (weak, nonatomic) IBOutlet UITextView* tvOutPut;
@@ -27,20 +28,19 @@
 @property (strong, nonatomic) WebViewJavascriptBridge *javascriptBridge;
 @property (weak, nonatomic) IBOutlet UITextField *tfChat;
 
-@property (weak, nonatomic) IBOutlet UILabel *lbRoomCount;
+
 @property (strong, nonatomic) IBOutlet UIToolbar *tb;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBarRoom;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnTalk;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnJoin;
 
-@property (weak, nonatomic) IBOutlet UILabel *lbChatRoomTitle;
+@property (weak, nonatomic) IBOutlet UILabel *lbRoomCount;
 @property (weak, nonatomic) IBOutlet UITableView *tbFbChat;
 @property(strong, nonatomic) NSMutableArray* mArrFbChat;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityChatRoom;
 
 
 @property (nonatomic) BOOL isJoinFbChatRoom;
-
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *btnZoom;
 @property(nonatomic) BOOL isZoomed;
@@ -63,6 +63,7 @@
     
     _isLeaving = isLeaving;
     if(isLeaving){
+        
         [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
@@ -119,7 +120,6 @@
     self.tfChat.frameWidth = 180.0f;
     self.tfChat.frameHeight = 30.0f;
     
-    self.lbChatRoomTitle.text = self.lang[@"titleChatRoom"];
     self.barBtnJoin.title = self.lang[@"actionJoin"];
     self.barBtnTalk.title = self.lang[@"actionTalk"];
     self.btnZoom.title = self.lang[@"actionFull"];
@@ -163,7 +163,7 @@
         self.barBtnJoin.enabled = YES;
         return;
     }
-    
+
     PRPLog(@"[BRDModel sharedInstance].fbName: %@-[%@ , %@]",
            [BRDModel sharedInstance].fbName,
            NSStringFromClass([self class]),
@@ -171,13 +171,11 @@
     
     NSString* name = [BRDModel sharedInstance].fbName;
     NSString* fbId = [BRDModel sharedInstance].fbId;
-    NSString* room = [BRDModel sharedInstance].currentSelectSubCategory.uid;
-    [self callJsJoinRoomHandler:name toRoom:room withFbId:fbId];
+    [self callJsJoinRoomHandler:name toRoom:self.room withFbId:fbId];
 }
 
 #pragma mark node.js socekt helper methods
 - (void)callJsSendMsgHandler:(NSString*)newMsg  {
-    
     
     if([self.delegate respondsToSelector:@selector(getOutterInfo)]){
         [self.delegate getOutterInfo];
@@ -187,15 +185,16 @@
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
     }
+    
     NSDictionary* data = @{@"msg": newMsg,
-                           @"senderFbId": [BRDModel sharedInstance].fbId,
+                           @"senderFbId": kSharedModel.fbId,
+                           @"fbId":  kSharedModel.fbId,
                            @"currentYoutubeKey": self.currentYoutubeKey,
                            @"currentPlaybackTime": self.currentPlaybackTime,
     };
     
     [_bridge callHandler:@"JsSendMsgHandler" data:data responseCallback:^(id response) {
         NSLog(@"JsSendMsgHandler responded: %@", response);
-        
     }];
 }
 
@@ -275,9 +274,7 @@
 
 - (IBAction)joinRoomWithFBAccount:(UIBarButtonItem*)sender {
     
-    NSString* btnTitle = sender.title;
-
-    
+    NSString* btnTitle = sender.title;    
     if([btnTitle isEqualToString:self.lang[@"actionJoin"]] 
        && !self.isJoinFbChatRoom){
         
@@ -309,7 +306,7 @@
 //            NSString* currentYoutubeKey = (NSString*)resDic[@"currentYoutubeKey"];
 //            NSString* currentPlaybackTime = (NSString*)resDic[@"currentPlaybackTime"];
 
-            if([sender isEqualToString:@"me"]) fbId = [BRDModel sharedInstance].fbId;
+            if([sender isEqualToString:@"me"]) fbId = kSharedModel.fbId;
             
             if([sender isEqualToString:@"server"]
                && [message rangeOfString:@"Good to see your"].location != NSNotFound){
@@ -421,16 +418,18 @@
 //    
 //    }];
 }
+
 #pragma mark UITableViewDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BRCellfBChat *cellfBChat = (BRCellfBChat *)[self.tbFbChat dequeueReusableCellWithIdentifier:@"BRCellfBChat"];
     
     cellfBChat.tb = tableView;
-    
     BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
     cellfBChat.record = record;
+    cellfBChat.indexPath = indexPath;
     
+    cellfBChat.deletate = self;
     UIImage *backgroundImage = [UIImage imageNamed:@"table-row-background.png"];
     cellfBChat.backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
     
@@ -439,7 +438,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.mArrFbChat  count];
+    return [self.mArrFbChat count];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -457,8 +456,22 @@
 }
 -(void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath{
     
-    BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
-    [self.delegate triggerOuterAction1:record];
-}
+//    BRRecordFbChat* record = [self.mArrFbChat objectAtIndex:[indexPath row]];
+//    PRPLog(@"record.currentYoutubeKey: %@-[%@ , %@] \n ",
+//           record.currentYoutubeKey,
+//           
+//           NSStringFromClass([self class]),
+//           NSStringFromSelector(_cmd));
+//    
+//    
+//    BRRecordFbChat* record = self.tappedRecord;
+//    [self.delegate triggerOuterAction1:record];
 
+}
+#pragma mark BRCellfBChatDelegate method
+-(void)BRCellfBChatDelegateCellTapped:(BRRecordFbChat *)record
+{
+    [self.delegate triggerOuterAction1:record];
+    
+}
 @end

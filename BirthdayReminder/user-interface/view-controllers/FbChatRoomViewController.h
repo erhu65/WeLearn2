@@ -18,6 +18,7 @@
 @end
 
 @interface FbChatRoomViewController : BRCoreViewController
+@property(nonatomic, strong)NSString* room;
 @property(nonatomic) BOOL isLeaving;
 @property(nonatomic, strong) NSString* currentYoutubeKey;
 @property(nonatomic, strong) NSString* currentPlaybackTime;

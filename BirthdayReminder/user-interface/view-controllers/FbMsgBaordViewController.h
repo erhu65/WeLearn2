@@ -19,6 +19,11 @@
 @end
 @interface FbMsgBaordViewController : BRCoreViewController
 
+@property(nonatomic, strong)NSString* videoSelectedUid;
+@property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
+@property(nonatomic) double currentSelectedVideoPlayBackTime;
+
+
 @property(nonatomic, strong)NSString* videoId;
 @property(nonatomic, strong)NSNumber* page;
 @property(nonatomic)BOOL isLastPage;

@@ -7,6 +7,7 @@
 //
 
 #import "BRVideoViewController.h"
+#import "BRVideoDetailViewController.h"
 #import "BRCellVideo.h"
 #import "BRRecordVideo.h"
 
@@ -16,6 +17,13 @@
 #import "BRDModel.h"
 #import "NSMutableArray+Shuffling.h"
 #import "MyUnwindSegue.h"
+
+typedef enum videoFilterMode {
+    videoFilterFilterModeAll = 0,
+    videoFilterFilterModeFavorite = 1,
+    videoFilterFilterModeVideoFavorite = 2
+} videoFilterMode;
+
 @interface UIWindow (AutoLayoutDebug) 
 + (UIWindow *)keyWindow;
 - (NSString *)_autolayoutTrace;
@@ -25,7 +33,12 @@
 <UITableViewDelegate, 
 UITableViewDataSource,
 UIScrollViewDelegate,
-UISearchBarDelegate>
+UISearchBarDelegate,
+UIAlertViewDelegate>
+
+@property videoFilterMode mode;
+@property(nonatomic, strong)NSMutableArray* docs;
+@property(nonatomic, strong)NSMutableArray* docsTemp;
 @property(nonatomic, strong)NSNumber* page;
 @property(nonatomic, strong)NSNumber* lastPage;
 @property (weak, nonatomic) IBOutlet UIButton *sortBtn;
@@ -38,17 +51,35 @@ UISearchBarDelegate>
 @property (nonatomic, weak) IBOutlet UIView *filterBar;
 @property (nonatomic, strong)  UISearchBar *searchBar;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *spaceBetweenFilterBarAndMainTable;
+@property(nonatomic, strong)UIAlertView* av;
 @end
 
 @implementation BRVideoViewController
 {
     BOOL addItemsTrigger;
     BOOL _isSearchBarOpen;
+    BOOL _isConfirmToDeleteFavorite;
     
     NSArray *verticalConstraintsBeforeAnimation; 
     NSArray *verticalConstraintsAfterAnimation;
     
 }
+
+-(NSMutableArray*)docs{
+    
+    if(nil == _docs){
+        _docs = [[NSMutableArray alloc] init];
+    }
+    return _docs;
+}
+-(NSMutableArray*)docsTemp{
+    
+    if(nil == _docsTemp){
+        _docsTemp = [[NSMutableArray alloc] init];
+    }
+    return _docsTemp;
+}
+
 -(NSNumber*)page{
     if(_page == nil){
         _page = [[NSNumber alloc] initWithInt:0];
@@ -79,6 +110,7 @@ UISearchBarDelegate>
     self = [super initWithCoder:aDecoder];
     if(self){
         
+        _isConfirmToDeleteFavorite = NO;
         _isSearchBarOpen = FALSE;
          self.strSearch = @"";
         
@@ -90,7 +122,9 @@ UISearchBarDelegate>
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.tb.autoresizesSubviews = YES;
-    self.title = [NSString stringWithFormat:@"%@~%@",  [BRDModel sharedInstance].currentSelectMainCategory.name,  [BRDModel sharedInstance].currentSelectSubCategory.name];
+    
+    
+
    
     self.sortLb.text = self.lang[@"actionSearch"];
  
@@ -100,24 +134,33 @@ UISearchBarDelegate>
                                 target:self
                                 action:@selector(navigationBack:)];
     self.navigationItem.leftBarButtonItem = btnBack;
+    self.mode = self.tabBarController.selectedIndex;
+    if(self.mode == videoFilterFilterModeVideoFavorite){
+        self.title =  kSharedModel.lang[@"titleFavoriteVideos"];
+        self.navigationItem.leftBarButtonItem = nil;
+    } else {
+        self.title = [NSString stringWithFormat:@"%@~%@",  self.currentSelectSubCategory.name, self.currentSelectMainCategory.name];
+    }
+
 }
 
 -(void)navigationBack:(id)sender  {
     
-    [[BRDModel sharedInstance].videos removeAllObjects];
-    [[BRDModel sharedInstance].videosTemp removeAllObjects];
-    [BRDModel sharedInstance].subCategoriesSelectedUid = nil;
-    [BRDModel sharedInstance].currentSelectedVideo = nil;
+//    [[BRDModel sharedInstance].videos removeAllObjects];
+//    [[BRDModel sharedInstance].videosTemp removeAllObjects];
+//    [BRDModel sharedInstance].currentSelectedVideo = nil;
     [super navigationBack:sender];
 }
  
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideosDidUpdate:) name:BRNotificationVideosDidUpdate object:[BRDModel sharedInstance]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleVideosDidUpdate:) name:BRNotificationVideosDidUpdate object:[BRDModel sharedInstance]];
     
-    if([[BRDModel sharedInstance].videosTemp count] ==0){
-        [self _handleRefresh];
+    if([self.docsTemp count] == 0 
+       || (self.mode == videoFilterFilterModeVideoFavorite && kSharedModel.isUserVideoFavoriteNeedUpdate)
+       ){
+        [self _handleRefreshFromFirstPage:nil];
     }
 }
 - (void) viewWillDisappear:(BOOL)animated
@@ -131,7 +174,6 @@ UISearchBarDelegate>
            [[UIWindow keyWindow] _autolayoutTrace],
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
-    
 }
 - (void)didRotateFromInterfaceOrientation: (UIInterfaceOrientation)fromInterfaceOrientation
 {
@@ -143,46 +185,126 @@ UISearchBarDelegate>
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
 }
-
+-(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
+{
+    [super _handleFacebookMeDidUpdate:notification];
+    NSDictionary* userInfo = [notification userInfo];
+    NSString* error = userInfo[@"error"];
+    if(nil != error) return;
+    
+    [self _handleRefreshFromFirstPage:nil];
+}
+-(IBAction)_handleRefreshFromFirstPage:(id)sender{
+    
+    self.docs = nil;
+    self.docsTemp = nil;
+    
+    self.page = @0;
+    self.lastPage = @0;
+    [self _handleRefresh];
+}
 
 -(void)_handleRefresh{
     
     [self showHud:YES];    
-    [[BRDModel sharedInstance] fetchVideosWithPage:self.page];
-}
--(void)_handleVideosDidUpdate:(NSNotification *)notification
-{
-    [self hideHud:YES];
-    NSDictionary *userInfo = [notification userInfo];
-    NSString* errMsg = userInfo[@"errMsg"];
-    self.page = userInfo[@"page"];
-    self.lastPage = userInfo[@"lastPage"];
+    __weak __block BRVideoViewController *weakSelf = self;
+    if(self.mode == videoFilterFilterModeVideoFavorite){
     
-    if(errMsg!= nil && [errMsg length] > 0){
+        [kSharedModel fetchUserFavoriteVideosWithPage:self.page fbId:kSharedModel.fbId withBlock:^(NSDictionary* res){
+            kSharedModel.isUserVideoFavoriteNeedUpdate = NO;
+            [weakSelf hideHud:YES];
+            
+            NSString* error = res[@"error"];
+            if(nil != error){
+                [self handleErrMsg:error];
+            } else {
+                
+                NSMutableArray* mTempArr =(NSMutableArray*)res[@"mTempArr"];
+                NSRange range = NSMakeRange(0, mTempArr.count); 
+                NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndexesInRange:range];
+                [weakSelf.docsTemp insertObjects:mTempArr atIndexes:indexes];
+                
+                weakSelf.page = res[@"page"];
+                weakSelf.lastPage = res[@"lastPage"];
+                weakSelf.docs = weakSelf.docsTemp;
+                if(self.docs.count > 0){
+                    PRPLog(@"self.docs.count: %d-[%@ , %@]",
+                           weakSelf.docs.count,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    [weakSelf.tb reloadData];
+                } else {
+                    [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+                    self.sortBtn.enabled = NO;
+                }
+            }
+        }];
         
-        [self showMsg:errMsg type:msgLevelError];
     } else {
-        PRPLog(@"[BRDModel sharedInstance].videos: %d-[%@ , %@]",
-               [BRDModel sharedInstance].videos.count,
-               NSStringFromClass([self class]),
-               NSStringFromSelector(_cmd));
-        if([BRDModel sharedInstance].videos.count > 0){
-            [self.tb reloadData];
-            self.sortBtn.enabled = YES;
-        } else {
-            [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
-            self.sortBtn.enabled = NO;
-        }
-        
-    }
     
+        [kSharedModel fetchVideosWithPage:self.page withSubCategoryId:self.subCategoriesSelectedUid withBlock:^(NSDictionary* res){
+            [weakSelf hideHud:YES];
+            
+            NSString* error = res[@"error"];
+            
+            if(nil != error){
+                [self handleErrMsg:error];
+            } else {
+                NSMutableArray* mTempArr =(NSMutableArray*)res[@"mTempArr"];
+                NSRange range = NSMakeRange(0, mTempArr.count); 
+                NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndexesInRange:range];
+                [weakSelf.docsTemp insertObjects:mTempArr atIndexes:indexes];
+                
+                weakSelf.page = res[@"page"];
+                weakSelf.lastPage = res[@"lastPage"];
+                weakSelf.docs = weakSelf.docsTemp;
+                if(self.docs.count > 0){
+                    PRPLog(@"self.docs.count: %d-[%@ , %@]",
+                           weakSelf.docs.count,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    [weakSelf.tb reloadData];
+                } else {
+                    [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+                    self.sortBtn.enabled = NO;
+                }
+            }
+        }];
+
+    }
 }
+
+//-(void)_handleVideosDidUpdate:(NSNotification *)notification
+//{
+//    [self hideHud:YES];
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSString* errMsg = userInfo[@"errMsg"];
+//    self.page = userInfo[@"page"];
+//    self.lastPage = userInfo[@"lastPage"];
+//    
+//    if(errMsg!= nil && [errMsg length] > 0){
+//        
+//        [self showMsg:errMsg type:msgLevelError];
+//    } else {
+//        PRPLog(@"[BRDModel sharedInstance].videos: %d-[%@ , %@]",
+//               [BRDModel sharedInstance].videos.count,
+//               NSStringFromClass([self class]),
+//               NSStringFromSelector(_cmd));
+//        if([BRDModel sharedInstance].videos.count > 0){
+//            [self.tb reloadData];
+//            self.sortBtn.enabled = YES;
+//        } else {
+//            [self showMsg:self.lang[@"infoNoData"] type:msgLevelInfo];
+//            self.sortBtn.enabled = NO;
+//        }
+//    }
+//}
 
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.tb)
-		return [[BRDModel sharedInstance].videos count];
+		return self.docs.count;
     else 
         return 0;
 }
@@ -192,10 +314,19 @@ UISearchBarDelegate>
 	static NSString *CellIdentifier = @"BRCellVideo";
     
 	BRCellVideo *cell = (BRCellVideo*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];    
-    BRRecordVideo *record = [BRDModel sharedInstance].videos[indexPath.row];
+    BRRecordVideo *record = self.docs[indexPath.row];
     cell.indexPath = indexPath;
     cell.record = record; 
-    [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside]; 
+//    
+//    if(self.mode == videoFilterFilterModeAll){
+//
+//
+//    } else {
+//        cell.btnFavorite.hidden = YES;
+//        cell.btnFavorite.enabled = NO;
+//    }
+    
     return cell;
 }
 
@@ -209,7 +340,21 @@ UISearchBarDelegate>
 -(void)_toggleFavoriteHandler:(UIButton*)sender{
     
     int selectedRow = sender.tag;
-    __block BRRecordVideo *record = [BRDModel sharedInstance].videos[selectedRow];
+    __block BRRecordVideo *record = self.docs[selectedRow];
+    
+    if(record.isUserFavorite && !_isConfirmToDeleteFavorite){
+        
+        self.av = [[UIAlertView alloc] initWithTitle:kSharedModel.lang[@"warn"]
+                                             message:kSharedModel.lang[@"warnAreYouSoreRemoveFavoriteVideo"]
+                                            delegate:self
+                                   cancelButtonTitle:kSharedModel.lang[@"actionOK"]
+                                   otherButtonTitles:kSharedModel.lang[@"actionCancel"], nil];
+        self.av.tag = selectedRow;
+        
+        [self.av show];
+        return;
+    }
+    _isConfirmToDeleteFavorite = NO;
     
     [kSharedModel toggleFavoriteVideo:record.uid
                                       byFbid:kSharedModel.fbId 
@@ -230,16 +375,46 @@ UISearchBarDelegate>
                                      NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[updedIndex integerValue] inSection:0];
                                      
                                      BRCellVideo *cell = (BRCellVideo *) [self.tb cellForRowAtIndexPath:indexPath];
-                                     [cell toggleBtnFavoriteTitle:record.isUserFavorite];
+                                     
+                                     if(self.mode == videoFilterFilterModeAll
+                                        || self.mode == videoFilterFilterModeFavorite
+                                        ){
+                                         kSharedModel.isUserVideoFavoriteNeedUpdate =YES;
+                                         [cell toggleBtnFavoriteTitle:record.isUserFavorite];
+
+                                     } else {
+                                         if(self.mode == videoFilterFilterModeVideoFavorite){
+                                             [self _handleRefreshFromFirstPage:nil];
+                                         }
+                                     }
+
                                      
                                      PRPLog(@"updedIndex: %d, record.isUserFavorite:%d you can upd the btn title-[%@ , %@]",
                                             [updedIndex integerValue],
                                             record.isUserFavorite,
                                             NSStringFromClass([self class]),
                                             NSStringFromSelector(_cmd));
-                                     
                                  }
                              }];
+}
+
+#pragma mark UIAlertViewDelegate 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    if(alertView == self.av){
+        
+        if([title isEqualToString:kSharedModel.lang[@"actionOK"]]){
+            
+            int selectedRow = self.av.tag;
+            
+            UIButton* btn = [[UIButton alloc] init];
+            btn.tag = selectedRow;
+            _isConfirmToDeleteFavorite = YES;
+            [self _toggleFavoriteHandler:btn];
+            
+        }
+    }
 }
 
 
@@ -249,7 +424,6 @@ UISearchBarDelegate>
 	// Detect if the trigger has been set, if so add new items
 	if (addItemsTrigger)
 	{
-        
         BOOL isLastPage = [self.lastPage boolValue];
         if(!isLastPage){
             int page_ = [self.page intValue];
@@ -257,8 +431,8 @@ UISearchBarDelegate>
             self.page = [[NSNumber alloc] initWithInt:page_];
             [self _handleRefresh];
         }
-        
 	}
+    
 	// Reset the trigger
 	addItemsTrigger = NO;
 }
@@ -270,10 +444,16 @@ UISearchBarDelegate>
 		addItemsTrigger = YES;
 }
 
-
-
 #pragma mark show or hide order table view
 - (IBAction)filterButtonPressed:(id)sender {
+    
+    UIButton* btn = ( UIButton*)sender;
+    btn.enabled = NO;
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        btn.enabled = YES;
+    });
     
     if (!_isSearchBarOpen) [self showFilterTable];
     else [self hideFilterTable];
@@ -294,15 +474,15 @@ UISearchBarDelegate>
                          
                          [self.searchBar removeFromSuperview]; 
                          self.searchBar = nil;
-
-                         [self.view addConstraint: self.spaceBetweenFilterBarAndMainTable];
-                         if([BRDModel sharedInstance].subCategoriesSortType == subCategoriesSortTypeNoSort){
-                             
-                             [[BRDModel sharedInstance].subCategories shuffle];
-                         } else {
-                             [[BRDModel sharedInstance] subCategoriesSort];
-                         }
-                         [self.tb reloadData];
+                         [self.view addConstraint: self.spaceBetweenFilterBarAndMainTable];                         
+//                         if([BRDModel sharedInstance].subCategoriesSortType == subCategoriesSortTypeNoSort){
+//                             
+//                             [self.docs shuffle];
+//                         } else {
+//                             //[[BRDModel sharedInstance] subCategoriesSort];
+//                         }
+                         
+//                         [self.tb reloadData];
                          
                      }];
     
@@ -330,14 +510,14 @@ UISearchBarDelegate>
     
     NSDictionary *viewsDictionary = viewsDictionary = 
     @{@"searchBar": self.searchBar};
-
+    
     NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[searchBar]|" options:0
                                                                    metrics:nil
                                                                      views:viewsDictionary];
     [self.view addConstraints:constraints];
     [self.view removeConstraint: self.spaceBetweenFilterBarAndMainTable];
     
-    viewsDictionary = @{ @"filterBar": self.filterBar,
+    viewsDictionary = @{@"filterBar": self.filterBar,
                         @"searchBar": self.searchBar,
                         @"mainTableView": self.tb};
     
@@ -360,10 +540,34 @@ UISearchBarDelegate>
     
     [UIView animateWithDuration:0.3f animations:^ {
         [self.view layoutIfNeeded];
-        
+
     }];
     
 }
+
+- (void)filterVideoByNameOrDesc:(NSString*)searchFor
+{
+    __block NSMutableArray* arrayTemp = [[NSMutableArray alloc] init];
+    self.docs = nil;
+    [self.docsTemp enumerateObjectsUsingBlock:^(id obj , NSUInteger idx, BOOL *stop){
+        BRRecordVideo* record = (BRRecordVideo*)obj;
+        if ([record.name rangeOfString:searchFor].location != NSNotFound
+            ||[record.desc rangeOfString:searchFor].location != NSNotFound
+            ) {
+            
+            [arrayTemp insertObject:record atIndex:0];
+        }
+        
+    }];
+    
+    if([searchFor length]>0){
+        self.docs = arrayTemp;
+    } else {
+        self.docs = self.docsTemp;
+    }
+    
+}
+
 
 #pragma mark UISearchBarDelegate
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchFor{
@@ -376,7 +580,7 @@ UISearchBarDelegate>
 //	[BRDModel sharedInstance].videos = [[BRDModel sharedInstance].videosTemp mutableCopy];
 //	
     self.strSearch  = searchFor;
-    [[BRDModel sharedInstance] filterVideoByNameOrDesc:self.strSearch];
+    [self filterVideoByNameOrDesc:self.strSearch];
     [self.tb reloadData];	
     
 }
@@ -386,22 +590,20 @@ UISearchBarDelegate>
            searchBar.text,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
-
 }
 //get called after  clacel button being pressed
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    searchBar.showsCancelButton = NO;
     [searchBar resignFirstResponder];
     self.strSearch  = @"";
-    
     PRPLog(@" searchBar.text: %@-[%@ , %@]",
            searchBar.text,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
     [self hideFilterTable];
-    [BRDModel sharedInstance].videos = [BRDModel sharedInstance].videosTemp;
+    self.docs = self.docsTemp;
     [self.tb reloadData];	
-
 }
 //get called after keyboard Search key being pressed
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -420,17 +622,21 @@ UISearchBarDelegate>
     NSString *identifier = segue.identifier;
     
     if ([identifier isEqualToString:@"segueVideo"]) {
-        
         BRCellVideo *cell =  (BRCellVideo*)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
-        BRRecordVideo* record =  [[BRDModel sharedInstance].videos objectAtIndex:[indexPath row]];
-        [BRDModel sharedInstance].currentSelectedVideo = record;
+        BRRecordVideo* record =  self.docs[indexPath.row];
+        BRVideoDetailViewController *BRVideoDetailViewController = segue.destinationViewController;
+        BRVideoDetailViewController.videoSelectedUid = record.uid;
+        BRVideoDetailViewController.currentSelectedVideo = record;
+        BRVideoDetailViewController.docs = self.docsTemp;
+        BRVideoDetailViewController.videoSelecteSubCategoryId = self.currentSelectSubCategory.uid;
+        //[BRDModel sharedInstance].currentSelectedVideo = record;
         
-        [BRDModel sharedInstance].videoSelectedUid = record.uid;
-        PRPLog(@"\n [BRDModel sharedInstance].videoSelectedUid %@ \n-[%@ , %@]",
-               [BRDModel sharedInstance].subCategoriesSelectedUid,
-               NSStringFromClass([self class]),
-               NSStringFromSelector(_cmd));   
+//        [BRDModel sharedInstance].videoSelectedUid = record.uid;
+//        PRPLog(@"\n [BRDModel sharedInstance].videoSelectedUid %@ \n-[%@ , %@]",
+//               [BRDModel sharedInstance].subCategoriesSelectedUid,
+//               NSStringFromClass([self class]),
+//               NSStringFromSelector(_cmd));   
         //        UINavigationController *navigationController = segue.destinationViewController;
         
         //        BRSubCategoryViewController *BRSubCategoryViewController_ = (BRSubCategoryViewController *) navigationController.topViewController; 
