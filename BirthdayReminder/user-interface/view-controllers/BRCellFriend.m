@@ -8,6 +8,7 @@
 
 #import "BRCellFriend.h"
 #import "BRDBirthday.h"
+#import "BRRecordFriend.h"
 #import "BRStyleSheet.h"
 #import "BRDBirthdayImport.h"
 #import "UIImageView+RemoteFile.h"
@@ -36,87 +37,19 @@
 }
 
 
--(void) setBirthdayImport:(BRDBirthdayImport *)birthdayImport
+-(void) setRecord:(BRRecordFriend *)record
 {
-    
-    _birthdayImport = birthdayImport;
-    self.nameLabel.text = _birthdayImport.name;
-    
-    int days = _birthdayImport.remainingDaysUntilNextBirthday;
-    
-    self.remainingDaysLabel.hidden = YES;
-    self.remainingDaysImageView.hidden = YES;
-    self.remainingDaysSubTextLabel.hidden = YES;
-    
-    if (days == 0) {
-        //Birthday is today!
-        self.remainingDaysLabel.text = self.remainingDaysSubTextLabel.text = @"";
-        self.remainingDaysImageView.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
-    } else {
-        self.remainingDaysLabel.text = [NSString stringWithFormat:@"%d",days];
-        self.remainingDaysSubTextLabel.text = (days == 1) ? @"more day" : @"more days";
-        self.remainingDaysImageView.image = [UIImage imageNamed:@"icon-days-remaining.png"];
-    }
-    
-    self.birthdayLabel.text = _birthdayImport.birthdayTextToDisplay;
-    if ([birthdayImport.facebookID  length] > 0) {
-        [self.iconView setImageWithFbThumb:birthdayImport.facebookID placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-        
-    }
-//    if (_birthdayImport.imageData == nil)
-//    {
-//        if ([_birthdayImport.picURL length] > 0) {
-//            [self.iconView setImageWithRemoteFileURL:birthdayImport.picURL placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-//        }
-//        else self.iconView.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
-//    }
-//    else {
-//        self.iconView.image = [UIImage imageWithData:birthdayImport.imageData];
-//    }
+    _record = record;
+    self.nameLabel.text = _record.fbName;
+    self.lbCount.text = [NSString stringWithFormat:@"%d videos", [_record.count integerValue]];
     UIImage *backgroundImage = (self.indexPath.row == 0) ? [UIImage imageNamed:@"table-row-background.png"] : [UIImage imageNamed:@"table-row-icing-background.png"];
     self.backgroundView = [[UIImageView alloc] initWithImage:backgroundImage];
-    
-    UIImageView *imageView;
-    if(self.isSelected){
-        imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-selected.png"]];
-    } else {
-        imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-import-not-selected.png"]];
-    }
     //self.accessoryView = imageView;
     
-}
-
--(void) setBirthday:(BRDBirthday *)birthday
-{
-    _birthday = birthday;
-    self.nameLabel.text = _birthday.name;
-    
-    int days = _birthday.remainingDaysUntilNextBirthday;
-    
-    if (days == 0) {
-        //Birthday is today!
-        self.remainingDaysLabel.text = self.remainingDaysSubTextLabel.text = @"";
-        self.remainingDaysImageView.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
+    if ([record.strImgUrl length] > 0) {
+        [self.iconView setImageWithFbThumb:record.fbId placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
     }
-    else {
-        self.remainingDaysLabel.text = [NSString stringWithFormat:@"%d",days];
-        self.remainingDaysSubTextLabel.text = (days == 1) ? @"more day" : @"more days";
-        self.remainingDaysImageView.image = [UIImage imageNamed:@"icon-days-remaining.png"];
-    }
-    
-    self.birthdayLabel.text = _birthday.birthdayTextToDisplay;
-    
-    if (_birthday.imageData == nil)
-    {
-        if ([_birthday.picURL length] > 0) {
-            [self.iconView setImageWithRemoteFileURL:_birthday.picURL placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-        }
-        else self.iconView.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
-    }
-    else {
-        self.iconView.image = [UIImage imageWithData:_birthday.imageData];
-    }
-    
+    else self.iconView.image = [UIImage imageNamed:@"icon-birthday-cake.png"];
 }
 
 -(void) setIconView:(UIImageView *)iconView
@@ -135,30 +68,15 @@
     }
 }
 
--(void) setBirthdayLabel:(UILabel *)birthdayLabel
+-(void) setLbCount:(UILabel *)lbCount
 {
-    _birthdayLabel = birthdayLabel;
-    if (_birthdayLabel) {
-        [BRStyleSheet styleLabel:_birthdayLabel withType:BRLabelTypeBirthdayDate];
+    _lbCount= lbCount;
+    if (_lbCount) {
+        [BRStyleSheet styleLabel:_lbCount withType:BRLabelTypeBirthdayDate];
     }
 }
 
 
--(void) setRemainingDaysLabel:(UILabel *)remainingDaysLabel
-{
-    _remainingDaysLabel = remainingDaysLabel;
-    if (_remainingDaysLabel) {
-        [BRStyleSheet styleLabel:_remainingDaysLabel withType:BRLabelTypeDaysUntilBirthday];
-    }
-}
-
--(void) setRemainingDaysSubTextLabel:(UILabel *)remainingDaysSubTextLabel
-{
-    _remainingDaysSubTextLabel = remainingDaysSubTextLabel;
-    if (_remainingDaysSubTextLabel) {
-        [BRStyleSheet styleLabel:_remainingDaysSubTextLabel withType:BRLabelTypeDaysUntilBirthdaySubText];
-    }
-}
 
 @end
 

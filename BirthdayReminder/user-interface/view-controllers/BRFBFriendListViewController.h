@@ -1,13 +1,9 @@
-//
-//  BRFBFriendListViewController.h
-//  BirthdayReminder
-//
-//  Created by Peter2 on 1/10/13.
-//  Copyright (c) 2013 Nick Kuh. All rights reserved.
-//
 
-#import "BRImportViewController.h"
+#import "BRCoreViewController.h"
 
-@interface BRFBFriendListViewController : BRImportViewController
- 
+@interface BRFBFriendListViewController : BRCoreViewController
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *importButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @end

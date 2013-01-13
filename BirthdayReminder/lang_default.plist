@@ -4,6 +4,8 @@
 <dict>
 	<key></key>
 	<string></string>
+	<key>warnNoFBAccountFound</key>
+	<string>No Facebook Account Found</string>
 	<key>titleMainCategories</key>
 	<string>Main Categories</string>
 	<key>error_network_connection</key>
@@ -20,20 +22,14 @@
 	<string>Remove favorite successfully</string>
 	<key>titleFavoriteCategory</key>
 	<string>Favorite Categories</string>
-	<key>titleFavoriteVideos</key>
-	<string>Favorite videos</string>
-	<key>titleFriendsFavoriteVideos</key>
-	<string>Friends&apos; Favorite videos</string>
-	<key>titleWhosFavoriteVideos</key>
-	<string>Favorite Videos</string>
 	<key>actionAddFavorite</key>
 	<string>Add Favorite</string>
-	<key>titleChatRoom</key>
-	<string>Chat Room</string>
 	<key>actionSplit</key>
 	<string>Split</string>
 	<key>say</key>
 	<string>say:</string>
+	<key>actionCheckOutWeLearnApp</key>
+	<string>Hi let&apos;s check out WeLearn App</string>
 	<key>sum</key>
 	<string>Sum</string>
 	<key>actionMsg</key>
@@ -48,6 +44,8 @@
 	<string>Leave</string>
 	<key>onLine</key>
 	<string>On Line</string>
+	<key>titleChatRoom</key>
+	<string>Chat Room</string>
 	<key>titleVideo</key>
 	<string>Video</string>
 	<key>actionDimiss</key>
@@ -62,6 +60,8 @@
 	<string>Are you sure to remove the favorite main category?</string>
 	<key>info</key>
 	<string>Info</string>
+	<key>actionInviteFriend</key>
+	<string>Invite your friend</string>
 	<key>titleMsgBoard</key>
 	<string>Msg Board</string>
 	<key>actionJoin</key>
@@ -70,6 +70,8 @@
 	<string>By Date</string>
 	<key>actionSearch</key>
 	<string>Search</string>
+	<key>titleFriendsFavoriteVideos</key>
+	<string>Friends&apos; Favorite videos</string>
 	<key>actionOK</key>
 	<string>OK</string>
 	<key>infoNoData</key>
@@ -92,14 +94,16 @@
 	<string>Videos</string>
 	<key>error</key>
 	<string>Error</string>
+	<key>titleFavoriteVideos</key>
+	<string>Favorite videos</string>
 	<key>actionCancel</key>
 	<string>Cancel</string>
 	<key>warnLoginFBFirst</key>
 	<string>Please login Facebook first</string>
 	<key>warn</key>
 	<string>Warn</string>
-	<key>warnNoFBAccountFound</key>
-	<string>No Facebook Account Found</string>
+	<key>titleWhosFavoriteVideos</key>
+	<string>Favorite Videos</string>
 	<key>actionFull</key>
 	<string>Full</string>
 </dict>

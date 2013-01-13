@@ -210,7 +210,6 @@ BRCellfBChatDelegate>
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
     }
-
     
     PRPLog(@"self.currentYoutubeKey:%@  self.currentPlaybackTime:%@ -[%@ , %@] \n ",
            self.currentYoutubeKey,
@@ -319,15 +318,13 @@ BRCellfBChatDelegate>
             self.lbRoomCount.text = [NSString stringWithFormat:@"%@: %@",kSharedModel.lang[@"onLine"], roomCount];
             BRRecordFbChat* recordNew = [[BRRecordFbChat alloc] initWithJsonDic:resDic];
             [self.mArrFbChat insertObject:recordNew atIndex:0];
-            
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
             NSArray* arrIndexPathNew = @[indexPath];
-
+            
             [[self tbFbChat] beginUpdates];
             [self.tbFbChat insertRowsAtIndexPaths:arrIndexPathNew withRowAnimation:UITableViewRowAnimationAutomatic];
             [[self tbFbChat] endUpdates];
             [[self tbFbChat] setContentOffset:CGPointZero animated:YES];
-            
             self.activityChatRoom.hidden = YES;
             [self.activityChatRoom stopAnimating];
             self.barBtnTalk.enabled = YES;

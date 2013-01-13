@@ -137,7 +137,7 @@ UIAlertViewDelegate>
         self.title =  kSharedModel.lang[@"titleFavoriteVideos"];
         self.navigationItem.leftBarButtonItem = nil;
     } else if (self.mode == videoFilterFilterModeVideoFavoriteFriends) {
-        self.title = [NSString stringWithFormat:@"%@ %@", self.fbFriend.name, kSharedModel.lang[@"titleWhosFavoriteVideos"]];
+        self.title = [NSString stringWithFormat:@"%@ %@", self.fbFriend.fbName, kSharedModel.lang[@"titleWhosFavoriteVideos"]];
         
         
         
@@ -220,7 +220,7 @@ UIAlertViewDelegate>
         if(self.mode == videoFilterFilterModeVideoFavorite){
             fbId = kSharedModel.fbId;
         } else if(self.mode == videoFilterFilterModeVideoFavoriteFriends) {
-            fbId = self.fbFriend.facebookID;
+            fbId = self.fbFriend.fbId;
         }
     
         [kSharedModel fetchUserFavoriteVideosWithPage:self.page fbId:fbId withBlock:^(NSDictionary* res){
@@ -330,7 +330,12 @@ UIAlertViewDelegate>
     BRRecordVideo *record = self.docs[indexPath.row];
     cell.indexPath = indexPath;
     cell.record = record; 
-        [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside]; 
+    [cell.btnFavorite addTarget:self action:@selector(_toggleFavoriteHandler:) forControlEvents:UIControlEventTouchUpInside]; 
+    if(self.mode == videoFilterFilterModeVideoFavoriteFriends){
+        cell.btnFavorite.enabled = NO;
+        cell.btnFavorite.hidden = YES;
+    }
+    
 //    
 //    if(self.mode == videoFilterFilterModeAll){
 //
@@ -635,6 +640,7 @@ UIAlertViewDelegate>
     NSString *identifier = segue.identifier;
     
     if ([identifier isEqualToString:@"segueVideo"]) {
+                
         BRCellVideo *cell =  (BRCellVideo*)sender;
         NSIndexPath *indexPath = [self.tb indexPathForCell:cell];
         BRRecordVideo* record =  self.docs[indexPath.row];

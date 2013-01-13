@@ -9,6 +9,10 @@
 #import "LangManager.h"
 
 #import "MBProgressHUD.h"
+#import "SGChildViewController.h"
+@class SGChildViewController;
+
+
 
 typedef enum msgLevel {
     msgLevelInfo = 0,
@@ -29,4 +33,12 @@ typedef enum msgLevel {
 -(void)hideHud:(BOOL) isAnimation;
 -(IBAction)navigationBack:(id)sender;
 -(void)_handleFacebookMeDidUpdate:(NSNotification *)notification;
+
+
+@property (nonatomic, strong) SGChildViewController *noticeChildViewController;
+@property (nonatomic, strong) NSArray *noticeHConstraint;
+@property (nonatomic, strong) NSArray *noticeVConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *noticeHorizontalAlignconstrain;
+@property (nonatomic, strong) NSLayoutConstraint *noticeVerticalAlignconstrain;
+
 @end

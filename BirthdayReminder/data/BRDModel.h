@@ -50,13 +50,14 @@ typedef enum subCategoriesSortType {
 
 + (BRDModel*)sharedInstance;
 
-
+@property (nonatomic, strong) ACAccount* facebookAccount;
 @property(nonatomic, strong)NSDictionary* lang;
 @property(nonatomic, strong)NSDictionary* theme;
 
 @property(nonatomic, strong)NSDictionary* fbMe;
 @property(nonatomic, strong)NSString* fbName;
 @property(nonatomic, strong)NSString* fbId;
+@property(nonatomic, strong)NSString* access_token;
 
 @property(nonatomic, strong)NSMutableArray* mArrFriends;
 
@@ -70,27 +71,24 @@ typedef enum subCategoriesSortType {
 - (void)cancelChanges;
 
 -(NSMutableDictionary *) getExistingBirthdaysWithUIDs:(NSArray *)uids;
-
 - (void)fetchAddressBookBirthdays;
 - (void)fetchFacebookBirthdays;
+- (void)fetchFbFriendsWithVideosCount:(NSString*)access_token fbId:(NSString*)fbId
+withBlock:(void (^)(NSDictionary* userInfo))block;
+
 - (void)fetchFacebookMe;
 
-@property BOOL  mainCategoriesSortIsDesc;
+@property BOOL mainCategoriesSortIsDesc;
 @property BOOL isUserMainCategoryFavoriteNeedUpdate;
 @property BOOL isUserVideoFavoriteNeedUpdate;
 @property mainCategoriesSortType mainCategoriesSortType;
-//@property(nonatomic, strong)NSMutableArray* mainCategories;
-//@property(nonatomic, strong)NSMutableArray* mainCategoriesFavorite;
-//@property(nonatomic, strong)NSString* mainCategoriesSelectedUid;
-//@property(nonatomic, strong)BRRecordMainCategory* currentSelectMainCategory;
-//
-- (void)fetchMainCategoriesWithPage:(NSNumber*)page 
-                          WithBlock:(void (^)(NSDictionary* userInfo))block;
 
 - (void)fetchMainCategoriesFavoriteWithPage:(NSNumber*)page
                                        byFB:(NSString*)fbId
                                   WithBlock:(void (^)(NSDictionary* userInfo))block;
 
+- (void)fetchMainCategoriesWithPage:(NSNumber*)page 
+                          WithBlock:(void (^)(NSDictionary* userInfo))block;
 -(void)toggleFavoriteMainCateogry:(NSString*)sn
                               uid:(NSString*)uid
                            byFbid:(NSString*)fbId
@@ -102,20 +100,13 @@ WithBlock:(void (^)(NSDictionary* userInfo))block;
 
 @property BOOL  subCategoriesSortIsDesc;
 @property subCategoriesSortType subCategoriesSortType;
-//@property(nonatomic, strong)NSMutableArray* subCategories;
-//@property(nonatomic, strong)NSString* subCategoriesSelectedUid;
-//@property(nonatomic, strong)BRRecordSubCategory* currentSelectSubCategory;
+
 - (void)fetchSubCategoriesWithPage:(NSNumber*)page 
                    mainCategoryUid:(NSString*)mainCategoryUid
 withBlock:(void (^)(NSDictionary* userInfo))block;
 
 -(NSMutableArray*)subCategoriesSort:(NSMutableArray*)docs;
 
-//@property(nonatomic, strong)NSMutableArray* videos;
-//@property(nonatomic, strong)NSMutableArray* videosTemp;
-//@property(nonatomic, strong)NSString* videoSelectedUid;
-//@property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
-//@property(nonatomic) double currentSelectedVideoPlayBackTime;
 -(void)toggleFavoriteVideo:(NSString*)uid
                            byFbid:(NSString*)fbId
                       withBool:(BOOL)isMyFavorite

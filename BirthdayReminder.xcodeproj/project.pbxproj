@@ -149,6 +149,9 @@
 		B77A4CE91678963D0021C984 /* UIColor-Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CE71678963D0021C984 /* UIColor-Expanded.m */; };
 		B77A4CF416789BAF0021C984 /* ErrorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CF316789BAF0021C984 /* ErrorHandler.m */; };
 		B77A4CF716789C6B0021C984 /* BRErrorHandlerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B77A4CF616789C6B0021C984 /* BRErrorHandlerViewController.m */; };
+		B78702ED169EB02100BC824F /* BRRecordFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = B78702EC169EB02100BC824F /* BRRecordFriend.m */; };
+		B78702F0169F5EC700BC824F /* BRTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78702EF169F5EC600BC824F /* BRTabBarController.m */; };
+		B78726BC16A2C34800D20138 /* SGChildViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78726BB16A2C34800D20138 /* SGChildViewController.m */; };
 		B78845C3167EC69C0015CE41 /* BRSubCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78845C2167EC69C0015CE41 /* BRSubCategoryViewController.m */; };
 		B78845C7167EC7430015CE41 /* BRCellSubCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B78845C6167EC7430015CE41 /* BRCellSubCategory.m */; };
 		B78845CA167EC7630015CE41 /* BRRecordSubCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = B78845C9167EC7630015CE41 /* BRRecordSubCategory.m */; };
@@ -406,6 +409,12 @@
 		B77A4CF316789BAF0021C984 /* ErrorHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ErrorHandler.m; sourceTree = "<group>"; };
 		B77A4CF516789C6B0021C984 /* BRErrorHandlerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRErrorHandlerViewController.h; path = ../../BRErrorHandlerViewController.h; sourceTree = "<group>"; };
 		B77A4CF616789C6B0021C984 /* BRErrorHandlerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRErrorHandlerViewController.m; path = ../../BRErrorHandlerViewController.m; sourceTree = "<group>"; };
+		B78702EB169EB02000BC824F /* BRRecordFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRRecordFriend.h; sourceTree = "<group>"; };
+		B78702EC169EB02100BC824F /* BRRecordFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRRecordFriend.m; sourceTree = "<group>"; };
+		B78702EE169F5EC500BC824F /* BRTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRTabBarController.h; sourceTree = "<group>"; };
+		B78702EF169F5EC600BC824F /* BRTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRTabBarController.m; sourceTree = "<group>"; };
+		B78726BA16A2C34800D20138 /* SGChildViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGChildViewController.h; sourceTree = "<group>"; };
+		B78726BB16A2C34800D20138 /* SGChildViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGChildViewController.m; sourceTree = "<group>"; };
 		B78845C1167EC69C0015CE41 /* BRSubCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRSubCategoryViewController.h; sourceTree = "<group>"; };
 		B78845C2167EC69C0015CE41 /* BRSubCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRSubCategoryViewController.m; sourceTree = "<group>"; };
 		B78845C5167EC7430015CE41 /* BRCellSubCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellSubCategory.h; path = ../components/BRCellSubCategory.h; sourceTree = "<group>"; };
@@ -613,6 +622,8 @@
 				4867FEA415C15BCE0051C7DB /* model */,
 				48BA416315A44E3B00F5885A /* user-interface */,
 				487BA4791594B02C00EEB099 /* MainStoryboard.storyboard */,
+				B78702EE169F5EC500BC824F /* BRTabBarController.h */,
+				B78702EF169F5EC600BC824F /* BRTabBarController.m */,
 				487BA4BD1597724200EEB099 /* resources */,
 				487BA46E1594B02C00EEB099 /* Supporting Files */,
 				4851731715DA9AA70085F77C /* support */,
@@ -737,6 +748,8 @@
 		48BA416415A44E3B00F5885A /* view-controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B78726BA16A2C34800D20138 /* SGChildViewController.h */,
+				B78726BB16A2C34800D20138 /* SGChildViewController.m */,
 				48BEC16615A5B7EB00263FBD /* BRCoreViewController.h */,
 				48BEC16715A5B7EB00263FBD /* BRCoreViewController.m */,
 				B70951281692DED0009D10F3 /* Tab1NavigationController.h */,
@@ -764,10 +777,14 @@
 				48BEC16B15A5BF6D00263FBD /* BRNotesEditViewController.m */,
 				48BEC17A15A5C44D00263FBD /* BRNotificationTimeViewController.h */,
 				48BEC17B15A5C44D00263FBD /* BRNotificationTimeViewController.m */,
+				4802EBDB15D3B93900C009A8 /* BRImportViewController.h */,
+				4802EBDC15D3B93900C009A8 /* BRImportViewController.m */,
 				485172A715D7D68F0085F77C /* BRImportFacebookViewController.h */,
 				485172A815D7D68F0085F77C /* BRImportFacebookViewController.m */,
 				488C355715D3C51400370951 /* BRImportAddressBookViewController.h */,
 				488C355815D3C51400370951 /* BRImportAddressBookViewController.m */,
+				4867FEA815C15D000051C7DB /* BRDBirthday.h */,
+				4867FEA915C15D000051C7DB /* BRDBirthday.m */,
 				48DEA92315C2E2D200397172 /* BRBirthdayTableViewCell.h */,
 				48DEA92415C2E2D200397172 /* BRBirthdayTableViewCell.m */,
 				485172BE15D8FA0D0085F77C /* BRPostToFacebookWallViewController.h */,
@@ -927,12 +944,10 @@
 		B78BEF71169DDB2C00B321D2 /* FriendsList */ = {
 			isa = PBXGroup;
 			children = (
-				4802EBDB15D3B93900C009A8 /* BRImportViewController.h */,
-				4802EBDC15D3B93900C009A8 /* BRImportViewController.m */,
 				B70F4231169DE13100A6D383 /* BRFBFriendListViewController.h */,
 				B70F4232169DE13100A6D383 /* BRFBFriendListViewController.m */,
-				4867FEA815C15D000051C7DB /* BRDBirthday.h */,
-				4867FEA915C15D000051C7DB /* BRDBirthday.m */,
+				B78702EB169EB02000BC824F /* BRRecordFriend.h */,
+				B78702EC169EB02100BC824F /* BRRecordFriend.m */,
 				B70F4234169DE3A500A6D383 /* BRCellFriend.h */,
 				B70F4235169DE3A500A6D383 /* BRCellFriend.m */,
 			);
@@ -1318,6 +1333,9 @@
 				B78BEF44169DBB0300B321D2 /* Tab4NavigationController.m in Sources */,
 				B70F4233169DE13100A6D383 /* BRFBFriendListViewController.m in Sources */,
 				B70F4236169DE3A500A6D383 /* BRCellFriend.m in Sources */,
+				B78702ED169EB02100BC824F /* BRRecordFriend.m in Sources */,
+				B78702F0169F5EC700BC824F /* BRTabBarController.m in Sources */,
+				B78726BC16A2C34800D20138 /* SGChildViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

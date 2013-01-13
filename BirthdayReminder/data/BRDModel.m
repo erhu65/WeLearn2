@@ -13,6 +13,7 @@
 #import "BRRecordSubCategory.h"
 #import "BRRecordVideo.h"
 #import "BRRecordMsgBoard.h"
+#import "BRRecordFriend.h"
 #import "BRDSettings.h"
 #import <AddressBook/AddressBook.h>
 #import <Social/Social.h>
@@ -31,7 +32,7 @@ typedef enum : int
 
 @interface BRDModel()
 
-@property (nonatomic, strong) ACAccount* facebookAccount;
+
 @property FacebookAction currentFacebookAction;
 @property (nonatomic,strong) NSString *postToFacebookMessage;
 @property (nonatomic,strong) NSString *postToFacebookID;
@@ -51,7 +52,7 @@ static BRDModel *_sharedInstance = nil;
 		_sharedInstance = [[BRDModel alloc] init];
         _sharedInstance.lang = [LangManager sharedManager].dic;
         _sharedInstance.theme = [ThemeManager sharedManager].dic;
-        
+        //_sharedInstance.facebookAccount = nil;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* fbId = [defaults objectForKey:KUserDefaultFbId];
         NSString* fbName = [defaults objectForKey:KUserDefaultFbName];
@@ -59,10 +60,8 @@ static BRDModel *_sharedInstance = nil;
             _sharedInstance.fbId = fbId;
             _sharedInstance.fbName = fbName;
         }
-        
-        
-
 	}
+    
 	return _sharedInstance;
 }
 
@@ -76,7 +75,7 @@ static BRDModel *_sharedInstance = nil;
     }
     return _facebookAccount;
 }
-//
+
 -(NSMutableArray*)mArrFriends{
     
     if( nil == _mArrFriends){
@@ -84,7 +83,7 @@ static BRDModel *_sharedInstance = nil;
     } 
     return _mArrFriends;
 }
-//
+
 //-(NSMutableArray*)subCategories{
 //    
 //    if(!_subCategories){
@@ -92,7 +91,6 @@ static BRDModel *_sharedInstance = nil;
 //    }
 //    return _subCategories;
 //}
-
 
 -(void) extractBirthdaysFromAddressBook:(ABAddressBookRef)addressBook
 {
@@ -139,6 +137,90 @@ static BRDModel *_sharedInstance = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationAddressBookBirthdaysDidUpdate object:self userInfo:userInfo];
 }
 
+
+- (void)authenticateWithFacebook {
+    
+    if(nil != self.fbId 
+       && self.currentFacebookAction != FacebookActionGetFriendsBirthdays){
+        [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
+        return;
+    }
+    
+    //Centralized iOS user Twitter, Facebook and Sina Weibo accounts are accessed by apps via the ACAccountStore 
+    //if(nil != self.facebookAccount)return;
+    
+    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
+    
+    ACAccountType *accountTypeFacebook = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    
+    // At first, we only ask for the basic read
+    NSArray* permissions = @[@"email", @"read_stream",@"read_friendlists", @"friends_birthday", @"publish_stream"];
+    
+    NSDictionary* options =@{ACFacebookAppIdKey:KFacebookKey,ACFacebookPermissionsKey: permissions,ACFacebookAudienceKey:ACFacebookAudienceOnlyMe};    
+    
+    //Replace with your Facebook.com app ID
+    //    NSDictionary *options = @{ACFacebookAppIdKey: @"500954283270682",
+    //ACFacebookPermissionsKey: @[@"email", @"read_stream",@"read_friendlists"] ,ACFacebookAudienceKey:ACFacebookAudienceFriends};
+    
+    [accountStore requestAccessToAccountsWithType:accountTypeFacebook options:options completion:^(BOOL granted, NSError *error) {
+        if(granted) {
+            //The completition handler may not fire in the main thread and as we are going to 
+            
+            /** 
+             * The user granted us the basic read permission.
+             * Now we can ask for more permissions
+             **/
+            //            NSMutableDictionary* options2 = [options mutableCopy];    
+            //            NSArray*readPermissions =@[@"read_stream",@"read_friendlists"];
+            //            [options2 setObject:readPermissions forKey:ACFacebookPermissionsKey];
+            //            
+            //            
+            NSArray *accounts = [accountStore accountsWithAccountType:accountTypeFacebook];
+            self.facebookAccount = [accounts lastObject];
+            PRPLog(@"Facebook Authorized! accounts:%@ -[%@ , %@]",
+                   accounts,
+                   NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+            //By checking what Facebook action the user was trying to perform before the authorization process we can complete the Facebook action when the authorization succeeds
+            switch (self.currentFacebookAction) {
+                case FacebookActionGetFriendsBirthdays:
+                    [self fetchFacebookBirthdays];
+                    break;
+                case FacebookActionPostToWall:
+                    //TODO - post to a friend's Facebook Wall
+                    [self postToFacebookWall:self.postToFacebookMessage withFacebookID:self.postToFacebookID];
+                    break;
+                case FacebookActionGetMe:
+                    //TODO - post to a friend's Facebook Wall
+                    [self fetchFacebookMe];
+                    break;
+                case FacebookActionToggleMainCategoryFIsUserFavorite:
+                    [self fetchFacebookMe];
+                    
+                    
+                default:
+                    PRPLog(@"self.facebookAccount= %@-[%@ , %@]",
+                           self.facebookAccount,
+                           NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+            }
+            
+        } else {
+            
+            if ([error code] == ACErrorAccountNotFound) {
+                NSLog(@"No Facebook Account Found");
+                
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    NSDictionary *userInfo = @{@"error": self.lang[@"warnNoFBAccountFound"]};
+                    [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:userInfo];
+                });
+                
+            }
+            else {
+                NSLog(@"Facebook SSO Authentication Failed: %@",error);
+            }
+        }
+    }];
+}
+
 - (void)fetchAddressBookBirthdays
 {
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -181,7 +263,19 @@ static BRDModel *_sharedInstance = nil;
     CFRelease(addressBook);
 }
 
-
+- (NSDictionary *)_parseQueryString:(NSString *)query {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:6];
+    NSArray *pairs = [query componentsSeparatedByString:@"&"];
+    
+    for (NSString *pair in pairs) {
+        NSArray *elements = [pair componentsSeparatedByString:@"="];
+        NSString *key = [[elements objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *val = [[elements objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [dict setObject:val forKey:key];
+    }
+    return dict;
+}
 
 - (void)fetchFacebookBirthdays
 {
@@ -192,18 +286,26 @@ static BRDModel *_sharedInstance = nil;
         [self authenticateWithFacebook];
         return;
     }
+
     
     //We've got an authenticated Facebook Account if the code executes here
     NSURL *requestURL = [NSURL URLWithString:@"https://graph.facebook.com/me/friends"];
-    NSDictionary *params = @{@"fields" : @"name,id,birthday"};
+    NSDictionary *params = @{@"fields" : @"name, id, birthday"};
     
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeFacebook requestMethod:SLRequestMethodGET URL:requestURL parameters:params];
     
     request.account = self.facebookAccount;
-    
+    __block NSString* errMsg;
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         if (error != nil) {
+            errMsg = [error description];
             NSLog(@"Error getting my Facebook friend birthdays: %@",error);
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                //update the view on the main thread
+                NSDictionary *userInfo;
+                userInfo = @{@"error":errMsg};
+                [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookBirthdaysDidUpdate object:self userInfo:userInfo];
+            });
         }
         else
         {
@@ -212,6 +314,40 @@ static BRDModel *_sharedInstance = nil;
             NSLog(@"Facebook returned friends: %@",resultD);
             // with a 'data' key - an array of Facebook friend dictionaries
             NSArray *birthdayDictionaries = resultD[@"data"];
+            if(nil == birthdayDictionaries){
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    //update the view on the main thread
+                    NSDictionary *userInfo;
+                    errMsg = [resultD description];
+                    userInfo = @{@"error":errMsg};
+                    [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookBirthdaysDidUpdate object:self userInfo:userInfo];
+                });
+
+                return;
+            }
+            
+            NSDictionary* paging =  resultD[@"paging"];
+            NSString* nextUrlStr = paging[@"next"];
+            NSURL *url = [NSURL URLWithString:nextUrlStr];
+            NSDictionary* queryParams = [self _parseQueryString: [url query]];
+            NSString* access_token = queryParams[@"access_token"];
+            
+            PRPLog(@"self.fbId:%@ \n scheme:%@ \n host:%@ \n port:%@ \n path:%@ \n pathComponents:%@ \n parameterString:%@ \n query:%@ \n access_token:%@ \n fragment:%@ \n -[%@ , %@]",
+                   self.fbId,
+                   [url scheme],
+                   [url host],
+                   [url port],
+                   [url path],
+                   [url pathComponents],
+                   [url parameterString],
+                   [url query],
+                   access_token,
+                   [url fragment],
+                   NSStringFromClass([self class]),NSStringFromSelector(_cmd)
+                   );
+            self.access_token = access_token;
+            
+            
             
             int birthdayCount = [birthdayDictionaries count];
             NSDictionary *facebookDictionary;
@@ -228,7 +364,7 @@ static BRDModel *_sharedInstance = nil;
                 //create an instance of BRDBirthdayImport
                 NSLog(@"Found a Facebook Birthday: %@",facebookDictionary);
                 birthday = [[BRDBirthdayImport alloc] initWithFacebookDictionary:facebookDictionary];
-                [self.mArrFriends addObject:birthday];
+               
                 [birthdays addObject: birthday];
             }
             
@@ -239,13 +375,162 @@ static BRDModel *_sharedInstance = nil;
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 //update the view on the main thread
-                NSDictionary *userInfo = @{@"birthdays":birthdays};
+                NSDictionary *userInfo;
+                if(nil != errMsg) {
+                    userInfo = @{@"error":errMsg};
+                } else {
+                    userInfo = @{@"birthdays":birthdays};
+                }
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookBirthdaysDidUpdate object:self userInfo:userInfo];
             });
         }
     }];
 }
 
+- (void)fetchFbFriendsWithVideosCount:(NSString*)access_token 
+                                 fbId:(NSString*)fbId
+                            withBlock:(void (^)(NSDictionary* userInfo))block{
+    
+    if (nil == self.fbId) {
+        self.currentFacebookAction = FacebookActionGetMe;
+        [self authenticateWithFacebook];
+        return;
+    }
+    
+    dispatch_queue_t concurrentQueue = 
+    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    /* If we have not already saved an array of 10,000
+     random numbers to the disk before, generate these numbers now
+     and then save them to the disk in an array */
+    dispatch_async(concurrentQueue, ^{
+        
+        NSString* urlMainCategores = [NSString stringWithFormat:@"%@/friends-videos-with-count?access_token=%@&fbId=%@", BASE_URL, self.access_token, self.fbId];
+        NSURL *url = [NSURL URLWithString:urlMainCategores];
+        NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+        [urlRequest setTimeoutInterval:30.0f];
+        [urlRequest setHTTPMethod:@"GET"];
+        
+        NSURLResponse *response;
+        NSError *error;
+        NSString* errMsg;
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
+        NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                             returningResponse:&response
+                                                         error:&error];
+        PRPLog(@"fetchFbFriendsWithVideosCount http request url: %@\n  -[%@ , %@]",
+               urlMainCategores,
+               NSStringFromClass([self class]),
+               NSStringFromSelector(_cmd));
+        
+        if ([data length] > 0 &&
+            error == nil){
+            
+            NSString*  resStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            PRPLog(@"%lu bytes of data was returned \n resStr: %@\n-[%@ , %@]",
+                   (unsigned long)[data length],
+                   resStr,
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            //            PRPLog(@"response %@ -[%@ , %@]",
+            //                   [response description],
+            //                   NSStringFromClass([self class]),
+            //                   NSStringFromSelector(_cmd));
+            
+            /* Now try to deserialize the JSON object into a dictionary */
+            error = nil;
+            id jsonObject = [NSJSONSerialization 
+                             JSONObjectWithData:data
+                             options:NSJSONReadingAllowFragments
+                             error:&error];
+            
+            if (jsonObject != nil &&
+                error == nil){
+                
+                PRPLog(@"Successfully deserialized....-[%@ , %@]",
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                
+                if ([jsonObject isKindOfClass:[NSDictionary class]]){
+                    
+                    NSDictionary *deserializedDictionary = (NSDictionary *)jsonObject;
+                    
+                    PRPLog(@"Deserialized JSON Dictionary = %@ \n -[%@ , %@]",
+                           deserializedDictionary,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));;
+                    
+                } else if ([jsonObject isKindOfClass:[NSArray class]]){
+                    
+                    NSArray *arrFriends = (NSArray *)jsonObject;
+                    PRPLog(@"Deserialized JSON Array = %@-[%@ , %@]",
+                           arrFriends,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd)); 
+                    
+                    [arrFriends enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
+                        NSDictionary* dicRecord = (NSDictionary*)obj;
+                        BRRecordFriend* record = [[BRRecordFriend alloc] initWithJsonDic:dicRecord];
+                        
+                        [mArrTemp addObject:record];
+                        
+                    }];
+                    self.mArrFriends = mArrTemp;
+                    
+                } else {
+                    /* Some other object was returned. We don't know how to deal
+                     with this situation as the deserializer only returns dictionaries
+                     or arrays */
+                    PRPLog(@"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries-[%@ , %@]",
+                           error,
+                           NSStringFromClass([self class]),
+                           NSStringFromSelector(_cmd));
+                    errMsg = @"Some other object was returned. We don't know how to deal with this situation as the deserializer only returns dictionaries";
+                }
+                
+            } else if (error != nil){
+                
+                PRPLog(@"An error happened while deserializing the JSON data.\n %@-[%@ , %@]",
+                       error,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));    
+                errMsg = [NSString stringWithFormat:@"An error happened while deserializing the JSON data %@",  [error description]];
+            }
+        } else if ([data length] == 0 &&
+                 error == nil){
+            PRPLog(@"No data was returned.-[%@ , %@]",
+                   (unsigned long)[data length],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = @"No data was returned.";
+        } else if (error != nil){
+            PRPLog(@"Error happened = %@-[%@ , %@]",
+                   [error description],
+                   NSStringFromClass([self class]),
+                   NSStringFromSelector(_cmd));
+            errMsg = [NSString stringWithFormat:@"Error happened = %@",  [error description]];
+        }
+        
+        dispatch_sync(dispatch_get_main_queue(), ^(){
+            
+            NSDictionary *userInfo;
+                if(nil != errMsg){
+                    userInfo = @{@"error": errMsg};
+                } else {
+                    userInfo = @{@"mArrTemp": [mArrTemp mutableCopy]};
+                    
+                }
+            block(userInfo); 
+            
+        });
+
+        
+    });
+    
+ 
+}
 
 - (void)fetchFacebookMe
 {    
@@ -270,7 +555,7 @@ static BRDModel *_sharedInstance = nil;
     __weak __block BRDModel *weakSelf = self;
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         if (error != nil) {
-            NSLog(@"Error getting my Facebook friend birthdays: %@",error);
+            NSLog(@"Error getting user facebook info: %@",error);
         }
         else
         {     
@@ -2280,7 +2565,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block
         
         NSURLResponse *response;
         NSError *error;
-        NSString* errMsg = @"";
+        NSString* errMsg;
         
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
@@ -2376,8 +2661,10 @@ withBlock:(void (^)(NSDictionary* userInfo))block
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            NSDictionary *userInfo = @{@"errMsg":errMsg};
+            NSDictionary *userInfo;
+            if(nil != errMsg){
+                userInfo = @{@"error":errMsg};
+            } 
             [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationSocketURLDidUpdate object:self userInfo:userInfo];
         });
         
@@ -2528,6 +2815,30 @@ withBlock:(void (^)(NSDictionary* userInfo))block
      
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID
 {
+    
+    /*
+     Feed story publishing to other users is disabled for this application
+     
+     ou probably created this Facebook application recently, which means the February 2013 breaking changes are enabled.
+     
+     February's Breaking Changes include:
+     
+     Removing ability to post to friends walls via Graph API
+     
+     We will remove the ability to post to a user's friends' walls via the Graph API. Specifically, posts against [user_id]/feed where [user_id] is different from the session user, or stream.publish calls where the target_id user is different from the session user, will fail. If you want to allow people to post to their friends' timelines, invoke the feed dialog. Stories that include friends via user mentions tagging or action tagging will show up on the friend’s timeline (assuming the friend approves the tag). For more info, see this blog post.
+     
+     We are disabling this feature starting in February, if you wish to enable it (only temporarily until February), 
+     
+     
+     go to your app dashboard > Settings > Advanced > Disable "February 2013 Breaking Changes"
+     
+     
+     
+     I highly recommend against doing so, however, since starting February this functionality will cause your app to throw the same error again.
+     
+
+     
+     */
     NSLog(@"postToFacebookWall");
     
     if (self.facebookAccount == nil) {
@@ -2563,88 +2874,6 @@ withBlock:(void (^)(NSDictionary* userInfo))block
         }
     }];
     
-}
-
-
-- (void)authenticateWithFacebook {
-    
-    if(nil != self.fbId 
-       && self.currentFacebookAction != FacebookActionGetFriendsBirthdays){
-        [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:nil];
-        return;
-    }
-
-    //Centralized iOS user Twitter, Facebook and Sina Weibo accounts are accessed by apps via the ACAccountStore 
-    //if(nil != self.facebookAccount)return;
-
-    ACAccountStore *accountStore = [[ACAccountStore alloc] init];
-    
-    ACAccountType *accountTypeFacebook = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
-    
-    // At first, we only ask for the basic read
-    NSArray* permissions = @[@"email", @"read_stream",@"read_friendlists", @"friends_birthday"];
-    
-    NSDictionary* options =@{ACFacebookAppIdKey:KFacebookKey,ACFacebookPermissionsKey: permissions,ACFacebookAudienceKey:ACFacebookAudienceOnlyMe};    
-    
-    //Replace with your Facebook.com app ID
-//    NSDictionary *options = @{ACFacebookAppIdKey: @"500954283270682",
-//ACFacebookPermissionsKey: @[@"email", @"read_stream",@"read_friendlists"] ,ACFacebookAudienceKey:ACFacebookAudienceFriends};
-    
-    [accountStore requestAccessToAccountsWithType:accountTypeFacebook options:options completion:^(BOOL granted, NSError *error) {
-        if(granted) {
-            //The completition handler may not fire in the main thread and as we are going to 
-            NSLog(@"Facebook Authorized!");
-            /** 
-             * The user granted us the basic read permission.
-             * Now we can ask for more permissions
-             **/
-//            NSMutableDictionary* options2 = [options mutableCopy];    
-//            NSArray*readPermissions =@[@"read_stream",@"read_friendlists"];
-//            [options2 setObject:readPermissions forKey:ACFacebookPermissionsKey];
-//            
-//            
-            NSArray *accounts = [accountStore accountsWithAccountType:accountTypeFacebook];
-            self.facebookAccount = [accounts lastObject];
-            
-            //By checking what Facebook action the user was trying to perform before the authorization process we can complete the Facebook action when the authorization succeeds
-            switch (self.currentFacebookAction) {
-                case FacebookActionGetFriendsBirthdays:
-                    [self fetchFacebookBirthdays];
-                    break;
-                case FacebookActionPostToWall:
-                    //TODO - post to a friend's Facebook Wall
-                    [self postToFacebookWall:self.postToFacebookMessage withFacebookID:self.postToFacebookID];
-                    break;
-                case FacebookActionGetMe:
-                    //TODO - post to a friend's Facebook Wall
-                    [self fetchFacebookMe];
-                    break;
-                case FacebookActionToggleMainCategoryFIsUserFavorite:
-                    [self fetchFacebookMe];
-                 
-                    
-                default:
-                    PRPLog(@"self.facebookAccount= %@-[%@ , %@]",
-                           self.facebookAccount,
-                           NSStringFromClass([self class]),NSStringFromSelector(_cmd));
-            }
-            
-        } else {
-            
-            if ([error code] == ACErrorAccountNotFound) {
-                NSLog(@"No Facebook Account Found");
-                
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    NSDictionary *userInfo = @{@"error": self.lang[@"warnNoFBAccountFound"]};
-                    [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationFacebookMeDidUpdate object:self userInfo:userInfo];
-                });
-        
-            }
-            else {
-                NSLog(@"Facebook SSO Authentication Failed: %@",error);
-            }
-        }
-    }];
 }
 
 -(void) updateCachedBirthdays

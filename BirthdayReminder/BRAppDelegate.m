@@ -23,6 +23,7 @@ MFMailComposeViewControllerDelegate>
 @end
 
 @implementation BRAppDelegate
+@synthesize javascriptBridge = _bridge;
 
 void exceptionHandler(NSException *exception)
 {
@@ -35,6 +36,8 @@ void exceptionHandler(NSException *exception)
     [settings setBool:YES forKey:@"ExceptionOccurredOnLastRun"];
     [settings synchronize];
 }
+
+
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -75,15 +78,12 @@ void exceptionHandler(NSException *exception)
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];     
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleSocketURLDidUpdate:) name:BRNotificationVideoDidUpdate object:[BRDModel sharedInstance]]; 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleSocketURLDidUpdate:) name:BRNotificationSocketURLDidUpdate object:[BRDModel sharedInstance]]; 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleRegisterUdidDidUpdate:) name:BRNotificationRegisterUdidDidUpdate object:[BRDModel sharedInstance]]; 
 
     
     [[BRDModel sharedInstance] getSocketUrl];
-    
-    
-    
     
     return YES;
 }
@@ -176,12 +176,13 @@ void exceptionHandler(NSException *exception)
 -(void)_handleSocketURLDidUpdate:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
-    NSString* errMsg = userInfo[@"errMsg"];
+    NSString* error = userInfo[@"error"];
     
-    if(errMsg!= nil && [errMsg length] > 0){        
+    if(nil != userInfo 
+       && nil != error){        
         // Notify the user
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" 
-                                                        message:errMsg 
+                                                        message:error 
                                                        delegate:self
                                               cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
         [alert show];
@@ -190,7 +191,57 @@ void exceptionHandler(NSException *exception)
                [BRDModel sharedInstance].socketUrl,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
+        
+        self.webview = [[UIWebView alloc] init];
+        NSString* urlNotice = [NSString stringWithFormat:@"%@/notice.html", [BRDModel sharedInstance].socketUrl];
+        NSURL* url = [[NSURL alloc] initWithString:urlNotice];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        [self.webview loadRequest:request];
+        
+        [WebViewJavascriptBridge enableLogging];
+        _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webview handler:^(id data, WVJBResponseCallback responseCallback) {
+            
+            NSLog(@"ObjC received message from JS: %@", data);
+            responseCallback(@"Response for message from ObjC");
+        }];
+        NSString* uniqueName = [Utils createUUID:@"_notice_user"];
+        NSDictionary* data = @{@"uniqueName": uniqueName};
+        [_bridge callHandler:@"JsJoinNoticeHandler" 
+                        data:data 
+            responseCallback:^(id response) {
+                
+                PRPLog(@"callJsJoinRoomHandler responded: %@-[%@ , %@] \n ",
+                       response,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+            }];
 
+
+        [_bridge registerHandler:@"iosGetNoticeCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+            
+            NSDictionary* resDic = (NSDictionary*)data;
+//            NSString* type = resDic[@"type"];
+//            NSString* notice = resDic[@"notice"];
+            NSLog(@"iosGetNoticeCallback called: %@", resDic);
+            responseCallback(@"Response from iosGetNoticeCallback: ios got chatroom msg");
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationInAppDidUpdate object:self userInfo:resDic];
+        }];
+       
+        
+        [_bridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+            
+            NSLog(@"testObjcCallback called: %@", data);
+            responseCallback(@"Response from testObjcCallback");
+        }];
+        
+        [_bridge send:@"A string sent from ObjC before Webview has loaded." responseCallback:^(id responseData) {
+            NSLog(@"objc got response! %@", responseData);
+        }];
+        
+        [_bridge callHandler:@"testJavascriptHandler" data:[NSDictionary dictionaryWithObject:@"before ready" forKey:@"foo"]];
+        //node.js socket.io webview bridge end... 
+        [_bridge send:@"A string sent from ObjC after Webview has loaded."];
     }
 
 }
@@ -198,6 +249,7 @@ void exceptionHandler(NSException *exception)
 -(void)_handleRegisterUdidDidUpdate:(NSNotification*)notification
 {
     NSDictionary *userInfo = [notification userInfo];
+    
     NSString* errMsg = userInfo[@"errMsg"];
     
     if(errMsg != nil && [errMsg length] > 0){  

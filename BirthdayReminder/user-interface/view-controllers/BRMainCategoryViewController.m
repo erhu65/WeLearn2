@@ -252,6 +252,29 @@ UIAlertViewDelegate>
         kSharedModel.isUserMainCategoryFavoriteNeedUpdate = NO;
     }
 }
+
+
+//a) if you dont want to rotate:
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
+    
+    
+}
+
 - (void)didRotateFromInterfaceOrientation: (UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:
@@ -260,6 +283,13 @@ UIAlertViewDelegate>
           [[UIWindow keyWindow] _autolayoutTrace],
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
+}
+
+- (IBAction)toggleSlide:(id)sender{
+    
+    [self.noticeChildViewController 
+     toggleSlide:sender msg:@"YYY YYY YYY YYY YYY YYY YYY YYY YYY end" 
+     stayTime:5.0f];
 }
 
 -(void)handleMainCategoriesDidUpdate:(NSNotification *)notification
@@ -592,5 +622,6 @@ UIAlertViewDelegate>
 
     }
 }
+
 
 @end

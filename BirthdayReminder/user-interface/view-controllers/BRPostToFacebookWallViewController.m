@@ -36,7 +36,7 @@
     
     NSString *facebookPicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=large",self.facebookID];
     [self.photoView setImageWithRemoteFileURL:facebookPicURL placeHolderImage:[UIImage imageNamed:@"icon-birthday-cake.png"]];
-    self.textView.text = self.initialPostText;
+    self.textView.text = kSharedModel.lang[@"actionCheckOutWeLearnApp"];
     [self.textView becomeFirstResponder];
     [self updatePostButton];
 }

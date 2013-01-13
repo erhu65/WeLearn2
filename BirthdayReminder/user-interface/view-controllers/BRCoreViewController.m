@@ -36,6 +36,23 @@ typedef enum videosFilterMode {
     return self;
 }
 
+- (void)updateViewConstraints
+{
+    [super updateViewConstraints];
+    
+//    [self.view addSubview:self.button];
+//    
+//    NSDictionary *views = @{ @"button" : self.button };
+//    
+//    // Position the button with edge padding
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[button(==100)]|" options:0 metrics:nil views:views]];
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-700-[button(==60)]|" options:0 metrics:nil views:views]];    
+    // Vertically center.
+    //    NSLayoutConstraint *verticallyCenteredConstraint = [NSLayoutConstraint constraintWithItem:self.button attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    //    [self.view addConstraint:verticallyCenteredConstraint];
+}
+
+
 -(void) viewDidLoad
 {
     [super viewDidLoad];
@@ -43,9 +60,38 @@ typedef enum videosFilterMode {
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app-background.png"]];
     [self.view insertSubview:backgroundView atIndex:0];
     
+    self.noticeChildViewController = [[SGChildViewController alloc] init];
+    self.noticeChildViewController.superviewController = self;
+    self.noticeChildViewController.view.backgroundColor = [UIColor blueColor];
+    NSDictionary *views = @{@"noticeVidew" : self.noticeChildViewController.view};
+    
+    // Set the width of the container box to be 250
+    self.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[noticeVidew(==320)]" options:0 metrics:nil views:views];
+    [self.view addConstraints:self.noticeHConstraint];
+    
+    // Set the height of the container box to be 250
+    self.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noticeVidew(==100)]" options:0 metrics:nil views:views];
+    [self.view addConstraints:self.noticeVConstraint];
+    
+    // Vertically align
+    self.noticeVerticalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+    [self.view addConstraint:self.noticeVerticalAlignconstrain];
+    
+    // Horizontally align
+    self.noticeHorizontalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    [self.view addConstraint:self.noticeHorizontalAlignconstrain];
+    
+    // Containment
+    [self addChildViewController:self.noticeChildViewController];
+    [self.view addSubview:self.noticeChildViewController.view];
+    [self.noticeChildViewController didMoveToParentViewController:self];
+    
 }
 -(void)viewWillAppear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleFacebookMeDidUpdate:) name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handelBRNotificationInAppDidUpdate:) name:BRNotificationInAppDidUpdate object:nil];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -53,11 +99,26 @@ typedef enum videosFilterMode {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationInAppDidUpdate object:nil];
+    
+    
    if(nil != HUD){
       [HUD hide:NO];
     }
     [self _findAndResignFirstResponder:self.view];
     //prevent crash when clicking tab veray quickly...
+    
+}
+
+-(void)_handelBRNotificationInAppDidUpdate:(NSNotification*)notification
+{   
+    NSDictionary *userInfo = [notification userInfo];
+    //NSString* type = userInfo[@"type"];
+    NSString* notice = userInfo[@"notice"];
+    
+    [self.noticeChildViewController 
+     toggleSlide:nil msg:notice
+     stayTime:5.0f];
     
 }
 
@@ -150,7 +211,6 @@ typedef enum videosFilterMode {
 
 }
 
-
 -(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
 {
     [self hideHud:YES];  
@@ -167,10 +227,5 @@ typedef enum videosFilterMode {
         [self showMsg:msg type:msgLevelInfo]; 
         return;
     } 
-
-    
-    
 }
-
-
 @end

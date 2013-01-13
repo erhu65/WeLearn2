@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/data/BRDModel.m"
-         timestampString = "379448865.879174"
+         timestampString = "379671952.464349"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "258"
-         endingLineNumber = "258"
+         startingLineNumber = "543"
+         endingLineNumber = "543"
          landmarkName = "-fetchFacebookMe"
          landmarkType = "5">
       </FileBreakpoint>
@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoViewController.m"
-         timestampString = "379455276.816588"
+         timestampString = "379531157.209049"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "647"
-         endingLineNumber = "647"
+         startingLineNumber = "653"
+         endingLineNumber = "653"
          landmarkName = "-prepareForSegue:sender:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -47,11 +47,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379456079.389419"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "525"
-         endingLineNumber = "525"
+         startingLineNumber = "542"
+         endingLineNumber = "542"
          landmarkName = "-prepareForSegue:sender:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379456079.389419"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "527"
-         endingLineNumber = "527"
+         startingLineNumber = "544"
+         endingLineNumber = "544"
          landmarkName = "-prepareForSegue:sender:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433114.739932"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "259"
-         endingLineNumber = "259"
+         startingLineNumber = "276"
+         endingLineNumber = "276"
          landmarkName = "-_showNextMovie"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433537.263806"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "458"
-         endingLineNumber = "458"
+         startingLineNumber = "475"
+         endingLineNumber = "475"
          landmarkName = "-moviePlayBackDidFinish:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433141.830484"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "253"
-         endingLineNumber = "253"
+         startingLineNumber = "270"
+         endingLineNumber = "270"
          landmarkName = "-youTubePlayerViewController:failedExtractingYouTubeURLWithError:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -151,11 +151,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433243.666103"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "278"
-         endingLineNumber = "278"
+         startingLineNumber = "295"
+         endingLineNumber = "295"
          landmarkName = "-_showNextMovie"
          landmarkType = "5">
       </FileBreakpoint>
@@ -190,11 +190,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433533.39771"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "303"
-         endingLineNumber = "303"
+         startingLineNumber = "320"
+         endingLineNumber = "320"
          landmarkName = "-_showMovie:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -203,11 +203,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379433540.069479"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "312"
-         endingLineNumber = "312"
+         startingLineNumber = "329"
+         endingLineNumber = "329"
          landmarkName = "-_showMovie:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -320,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
-         timestampString = "379456068.476614"
+         timestampString = "379543428.286219"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "521"
-         endingLineNumber = "521"
+         startingLineNumber = "538"
+         endingLineNumber = "538"
          landmarkName = "-prepareForSegue:sender:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -333,12 +333,311 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoViewController.m"
-         timestampString = "379456150.750977"
+         timestampString = "379531157.209049"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "652"
-         endingLineNumber = "652"
+         startingLineNumber = "658"
+         endingLineNumber = "658"
          landmarkName = "-prepareForSegue:sender:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379672472.640629"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "202"
+         endingLineNumber = "202"
+         landmarkName = "-prepareForSegue:sender:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379670755.744042"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "128"
+         endingLineNumber = "128"
+         landmarkName = "-handleFacebookBirthdaysDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379670755.744042"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "119"
+         endingLineNumber = "119"
+         landmarkName = "-handleFacebookBirthdaysDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379670755.744042"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "132"
+         endingLineNumber = "132"
+         landmarkName = "-handleFacebookBirthdaysDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379670755.744042"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "136"
+         endingLineNumber = "136"
+         landmarkName = "-handleFacebookBirthdaysDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379671952.464349"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "412"
+         endingLineNumber = "412"
+         landmarkName = "-fetchFbFriendsWithVideosCount:fbId:withBlock:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2843"
+         endingLineNumber = "2843"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2854"
+         endingLineNumber = "2854"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2872"
+         endingLineNumber = "2872"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2845"
+         endingLineNumber = "2845"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2848"
+         endingLineNumber = "2848"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2852"
+         endingLineNumber = "2852"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379789922.477558"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2867"
+         endingLineNumber = "2867"
+         landmarkName = "-postToFacebookWall:withFacebookID:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379671952.464349"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "283"
+         endingLineNumber = "283"
+         landmarkName = "-fetchFacebookBirthdays"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379671952.464349"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "291"
+         endingLineNumber = "291"
+         landmarkName = "-fetchFacebookBirthdays"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379671952.464349"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "286"
+         endingLineNumber = "286"
+         landmarkName = "-fetchFacebookBirthdays"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/data/BRDModel.m"
+         timestampString = "379671952.464349"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "584"
+         endingLineNumber = "584"
+         landmarkName = "-fetchFacebookMe"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
+         timestampString = "379543760.68834"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "232"
+         endingLineNumber = "232"
+         landmarkName = "-shouldAutorotateToInterfaceOrientation:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRVideoDetailViewController.m"
+         timestampString = "379543761.661048"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "237"
+         endingLineNumber = "237"
+         landmarkName = "-shouldAutorotate"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/user-interface/view-controllers/BRFBFriendListViewController.m"
+         timestampString = "379671871.356089"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "76"
+         endingLineNumber = "76"
+         landmarkName = "-viewWillAppear:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/BRAppDelegate.m"
+         timestampString = "379791008.214599"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "221"
+         endingLineNumber = "221"
+         landmarkName = "-_handleSocketURLDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/BRAppDelegate.m"
+         timestampString = "379791008.214599"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "215"
+         endingLineNumber = "215"
+         landmarkName = "-_handleSocketURLDidUpdate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "BirthdayReminder/BRAppDelegate.m"
+         timestampString = "379790246.055898"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "200"
+         endingLineNumber = "200"
+         landmarkName = "-_handleSocketURLDidUpdate:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -225,6 +225,23 @@ FbMsgBaordViewControllerDelegate>
         }
     }
 }
+
+//b) if you want to rotate to landscape:
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return YES;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
 - (void)didRotateFromInterfaceOrientation: (UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:
@@ -519,7 +536,7 @@ FbMsgBaordViewControllerDelegate>
             NSString* room;
             if(nil != self.fbFriend){
             
-                room =  self.fbFriend.facebookID;
+                room =  self.fbFriend.fbId;
             } else if(nil != kSharedModel.fbId){
                 
                 room =  kSharedModel.fbId;

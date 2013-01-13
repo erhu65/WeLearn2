@@ -6,8 +6,19 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+
+//
+#if TARGET_IPHONE_SIMULATOR
+
+#define BASE_URL          @"http://localhost:3000"
+
+#else
+
 #define BASE_URL          @"http://nameless-dawn-4099.herokuapp.com"
-//#define BASE_URL          @"http://localhost:3000"
+
+#endif
+
+#define BRNotificationInAppDidUpdate           @"BRNotificationInAppDidUpdate"
 
 #define KUserDefaultFbId @"fbId"
 #define KUserDefaultFbName @"fbName"
