@@ -7,6 +7,8 @@
 //
 
 #import "SGChildViewController.h"
+#import "BackgroundLayer.h"
+
 
 @interface SGChildViewController ()
 @property (nonatomic, assign, getter = isZoomed) BOOL zoomed;
@@ -26,7 +28,7 @@
     if (self = [super initWithNibName:nil bundle:nil])
     {
         self.view.translatesAutoresizingMaskIntoConstraints = NO;
-        self.view.backgroundColor = [UIColor blueColor];
+       // self.view.backgroundColor = [UIColor blueColor];
         self.msg = @"";
         self.stayTime = 0.0f;
         self.isDismiss = NO;
@@ -44,14 +46,14 @@
     // Position the lbMsg with edge padding
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[lbNotice]-20-|" options:0 metrics:nil views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[lbNotice]-20-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lbNotice]-20-|" options:0 metrics:nil views:views]];
 
     // Position the lbMsg with edge padding
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[button(==40)]-20-|" options:0 metrics:nil views:views]];
 //    
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[button(==20)]-20-|" options:0 metrics:nil views:views]];
     
-    NSLayoutConstraint *verticallyCenteredConstraint = [NSLayoutConstraint constraintWithItem:self.button attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0];
+    NSLayoutConstraint *verticallyCenteredConstraint = [NSLayoutConstraint constraintWithItem:self.button attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:4.0];
     [self.view addConstraint:verticallyCenteredConstraint];
     
     NSLayoutConstraint *horizontallyCenteredConstraint = [NSLayoutConstraint constraintWithItem:self.button attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
@@ -72,6 +74,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //self.view.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"app-background.png"]];
+    
+    
+    //Add gradient background
+    CAGradientLayer *bgLayer = [BackgroundLayer brownGradient];
+	bgLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, 100.0f);
+    [self.view.layer insertSublayer:bgLayer atIndex:0];
+    
+    self.lbNotice.backgroundColor = [UIColor blackColor];    
     [self.view addSubview:self.lbNotice];
     [self.view addSubview:self.button];
 }
@@ -119,7 +130,7 @@
     
     if(nil != msg_) self.msg = msg_;
     if(0.0f != stayTime_) self.stayTime = stayTime_;
-    
+    _lbNotice.text = self.msg;
     NSDictionary *views = @{ @"self" : self.view };
     UIView *superView = self.superviewController.view;
     
@@ -234,9 +245,12 @@
     if(nil == _lbNotice){
         _lbNotice = [[UILabel alloc] init];
         _lbNotice.translatesAutoresizingMaskIntoConstraints = NO;
-        _lbNotice.text = @"XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX end";
+        _lbNotice.text = @"";
         _lbNotice.numberOfLines = 3;
+        _lbNotice.textAlignment = NSTextAlignmentCenter;
         [_lbNotice sizeToFit];
+        [BRStyleSheet styleLabel:_lbNotice withType:BRLabelTypeName];
+        
     }
     return _lbNotice;
 

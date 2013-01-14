@@ -143,7 +143,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block;
 
 - (void)getSocketUrl;
 - (void)registerUdid:(NSString*)udid;
-
+- (void)getProductsWithBlock:(void (^)(NSDictionary* userInfo))block;
 
 -(void) importBirthdays:(NSArray *)birthdaysToImport;
 - (void)postToFacebookWall:(NSString *)message withFacebookID:(NSString *)facebookID;

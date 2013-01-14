@@ -721,7 +721,7 @@ NSString *const kMarqueeLabelShouldAnimateNotification = @"MarqueeLabelShouldAni
     _marqueeType = marqueeType;
     
     if (_marqueeType == MLContinuous) {
-        self.textAlignment = UITextAlignmentCenter;
+        self.textAlignment = NSTextAlignmentCenter;
     }
 }
 

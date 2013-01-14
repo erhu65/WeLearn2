@@ -54,6 +54,7 @@ UIScrollViewDelegate>
     if(self){
         self.mArrMsg = [[NSMutableArray alloc] init];
         addItemsTrigger = NO;
+        self.isDisableInAppNotification = YES;
     }
     return self;
 }

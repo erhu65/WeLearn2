@@ -25,6 +25,7 @@ typedef enum msgLevel {
     MBProgressHUD *HUD;
 }
 @property(nonatomic, strong)NSDictionary* lang;
+@property BOOL isDisableInAppNotification;
 - (IBAction)cancelAndDismiss:(id)sender;
 - (IBAction)saveAndDismiss:(id)sender;
 -(void)handleErrMsg:(NSString*) errMsg;

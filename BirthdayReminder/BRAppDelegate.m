@@ -12,11 +12,12 @@
 #import "Appirater.h"
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
-
+#import "HMIAPHelper.h"
 
 @interface BRAppDelegate ()
 <UIAlertViewDelegate,
-MFMailComposeViewControllerDelegate>
+MFMailComposeViewControllerDelegate,
+UIWebViewDelegate>
 {
 
 }
@@ -84,6 +85,7 @@ void exceptionHandler(NSException *exception)
 
     
     [[BRDModel sharedInstance] getSocketUrl];
+    [HMIAPHelper sharedInstance];
     
     return YES;
 }
@@ -98,11 +100,19 @@ void exceptionHandler(NSException *exception)
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    //clear the in app notification connection
+    NSURL* url = [[NSURL alloc] initWithString:@"http://google.com"];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    [self.webview loadRequest:request];
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    //reconnect the in app notification connection
     [Appirater appEnteredForeground:YES];
+    [self _handleSocketURLDidUpdate:nil];
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -115,6 +125,8 @@ void exceptionHandler(NSException *exception)
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+
+    
 }
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
@@ -187,16 +199,12 @@ void exceptionHandler(NSException *exception)
                                               cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
         [alert show];
     } else {
+        if(nil == [BRDModel sharedInstance].socketUrl) return;
         PRPLog(@"[BRDModel sharedInstance].socketUrl: %@-[%@ , %@]",
                [BRDModel sharedInstance].socketUrl,
                NSStringFromClass([self class]),
                NSStringFromSelector(_cmd));
-        
         self.webview = [[UIWebView alloc] init];
-        NSString* urlNotice = [NSString stringWithFormat:@"%@/notice.html", [BRDModel sharedInstance].socketUrl];
-        NSURL* url = [[NSURL alloc] initWithString:urlNotice];
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
-        [self.webview loadRequest:request];
         
         [WebViewJavascriptBridge enableLogging];
         _bridge = [WebViewJavascriptBridge bridgeForWebView:self.webview handler:^(id data, WVJBResponseCallback responseCallback) {
@@ -215,19 +223,15 @@ void exceptionHandler(NSException *exception)
                        NSStringFromClass([self class]),
                        NSStringFromSelector(_cmd));
             }];
-
-
         [_bridge registerHandler:@"iosGetNoticeCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
-            
             NSDictionary* resDic = (NSDictionary*)data;
-//            NSString* type = resDic[@"type"];
-//            NSString* notice = resDic[@"notice"];
+            //            NSString* type = resDic[@"type"];
+            //            NSString* notice = resDic[@"notice"];
             NSLog(@"iosGetNoticeCallback called: %@", resDic);
             responseCallback(@"Response from iosGetNoticeCallback: ios got chatroom msg");
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationInAppDidUpdate object:self userInfo:resDic];
         }];
-       
+        
         
         [_bridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
             
@@ -241,9 +245,31 @@ void exceptionHandler(NSException *exception)
         
         [_bridge callHandler:@"testJavascriptHandler" data:[NSDictionary dictionaryWithObject:@"before ready" forKey:@"foo"]];
         //node.js socket.io webview bridge end... 
-        [_bridge send:@"A string sent from ObjC after Webview has loaded."];
+        [_bridge send:@"A string sent from ObjC after Webview has loaded."];        
+        NSString* urlNotice = [NSString stringWithFormat:@"%@/notice.html", [BRDModel sharedInstance].socketUrl];
+        NSURL* url = [[NSURL alloc] initWithString:urlNotice];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+        //self.webview.delegate = self;
+        [self.webview loadRequest:request];
     }
 
+}
+
+#pragma mark UIWebViewDelegate
+-(void)webViewDidFinishLoad:(UIWebView *)webView 
+{
+    
+    
+    
+}
+
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error 
+{    
+    PRPLog(@"Error for notice webview: %@-[%@ , %@]",
+           [error description],
+           NSStringFromClass([self class]),
+           NSStringFromSelector(_cmd));
 }
 
 -(void)_handleRegisterUdidDidUpdate:(NSNotification*)notification

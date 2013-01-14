@@ -99,6 +99,7 @@ BRCellfBChatDelegate>
         self.isLeaving = NO;
         self.isZoomed = YES;
         self.mArrFbChat = [[NSMutableArray alloc] init];
+        self.isDisableInAppNotification = YES;
         
     }
     return self;

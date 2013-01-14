@@ -31,7 +31,7 @@ typedef enum videosFilterMode {
     self = [super initWithCoder:aDecoder];
     if(self){
         self.lang = [LangManager sharedManager].dic;
-        
+        self.isDisableInAppNotification = FALSE;
     }
     return self;
 }
@@ -56,35 +56,40 @@ typedef enum videosFilterMode {
 -(void) viewDidLoad
 {
     [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor grayColor];
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app-background.png"]];
     [self.view insertSubview:backgroundView atIndex:0];
     
-    self.noticeChildViewController = [[SGChildViewController alloc] init];
-    self.noticeChildViewController.superviewController = self;
-    self.noticeChildViewController.view.backgroundColor = [UIColor blueColor];
-    NSDictionary *views = @{@"noticeVidew" : self.noticeChildViewController.view};
+    if(!self.isDisableInAppNotification){
     
-    // Set the width of the container box to be 250
-    self.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[noticeVidew(==320)]" options:0 metrics:nil views:views];
-    [self.view addConstraints:self.noticeHConstraint];
-    
-    // Set the height of the container box to be 250
-    self.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noticeVidew(==100)]" options:0 metrics:nil views:views];
-    [self.view addConstraints:self.noticeVConstraint];
-    
-    // Vertically align
-    self.noticeVerticalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-    [self.view addConstraint:self.noticeVerticalAlignconstrain];
-    
-    // Horizontally align
-    self.noticeHorizontalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-    [self.view addConstraint:self.noticeHorizontalAlignconstrain];
-    
-    // Containment
-    [self addChildViewController:self.noticeChildViewController];
-    [self.view addSubview:self.noticeChildViewController.view];
-    [self.noticeChildViewController didMoveToParentViewController:self];
+        self.noticeChildViewController = [[SGChildViewController alloc] init];
+        self.noticeChildViewController.superviewController = self;
+        //self.noticeChildViewController.view.backgroundColor = [UIColor blueColor];
+        NSDictionary *views = @{@"noticeVidew" : self.noticeChildViewController.view};
+        
+        // Set the width of the container box to be 250
+        self.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[noticeVidew(==320)]" options:0 metrics:nil views:views];
+        [self.view addConstraints:self.noticeHConstraint];
+        
+        // Set the height of the container box to be 250
+        self.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[noticeVidew(==100)]" options:0 metrics:nil views:views];
+        [self.view addConstraints:self.noticeVConstraint];
+        
+        // Vertically align
+        self.noticeVerticalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+        [self.view addConstraint:self.noticeVerticalAlignconstrain];
+        
+        // Horizontally align
+        self.noticeHorizontalAlignconstrain = [NSLayoutConstraint constraintWithItem:self.noticeChildViewController.view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+        [self.view addConstraint:self.noticeHorizontalAlignconstrain];
+        
+        // Containment
+        [self addChildViewController:self.noticeChildViewController];
+        [self.view addSubview:self.noticeChildViewController.view];
+        [self.noticeChildViewController didMoveToParentViewController:self];
+
+    }
     
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -114,7 +119,12 @@ typedef enum videosFilterMode {
 {   
     NSDictionary *userInfo = [notification userInfo];
     //NSString* type = userInfo[@"type"];
-    NSString* notice = userInfo[@"notice"];
+    NSDate* now = [NSDate date];
+    NSDateFormatter *f2 = [[NSDateFormatter alloc] init];
+    [f2 setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *strNow = [f2 stringFromDate:now];
+    
+    NSString* notice = [NSString stringWithFormat:@"%@ \n %@", userInfo[@"notice"], strNow];
     
     [self.noticeChildViewController 
      toggleSlide:nil msg:notice
@@ -218,8 +228,7 @@ typedef enum videosFilterMode {
     NSString* error = userInfo[@"error"];
     NSString* msg = userInfo[@"msg"];
     if(nil != error){
-        [self showMsg:error type:msgLevelWarn]; 
-        
+        [self showMsg:error type:msgLevelWarn];
         return;
     }
     
