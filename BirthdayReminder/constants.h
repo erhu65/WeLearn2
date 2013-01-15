@@ -22,6 +22,9 @@
 
 #define KUserDefaultFbId @"fbId"
 #define KUserDefaultFbName @"fbName"
+#define KUserDefaultNotice @"KUserDefaultNotice"
+#define KUserDefaultLang @"KUserDefaultLang"
+
 
 //431690400206637
 #define KFacebookKey @"500954283270682"//
@@ -123,6 +126,8 @@
 
 #define k_bottomY_heigher    387.0
 #define k_bottomY_lower    433.0
+
+
 
 typedef enum regenerate_barcode_type {
     regenerate_barcode_type_manual = 9001,

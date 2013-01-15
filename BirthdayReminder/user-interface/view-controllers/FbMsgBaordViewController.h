@@ -19,6 +19,9 @@
 @end
 @interface FbMsgBaordViewController : BRCoreViewController
 
+
+@property(nonatomic, assign)BOOL isVideoWatchModel;
+@property(nonatomic, assign)BOOL isShowBarBtnBack;
 @property(nonatomic, strong)NSString* videoSelectedUid;
 @property(nonatomic, strong)BRRecordVideo* currentSelectedVideo;
 @property(nonatomic) double currentSelectedVideoPlayBackTime;

@@ -209,6 +209,7 @@
 		B78C307916775B4600B80BE7 /* MyNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B78C306F16775B4600B80BE7 /* MyNavigationController.m */; };
 		B78FF6111684756200E043BF /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = B78FF60F1684756200E043BF /* WebViewJavascriptBridge.js.txt */; };
 		B78FF6121684756200E043BF /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = B78FF6101684756200E043BF /* WebViewJavascriptBridge.m */; };
+		B790A11916A569DB00273866 /* BRCustomServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B790A11816A569DB00273866 /* BRCustomServiceViewController.m */; };
 		B79DF3571680889E00510CA9 /* BRVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF3561680889E00510CA9 /* BRVideoViewController.m */; };
 		B79DF35B168088DC00510CA9 /* BRCellVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF35A168088DC00510CA9 /* BRCellVideo.m */; };
 		B79DF35E168088FB00510CA9 /* BRRecordVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = B79DF35D168088FB00510CA9 /* BRRecordVideo.m */; };
@@ -217,6 +218,9 @@
 		B7B1089E169AAB7F00BC02D1 /* favoriteRemove.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089A169AAB7F00BC02D1 /* favoriteRemove.png */; };
 		B7B1089F169AAB7F00BC02D1 /* favoriteRemove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */; };
 		B7B108A0169AAB7F00BC02D1 /* favoriteAdd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */; };
+		B7CE531D16A5A71700879184 /* V8HorizontalPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7CE531C16A5A71700879184 /* V8HorizontalPickerView.m */; };
+		B7CE532016A5AA9200879184 /* indicator.png in Resources */ = {isa = PBXBuildFile; fileRef = B7CE531E16A5AA9200879184 /* indicator.png */; };
+		B7CE532116A5AA9200879184 /* indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B7CE531F16A5AA9200879184 /* indicator@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -536,6 +540,8 @@
 		B78FF60E1684756200E043BF /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
 		B78FF60F1684756200E043BF /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
 		B78FF6101684756200E043BF /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
+		B790A11716A569DB00273866 /* BRCustomServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRCustomServiceViewController.h; sourceTree = "<group>"; };
+		B790A11816A569DB00273866 /* BRCustomServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRCustomServiceViewController.m; sourceTree = "<group>"; };
 		B79DF3551680889E00510CA9 /* BRVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BRVideoViewController.h; sourceTree = "<group>"; };
 		B79DF3561680889E00510CA9 /* BRVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRVideoViewController.m; sourceTree = "<group>"; };
 		B79DF359168088DC00510CA9 /* BRCellVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRCellVideo.h; path = ../components/BRCellVideo.h; sourceTree = "<group>"; };
@@ -548,6 +554,11 @@
 		B7B1089A169AAB7F00BC02D1 /* favoriteRemove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteRemove.png; sourceTree = "<group>"; };
 		B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteRemove@2x.png"; sourceTree = "<group>"; };
 		B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteAdd@2x.png"; sourceTree = "<group>"; };
+		B7CE531A16A5A71700879184 /* V8HorizontalPickerViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = V8HorizontalPickerViewProtocol.h; sourceTree = "<group>"; };
+		B7CE531B16A5A71700879184 /* V8HorizontalPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = V8HorizontalPickerView.h; sourceTree = "<group>"; };
+		B7CE531C16A5A71700879184 /* V8HorizontalPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = V8HorizontalPickerView.m; sourceTree = "<group>"; };
+		B7CE531E16A5AA9200879184 /* indicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = indicator.png; sourceTree = "<group>"; };
+		B7CE531F16A5AA9200879184 /* indicator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "indicator@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -703,6 +714,8 @@
 			isa = PBXGroup;
 			children = (
 				48DD475115DE7FD000CE9A51 /* Icon.png */,
+				B7CE531E16A5AA9200879184 /* indicator.png */,
+				B7CE531F16A5AA9200879184 /* indicator@2x.png */,
 				B7B1089C169AAB7F00BC02D1 /* favoriteAdd@2x.png */,
 				B7B10899169AAB7F00BC02D1 /* favoriteAdd.png */,
 				B7B1089B169AAB7F00BC02D1 /* favoriteRemove@2x.png */,
@@ -783,6 +796,7 @@
 		48BA416315A44E3B00F5885A /* user-interface */ = {
 			isa = PBXGroup;
 			children = (
+				B7CE531816A5A70700879184 /* V8HorizontalPickerView */,
 				48DEA92215C2DB8100397172 /* components */,
 				48DEA92E15C2E80100397172 /* BRStyleSheet.h */,
 				48DEA92F15C2E80100397172 /* BRStyleSheet.m */,
@@ -809,6 +823,8 @@
 				B78B9805169C5C170062E2D2 /* SubCategory */,
 				B7CA353A169B27860034FDD0 /* Videos */,
 				B78B9807169C66280062E2D2 /* VideoDetail */,
+				B790A11716A569DB00273866 /* BRCustomServiceViewController.h */,
+				B790A11816A569DB00273866 /* BRCustomServiceViewController.m */,
 				B78BF9F716945EEF0034BD02 /* ChatRoom */,
 				B78BF9F616945EA60034BD02 /* FBMsgBoard */,
 				B78BEF71169DDB2C00B321D2 /* FriendsList */,
@@ -1187,6 +1203,16 @@
 			name = Videos;
 			sourceTree = "<group>";
 		};
+		B7CE531816A5A70700879184 /* V8HorizontalPickerView */ = {
+			isa = PBXGroup;
+			children = (
+				B7CE531A16A5A71700879184 /* V8HorizontalPickerViewProtocol.h */,
+				B7CE531B16A5A71700879184 /* V8HorizontalPickerView.h */,
+				B7CE531C16A5A71700879184 /* V8HorizontalPickerView.m */,
+			);
+			name = V8HorizontalPickerView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1347,6 +1373,8 @@
 				B7B1089E169AAB7F00BC02D1 /* favoriteRemove.png in Resources */,
 				B7B1089F169AAB7F00BC02D1 /* favoriteRemove@2x.png in Resources */,
 				B7B108A0169AAB7F00BC02D1 /* favoriteAdd@2x.png in Resources */,
+				B7CE532016A5AA9200879184 /* indicator.png in Resources */,
+				B7CE532116A5AA9200879184 /* indicator@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1458,6 +1486,8 @@
 				B78B0DE916A436D70004F416 /* JSNotifier.m in Sources */,
 				B78B0DED16A437010004F416 /* UIImage+RWExtensions.m in Sources */,
 				B78B0E1116A4387C0004F416 /* NSData+Base64.m in Sources */,
+				B790A11916A569DB00273866 /* BRCustomServiceViewController.m in Sources */,
+				B7CE531D16A5A71700879184 /* V8HorizontalPickerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

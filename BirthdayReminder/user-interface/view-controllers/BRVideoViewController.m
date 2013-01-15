@@ -53,6 +53,7 @@ UIAlertViewDelegate>
 @property (nonatomic, strong)  UISearchBar *searchBar;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *spaceBetweenFilterBarAndMainTable;
 @property(nonatomic, strong)UIAlertView* av;
+@property(nonatomic, strong)UIAlertView* avChkisEnableToggleFavorite;
 @end
 
 @implementation BRVideoViewController
@@ -357,6 +358,16 @@ UIAlertViewDelegate>
 
 -(void)_toggleFavoriteHandler:(UIButton*)sender{
     
+
+    if(!kSharedModel.isEnebleToggleFavorite){
+        
+        self.avChkisEnableToggleFavorite = [[UIAlertView alloc] initWithTitle:kSharedModel.lang[@"info"] message:kSharedModel.lang[@"intoBuyUnlockKeyFirst"] delegate:self cancelButtonTitle:kSharedModel.lang[@"actionOK"] otherButtonTitles:kSharedModel.lang[@"actionCancel"], nil];
+        
+        [self.avChkisEnableToggleFavorite show];
+        return;
+    }
+
+    
     int selectedRow = sender.tag;
     __block BRRecordVideo *record = self.docs[selectedRow];
     
@@ -432,7 +443,14 @@ UIAlertViewDelegate>
             [self _toggleFavoriteHandler:btn];
             
         }
+    } else if(alertView == self.avChkisEnableToggleFavorite) {
+        if([title isEqualToString:kSharedModel.lang[@"actionOK"]]){
+            
+            [self performSegueWithIdentifier:@"segueStoreList" sender:nil];
+            
+        }
     }
+    
 }
 
 

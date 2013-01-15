@@ -34,14 +34,14 @@
     
     //NSString *themeName = [defaults objectForKey:@"lang"] ?: @"lang_default3";
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSString *lang_ = [settings stringForKey : KUserLang];
+    NSString *lang_ = [settings stringForKey : KUserDefaultLang];
     int whichLang_ = [lang_ intValue];
     NSString *langFileName = nil ;
     switch (whichLang_) {
         case 0:
             langFileName = @"lang_default";//english
             break;
-        case 2:
+        case 1:
             langFileName = @"lang_chinese";
             break;
         default:
@@ -54,6 +54,8 @@
     
     return sharedManager;
 }
+
+
 
 
 

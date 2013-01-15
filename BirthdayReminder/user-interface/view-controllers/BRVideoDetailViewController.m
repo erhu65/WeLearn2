@@ -81,8 +81,6 @@ FbMsgBaordViewControllerDelegate>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-   
 //	self.scrvThumb.delegate = self;
 //	
 //	UIImage *bigImage = [UIImage imageNamed:@"test.png"];

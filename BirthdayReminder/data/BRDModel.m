@@ -52,6 +52,7 @@ static BRDModel *_sharedInstance = nil;
 		_sharedInstance = [[BRDModel alloc] init];
         _sharedInstance.lang = [LangManager sharedManager].dic;
         _sharedInstance.theme = [ThemeManager sharedManager].dic;
+        _sharedInstance.isEnebleToggleFavorite = NO;
         //_sharedInstance.facebookAccount = nil;
         NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
         NSString* fbId = [defaults objectForKey:KUserDefaultFbId];
@@ -2228,7 +2229,8 @@ withBlock:(void (^)(NSDictionary* userInfo))block
 
 }
 - (void)fetchVideoMsgsByVideoId:(NSString*)videoId
-                     withPage:(NSNumber*)page{
+                     withPage:(NSNumber*)page
+withBlock:(void (^)(NSDictionary* userInfo))block{
     
     //[self.mainCategories removeAllObjects];
     dispatch_queue_t concurrentQueue = 
@@ -2266,6 +2268,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block
         NSString* errMsg;
         NSNumber* isLastPage;
         NSNumber* page;
+        NSMutableArray* mArrTemp = [[NSMutableArray alloc] init];
         NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest
                                              returningResponse:&response
                                                          error:&error];
@@ -2311,20 +2314,21 @@ withBlock:(void (^)(NSDictionary* userInfo))block
                         NSArray* arrMsgs = [deserializedDictionary objectForKey:@"msgs"];
                         isLastPage = (NSNumber*) [deserializedDictionary objectForKey:@"lastPage"];
                         page = (NSNumber*)[deserializedDictionary objectForKey:@"page"];
-                        if(nil == self.videoMsgs 
-                           || [page integerValue] == 0
-                           || [arrMsgs count] == 0
-                           ){
-                            self.videoMsgs = [[NSMutableArray alloc] init];
-                            
-                            
-                        }
+//                        if(nil == self.videoMsgs 
+//                           || [page integerValue] == 0
+//                           || [arrMsgs count] == 0
+//                           ){
+//                            self.videoMsgs = [[NSMutableArray alloc] init];
+//                            
+//                            
+//                        }
 
                         [arrMsgs enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop){
                             
                             NSDictionary* dicRecord = (NSDictionary*)obj;
                             BRRecordMsgBoard* record = [[BRRecordMsgBoard alloc] initWithJsonDic:dicRecord];
-                            [self.videoMsgs addObject:record];
+                            [mArrTemp addObject:record];
+                            //[self.videoMsgs addObject:record];
                             
                         }];
                         
@@ -2377,12 +2381,30 @@ withBlock:(void (^)(NSDictionary* userInfo))block
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            NSDictionary *userInfo = @{@"isLastPage": isLastPage, @"page": page};
+            NSDictionary *userInfo;
+            
             if(nil != errMsg){
+                
                 userInfo = @{@"error":errMsg};
+            } else {
+                userInfo = @{@"mTempArr": [mArrTemp mutableCopy],
+                @"isLastPage": isLastPage, 
+                @"page": page};
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationGetVideoMsgsDidUpdate object:self userInfo:userInfo];
+            
+            block(userInfo);               
         });
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            
+//            NSDictionary *userInfo = @{@"isLastPage": isLastPage, @"page": page};
+//            if(nil != errMsg){
+//                userInfo = @{@"error":errMsg};
+//            }
+//            
+//            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:BRNotificationGetVideoMsgsDidUpdate object:self userInfo:userInfo];
+//        });
         
     });
 }

@@ -21,7 +21,7 @@
 UIScrollViewDelegate>
 
 
-
+@property (nonatomic, strong) NSMutableArray* docs;
 @property (weak, nonatomic) IBOutlet UITextField *tfMsg;
 @property (weak, nonatomic) IBOutlet UITableView *tbMsgBoard;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityMsgBoard;
@@ -30,7 +30,8 @@ UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnMsg;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnBack;
 
-@property (strong, nonatomic) IBOutlet UIToolbar *tb;
+@property (strong, nonatomic) UIToolbar *tb;
+@property (strong, nonatomic) IBOutlet UIToolbar *tbBottom;
 @property(strong, nonatomic) NSMutableArray* mArrMsg;
 
 @end
@@ -40,6 +41,15 @@ UIScrollViewDelegate>
     
     BOOL addItemsTrigger;
 }
+-(NSMutableArray*)docs{
+    
+    if(nil == _docs){
+        _docs = [[NSMutableArray alloc] init];
+    }
+    return _docs;
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -53,8 +63,12 @@ UIScrollViewDelegate>
     self = [super initWithCoder:aDecoder];
     if(self){
         self.mArrMsg = [[NSMutableArray alloc] init];
+        self.isVideoWatchModel = YES;
+        self.isShowBarBtnBack = NO;
         addItemsTrigger = NO;
         self.isDisableInAppNotification = YES;
+        
+        
     }
     return self;
 }
@@ -83,35 +97,45 @@ UIScrollViewDelegate>
     self.tbMsgBoard.dataSource = self;
     self.tbMsgBoard.delegate = self;
     self.barBtnBack.enabled = NO;
+
+    if(!self.isShowBarBtnBack) {    
+        NSMutableArray *items = [self.tbBottom.items mutableCopy];
+        [items removeObject:self.barBtnBack];
+        [self.tbBottom setItems:items animated:NO];
+        //remove the back barButtonItem
+    } 
+    [self _fetchMsgs:@0 videoId:self.videoId];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleFacebookMeDidUpdate:) name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleDidPostVideoMsg:) name:BRNotificationDidPostVideoMsg object:[BRDModel sharedInstance]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleDidGetVideoMsgs:) name:BRNotificationGetVideoMsgsDidUpdate object:[BRDModel sharedInstance]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_handleDidGetVideoMsgs:) name:BRNotificationGetVideoMsgsDidUpdate object:[BRDModel sharedInstance]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardDidShowNotification object:nil];
     
-    [self _fetchMsgs:@0 videoId:self.videoId];
+ 
+    
+    [self.tbMsgBoard setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
 
 }
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationFacebookMeDidUpdate object:[BRDModel sharedInstance]];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationDidPostVideoMsg object:[BRDModel sharedInstance]];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationGetVideoMsgsDidUpdate object:[BRDModel sharedInstance]];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:BRNotificationGetVideoMsgsDidUpdate object:[BRDModel sharedInstance]];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];    
-    kSharedModel.videoMsgs = nil;
     
 }
 -(void)_handleFacebookMeDidUpdate:(NSNotification *)notification
@@ -136,23 +160,24 @@ UIScrollViewDelegate>
 
 -(void)_handleDidPostVideoMsg:(NSNotification*)notification
 {
+    
+    [self.activityMsgBoard stopAnimating];
+    self.activityMsgBoard.hidden = YES;
+
     NSDictionary *userInfo = [notification userInfo];
     NSString* error = userInfo[@"error"];
     if(nil != error && error.length > 0){
         [self showMsg:error type:msgLevelWarn]; 
         self.barBtnMsg.enabled = YES;
-        [self.activityMsgBoard stopAnimating];
-        self.activityMsgBoard.hidden = YES;
         return;
     }
-    
     //NSDictionary *userInfo = [notification userInfo];
     PRPLog(@"post msg successfully do refresh table view -[%@ , %@]",
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
     self.barBtnMsg.enabled = YES;    
     
-    if([kSharedModel.videoMsgs count] > 3){
+    if([self.docs count] > 3){
         NSIndexPath *firstRow = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tbMsgBoard scrollToRowAtIndexPath:firstRow atScrollPosition:UITableViewRowAnimationTop animated:YES];
     }
@@ -165,30 +190,61 @@ UIScrollViewDelegate>
     
     [self.activityMsgBoard startAnimating];
     self.activityMsgBoard.hidden = NO;
-    [kSharedModel fetchVideoMsgsByVideoId:videoId withPage:page];
-}
--(void)_handleDidGetVideoMsgs:(NSNotification*)notification{
+    __weak __block FbMsgBaordViewController* weakSelf = self;
+    [kSharedModel fetchVideoMsgsByVideoId:videoId withPage:page withBlock:^(NSDictionary* res) {
+        
+        [weakSelf.activityMsgBoard stopAnimating];
+        weakSelf.activityMsgBoard.hidden = YES;
+        
+        NSString* error = res[@"error"];
+        if(nil != error){
+            [self handleErrMsg:error];
+        } else {
+            
+            NSMutableArray* mTempArr =(NSMutableArray*)res[@"mTempArr"];
+            NSRange range = NSMakeRange(0, mTempArr.count); 
+            NSMutableIndexSet *indexes = [NSMutableIndexSet indexSetWithIndexesInRange:range];
+            [weakSelf.docs insertObjects:mTempArr atIndexes:indexes];
+            
+            weakSelf.isLastPage = [((NSNumber*)res[@"isLastPage"]) boolValue];
+            weakSelf.page = res[@"page"];
+           
+            self.barBtnBack.enabled = YES;           
+            if(self.docs.count > 0){
+                PRPLog(@"self.docs.count: %d-[%@ , %@]",
+                       weakSelf.docs.count,
+                       NSStringFromClass([self class]),
+                       NSStringFromSelector(_cmd));
+                [weakSelf.tbMsgBoard reloadData];
+               
+            } 
+        }
     
-    [self.activityMsgBoard stopAnimating];
-    self.activityMsgBoard.hidden = YES;
-    NSDictionary *userInfo = [notification userInfo];
-    NSString* error = userInfo[@"error"];
-    if(nil != error){
-        [self showMsg:error type:msgLevelWarn]; 
-        return;
-    }
-    self.isLastPage = [((NSNumber*)userInfo[@"isLastPage"]) boolValue];
-    self.page = userInfo[@"page"];
-    [self.tbMsgBoard reloadData];
-    self.barBtnBack.enabled = YES;
-
-    PRPLog(@"get video msgs count: %d  do reload\n  self.page:%@ \n self.isLastPage: %d\n -[%@ , %@]",
-           kSharedModel.videoMsgs.count,
-           self.page,
-           self.isLastPage,
-           NSStringFromClass([self class]),
-           NSStringFromSelector(_cmd));     
+    }];
 }
+//-(void)_handleDidGetVideoMsgs:(NSNotification*)notification{
+//    
+//    [self.activityMsgBoard stopAnimating];
+//    self.activityMsgBoard.hidden = YES;
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSString* error = userInfo[@"error"];
+//    if(nil != error){
+//        [self showMsg:error type:msgLevelWarn]; 
+//        return;
+//    }
+//    self.isLastPage = [((NSNumber*)userInfo[@"isLastPage"]) boolValue];
+//    self.page = userInfo[@"page"];
+//    [self.tbMsgBoard reloadData];
+//    self.barBtnBack.enabled = YES;
+//   
+//
+//    PRPLog(@"get video msgs count: %d  do reload\n  self.page:%@ \n self.isLastPage: %d\n -[%@ , %@]",
+//           self.docs.count,
+//           self.page,
+//           self.isLastPage,
+//           NSStringFromClass([self class]),
+//           NSStringFromSelector(_cmd));     
+//}
 
 - (void) _cancelSendMsg
 {
@@ -210,7 +266,6 @@ UIScrollViewDelegate>
         });
     }
 
-    self.barBtnMsg.enabled = FALSE;
     self.activityMsgBoard.hidden = NO;
     [self.activityMsgBoard startAnimating];
     UITextField* tfTemp = (UITextField*)[self.tb viewWithTag:KTempTfInKeyboard];
@@ -227,19 +282,18 @@ UIScrollViewDelegate>
         return;
     } 
     NSString* msg = (tfTemp.text.length > 0)?tfTemp.text:self.tfMsg.text;
-    NSString* videoId = self.currentSelectedVideo.uid;
     PRPLog(@"fbName:%@ \n fbId:%@ \n msg:%@ \n videoId:%@ \n -[%@ , %@]",
            [BRDModel sharedInstance].fbName,
            [BRDModel sharedInstance].fbId,
            msg,
-           videoId,
+           self.videoId,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
   
     [tfTemp resignFirstResponder];
   
     [kSharedModel postMsg:msg 
-                ByVideoId:videoId 
+                ByVideoId:self.videoId 
                      fbId:[BRDModel sharedInstance].fbId 
                    fbName:[BRDModel sharedInstance].fbName];
 }
@@ -296,7 +350,7 @@ UIScrollViewDelegate>
 {
     BRCellMsg *BRCellMsg = [self.tbMsgBoard dequeueReusableCellWithIdentifier:@"BRCellMsg"];
     
-    BRRecordMsgBoard* record = [kSharedModel.videoMsgs objectAtIndex:[indexPath row]];
+    BRRecordMsgBoard* record = [self.docs objectAtIndex:[indexPath row]];
     BRCellMsg.record = record;
     
     UIImage *backgroundImage = [UIImage imageNamed:@"table-row-background.png"];
@@ -307,7 +361,7 @@ UIScrollViewDelegate>
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [kSharedModel.videoMsgs count];
+    return [self.docs count];
 }
 
 #pragma mark UITableViewDelegate
@@ -321,7 +375,7 @@ UIScrollViewDelegate>
 // for some items. By default, all items are editable.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return YES if you want the specified item to be editable.
-    BRRecordMsgBoard* record = [kSharedModel.videoMsgs objectAtIndex:[indexPath row]];
+    BRRecordMsgBoard* record = [self.docs objectAtIndex:[indexPath row]];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSString* fbId = [defaults objectForKey:KUserDefaultFbId];
     
@@ -331,12 +385,12 @@ UIScrollViewDelegate>
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        BRRecordMsgBoard* record = [kSharedModel.videoMsgs objectAtIndex:[indexPath row]];
-        [kSharedModel.videoMsgs removeObject:record];
+        BRRecordMsgBoard* record = [self.docs objectAtIndex:[indexPath row]];
+        [self.docs removeObject:record];
         //add code here for when you hit delete
         // Animate the deletion from the table.
-        
-        [kSharedModel delMsgById:record._id VideoId:self.currentSelectedVideo.uid];
+      
+        [kSharedModel delMsgById:record._id VideoId:self.videoId];
         
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         

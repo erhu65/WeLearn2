@@ -62,7 +62,7 @@ typedef enum videosFilterMode {
     [self.view insertSubview:backgroundView atIndex:0];
     
     if(!self.isDisableInAppNotification){
-    
+        self.noticeChildViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
         self.noticeChildViewController = [[SGChildViewController alloc] init];
         self.noticeChildViewController.superviewController = self;
         //self.noticeChildViewController.view.backgroundColor = [UIColor blueColor];
@@ -129,6 +129,9 @@ typedef enum videosFilterMode {
     [self.noticeChildViewController 
      toggleSlide:nil msg:notice
      stayTime:5.0f];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:notice forKey:KUserDefaultNotice];
+    [defaults synchronize];
     
 }
 

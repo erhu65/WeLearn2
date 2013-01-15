@@ -49,7 +49,7 @@ UIAlertViewDelegate>
 @property (nonatomic, weak) IBOutlet UIView *filterBar; 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *spaceBetweenFilterBarAndMainTable;
 @property(nonatomic, strong)UIAlertView* av;
-
+@property(nonatomic, strong)UIAlertView* avChkisEnableToggleFavorite;
 @end
 
 
@@ -121,8 +121,6 @@ UIAlertViewDelegate>
 	pullView.frame = CGRectOffset(pullView.frame, 0.0f, -pullView.frame.size.height);
 	[self.tb addSubview:pullView];
 	// Do any additional setup after loading the view.
-
-    
     PRPLog(@"self.tabBarController.selectedIndex: %d -[%@ , %@]",
            self.tabBarController.selectedIndex,
            NSStringFromClass([self class]),
@@ -387,6 +385,14 @@ UIAlertViewDelegate>
 
 -(void)_toggleFavoriteHandler:(UIButton*)sender{
     
+    
+    if(!kSharedModel.isEnebleToggleFavorite){
+        self.avChkisEnableToggleFavorite = [[UIAlertView alloc] initWithTitle:kSharedModel.lang[@"info"] message:kSharedModel.lang[@"intoBuyUnlockKeyFirst"] delegate:self cancelButtonTitle:kSharedModel.lang[@"actionOK"] otherButtonTitles:kSharedModel.lang[@"actionCancel"], nil];
+        [self.avChkisEnableToggleFavorite show];
+        return;
+    }
+    
+    
     int selectedRow = sender.tag;
     __block BRRecordMainCategory *record = [self.docs objectAtIndex:selectedRow];
     if(record.isUserFavorite && !_isConfirmToDeleteFavorite){
@@ -459,6 +465,12 @@ UIAlertViewDelegate>
             [self _toggleFavoriteHandler:btn];
            
         }
+    } else if(alertView == self.avChkisEnableToggleFavorite) {
+        if([title isEqualToString:kSharedModel.lang[@"actionOK"]]){
+            
+            [self performSegueWithIdentifier:@"segueStoreList" sender:nil];
+
+        }
     }
 }
 
@@ -469,6 +481,7 @@ UIAlertViewDelegate>
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (tableView == filterTableView) {
+        
         if(activeFilterIndex == indexPath.row){
             [BRDModel sharedInstance].mainCategoriesSortIsDesc =  ![BRDModel sharedInstance].mainCategoriesSortIsDesc;
         } else {
@@ -525,6 +538,7 @@ UIAlertViewDelegate>
             [BRDModel sharedInstance].mainCategoriesSortIsDesc,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
+    
     UIImage* img_;
     if([BRDModel sharedInstance].mainCategoriesSortIsDesc){
         img_ = [UIImage imageNamed:@"Arrow.png"]; 
@@ -563,7 +577,6 @@ UIAlertViewDelegate>
     filterTableView.separatorColor = [UIColor darkGrayColor];
     
     [self.view addSubview:filterTableView];
-    
     NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(filterTableView);
     NSArray *constraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[filterTableView]|" options:0
                                                                    metrics:nil

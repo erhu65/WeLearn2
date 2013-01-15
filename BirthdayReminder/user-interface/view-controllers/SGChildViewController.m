@@ -39,12 +39,14 @@
 - (void)updateViewConstraints
 {
     [super updateViewConstraints];
-    
+    self.lbNotice.translatesAutoresizingMaskIntoConstraints = NO;
+    self.button.translatesAutoresizingMaskIntoConstraints = NO;
+    self.view.translatesAutoresizingMaskIntoConstraints = NO;
     NSDictionary *views = @{ @"lbNotice": self.lbNotice,
      @"button": self.button};
     
     // Position the lbMsg with edge padding
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[lbNotice]-20-|" options:0 metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[lbNotice]-10-|" options:0 metrics:nil views:views]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[lbNotice]-20-|" options:0 metrics:nil views:views]];
 
@@ -127,12 +129,15 @@
 - (void)toggleSlide:(id)sender  
                 msg:(NSString*)msg_
            stayTime:(float)stayTime_{
-    
+
     if(nil != msg_) self.msg = msg_;
     if(0.0f != stayTime_) self.stayTime = stayTime_;
     _lbNotice.text = self.msg;
     NSDictionary *views = @{ @"self" : self.view };
     UIView *superView = self.superviewController.view;
+    
+    self.lbNotice.translatesAutoresizingMaskIntoConstraints = NO;
+    self.button.translatesAutoresizingMaskIntoConstraints = NO;
     
     [superView removeConstraints:self.superviewController.noticeHConstraint];
     [superView removeConstraints:self.superviewController.noticeVConstraint];
@@ -140,12 +145,9 @@
     if (self.isSlideDown)
     {
         self.superviewController.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[self]|" options:0 metrics:nil views:views];
-        
-        self.superviewController.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-100)-[self(==100)]" options:0 metrics:nil views:views];
-        
+        self.superviewController.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-100)-[self(==100)]|" options:0 metrics:nil views:views];
     } else {
         self.superviewController.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[self]|" options:0 metrics:nil views:views];
-        
         self.superviewController.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[self(==100)]|" options:0 metrics:nil views:views];
     }
     
@@ -165,7 +167,6 @@
                          if(weakSelf.isSlideDown ){
                              dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW,
                                                                      self.stayTime * NSEC_PER_SEC);
-                             
                              dispatch_after(popTime, dispatch_get_main_queue(), ^(void)
                                             {
                                                  
@@ -197,6 +198,7 @@
 
     self.isDismiss = YES;
     NSDictionary *views = @{ @"self" : self.view };
+   
     UIView *superView = self.superviewController.view;
     
     [superView removeConstraints:self.superviewController.noticeHConstraint];
@@ -204,7 +206,7 @@
 
     self.superviewController.noticeHConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[self]|" options:0 metrics:nil views:views];
     
-    self.superviewController.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-100)-[self(==100)]" options:0 metrics:nil views:views];
+    self.superviewController.noticeVConstraint = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-100)-[self(==100)]|" options:0 metrics:nil views:views];
     
     [superView addConstraints:self.superviewController.noticeHConstraint];
     [superView addConstraints:self.superviewController.noticeVConstraint];

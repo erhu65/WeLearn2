@@ -16,5 +16,5 @@
 @property(nonatomic, retain) NSDictionary *dic;
 
 + (LangManager *)sharedManager;
-
++ (LangManager *)switchLang;
 @end

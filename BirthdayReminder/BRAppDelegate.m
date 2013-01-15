@@ -85,7 +85,7 @@ void exceptionHandler(NSException *exception)
 
     
     [[BRDModel sharedInstance] getSocketUrl];
-    [HMIAPHelper sharedInstance];
+    [HMIAPHelper sharedInstance];//restore the pervious purchased products first
     
     return YES;
 }

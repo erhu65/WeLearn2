@@ -59,10 +59,10 @@ typedef enum subCategoriesSortType {
 @property(nonatomic, strong)NSString* fbId;
 @property(nonatomic, strong)NSString* access_token;
 
+@property(nonatomic, assign)BOOL isEnebleToggleFavorite;
+
 @property(nonatomic, strong)NSMutableArray* mArrFriends;
-
 @property (nonatomic,readonly) NSArray *addressBookBirthdays;
-
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
@@ -113,7 +113,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block;
                   inSelectedIndex:(int)selectedIndex
                         WithBlock:(void (^)(NSDictionary* userInfo))block;
 
-@property(nonatomic, strong)NSMutableArray* videoMsgs;
+//@property(nonatomic, strong)NSMutableArray* videoMsgs;
 
 @property(nonatomic, strong)NSString* socketUrl;
 
@@ -126,7 +126,7 @@ withBlock:(void (^)(NSDictionary* userInfo))block;
 
 - (void)fetchVideoByUid:(NSString*)uid
 withBlock:(void (^)(NSDictionary* userInfo))block;
-- (void)filterVideoByNameOrDesc:(NSString*)strSearch;
+//- (void)filterVideoByNameOrDesc:(NSString*)strSearch;
 - (BRRecordVideo*)findVideoByYoutubeKey:(NSString*)youtubeKey fromDocs:(NSMutableArray*)docs;
 
 - (void)postMsg:(NSString*)message
@@ -135,7 +135,8 @@ withBlock:(void (^)(NSDictionary* userInfo))block;
          fbName:(NSString*)fbNmae;
 
 - (void)fetchVideoMsgsByVideoId:(NSString*)videoId 
-                     withPage:(NSNumber*)page;
+                     withPage:(NSNumber*)page
+withBlock:(void (^)(NSDictionary* userInfo))block;
 -(void)delMsgById:(NSString*)msgId
           VideoId:(NSString*)videoId;
 

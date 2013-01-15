@@ -278,15 +278,19 @@ forProductIdentifier:(NSString *)productIdentifier {
     [self savePurchases];
 }
 
+//enable(non-consumable) or add points(consumable) for user after purchasing 
 - (void)_provideContentWithPurchasedProdcut:(IAPProductPurchase *)prodcut {
- 
+    
     PRPLog(@"Loaded purchased product productIdentifier: %@, \n  contentVersion: %i [%@ , %@]",
            prodcut.productIdentifier,
            prodcut.contentVersion,
            NSStringFromClass([self class]),
            NSStringFromSelector(_cmd));
+    
+    kSharedModel.isEnebleToggleFavorite = YES;
+    
+    
 }
-
 
 - (void)provideContentWithURL:(NSURL *)URL {
     
@@ -299,10 +303,10 @@ forProductIdentifier:(NSString *)productIdentifier {
 - (void)purchaseNonconsumableAtURL:(NSURL *)nonLocalURL
               forProductIdentifier:(NSString *)productIdentifier {
     
-    NSError * error = nil;
-    BOOL success = FALSE;
-    BOOL exists = FALSE;
-    BOOL isDirectory = FALSE;
+//    NSError * error = nil;
+//    BOOL success = FALSE;
+//    BOOL exists = FALSE;
+//    BOOL isDirectory = FALSE;
     // 1
     NSString * libraryRelativePath =
     nonLocalURL.lastPathComponent;
@@ -336,9 +340,11 @@ forProductIdentifier:(NSString *)productIdentifier {
     
     NSString * contentVersion = @"";
     // 4
-    [self provideContentWithURL:localURL];
+ 
+    //[self provideContentWithURL:localURL];
     
     // 5
+    IAPProductPurchase* productPurchased;
     IAPProductPurchase * previousPurchase = [self
                                              purchaseForProductIdentifier:productIdentifier];
     if (previousPurchase) {
@@ -361,6 +367,7 @@ forProductIdentifier:(NSString *)productIdentifier {
         previousPurchase.libraryRelativePath =
         libraryRelativePath;
         previousPurchase.contentVersion = contentVersion;
+        productPurchased = previousPurchase;
     } else {
         IAPProductPurchase * purchase =
         [[IAPProductPurchase alloc]
@@ -370,7 +377,9 @@ forProductIdentifier:(NSString *)productIdentifier {
          contentVersion:contentVersion];
         [self addPurchase:purchase
      forProductIdentifier:productIdentifier];
+        productPurchased = purchase;
     }
+    [self _provideContentWithPurchasedProdcut:productPurchased];
     
     [self notifyStatusForProductIdentifier:productIdentifier
                                     string:@"Purchase complete!"];
@@ -387,8 +396,13 @@ forProductIdentifier:(NSString *)productIdentifier {
 //Then this delegate Funtion Will be fired
 - (void) paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 {
-    
-    NSLog(@"received restored transactions: %i", queue.transactions.count);
+    int countProdcuts = queue.transactions.count;
+    NSLog(@"received restored transactions: %i", countProdcuts);
+   
+    NSString* msg = [NSString stringWithFormat:@"%i %@", countProdcuts, kSharedModel.lang[@"infoRestorePurchasedProductsComplete"]];
+    UIAlertView* av = [[UIAlertView alloc] initWithTitle:kSharedModel.lang[@"info"] message:msg delegate:self cancelButtonTitle:kSharedModel.lang[@"actionOK"] otherButtonTitles:nil, nil];
+    [av show];
+
     for (SKPaymentTransaction *transaction in queue.transactions)
     {
         NSString *productID = transaction.payment.productIdentifier;
